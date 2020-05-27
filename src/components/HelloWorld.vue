@@ -34,7 +34,7 @@
 
       <el-container>
         <el-main>
-          <div style v-if="false">
+          <div style>
             <el-input placeholder="请输入PO/负责人" v-model="input3" class="input-with-select">
               <template slot="prepend">筛选</template>
               <el-button slot="append" icon="el-icon-search"></el-button>
@@ -44,7 +44,6 @@
             :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%"
             :border="true"
-            v-if="false"
           >
             <el-table-column align="center" sortable prop="date" label="PO" width></el-table-column>
             <el-table-column align="center" prop="date" label="负责人" width></el-table-column>
@@ -62,7 +61,7 @@
               <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">编辑</el-button>
             </el-table-column>
           </el-table>
-          <erp-chargeback></erp-chargeback>
+          <!-- <erp-chargeback></erp-chargeback> -->
         </el-main>
       </el-container>
     </el-container>
@@ -73,8 +72,8 @@
 import erpChargeback from "./chargeback.vue";
 export default {
   name: "HelloWorld",
-  components:{
-erpChargeback
+  components: {
+    erpChargeback
   },
   data() {
     return {
@@ -106,7 +105,8 @@ erpChargeback
         }
       ],
       isCollapse: true, //控制侧边栏的显示
-      search: ""
+      search: "",
+      input3:"",
     };
   },
   methods: {
