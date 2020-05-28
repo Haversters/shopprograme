@@ -25,7 +25,7 @@
         <el-table-column align="center" prop="address" label="Amazon接收的到货数量"></el-table-column>
         <el-table-column align="center" prop="address" label="备注"></el-table-column>
         <el-table-column align="center" prop="address" label="操作">
-          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(11, 111)">编辑</el-button>
         </el-table-column>
       </el-table>
     </el-main>
@@ -68,6 +68,7 @@ export default {
       search: "",
       input3: "",
       loading:false, //控制加载状态
+      imgsrc:require("../assets/logo.png")
     };
   },
     created() {
@@ -80,6 +81,7 @@ export default {
     },
     handleDelete(index, row) {
       console.log(index, row);
+      this.$router.push({path:'/editor'})
     }
   }
 };

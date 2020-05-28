@@ -19,21 +19,29 @@
           :router="true"
           :collapse="isCollapse"
         >
-          <el-menu-item index="0" route="order">
+          <el-menu-item index="0" route="/order">
             <i class="el-icon-sold-out"></i>
             <span slot="title">PO</span>
           </el-menu-item>
-          <el-menu-item index="1" route="chargeback">
+          <el-menu-item index="1" route="/chargeback">
             <i class="el-icon-document"></i>
             <span slot="title">chargeback</span>
           </el-menu-item>
-          <el-menu-item index="2" route="editor">
+          <el-menu-item index="2" route="/editor">
             <i class="el-icon-document"></i>
             <span slot="title">导航三</span>
           </el-menu-item>
-          <el-menu-item index="4">
+          <el-menu-item index="3" route="/logistics">
             <i class="el-icon-setting"></i>
-            <span slot="title">导航四</span>
+            <span slot="title">物流管理</span>
+          </el-menu-item>
+          <el-menu-item index="4" route="/finance">
+            <i class="el-icon-setting"></i>
+            <span slot="title">财务管理</span>
+          </el-menu-item>
+          <el-menu-item index="5" route="/admin">
+            <i class="el-icon-setting"></i>
+            <span slot="title">admin管理</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -65,7 +73,7 @@ export default {
       isCollapse: false, //控制侧边栏的显示
       search: "",
       fullHeight: document.documentElement.clientHeight,
-      navselected: "0",
+      navselected: "0"
     };
   },
   methods: {
@@ -77,14 +85,14 @@ export default {
     },
     getNavType() {
       this.navselected = this.$store.state.adminleftnavnum;
-      console.log(this.navselected)
+      console.log(this.navselected);
       //store.state.adminleftnavnum里值变化的时候，设置navselected
     },
     selectItems(index) {
       console.log(index);
       this.$store.state.adminleftnavnum = index;
       //按钮选中之后设置当前的index为store里的值。
-    },
+    }
   },
   watch: {
     // 监测store.state
