@@ -3,7 +3,7 @@
     <el-main>
       <div style>
         <el-input placeholder="请输入PO/负责人" v-model="input3" class="input-with-select">
-          <template slot="prepend" >筛选</template>
+          <template slot="prepend">筛选</template>
           <el-button slot="append" icon="el-icon-search">搜索</el-button>
         </el-input>
       </div>
@@ -67,12 +67,21 @@ export default {
       isCollapse: true, //控制侧边栏的显示
       search: "",
       input3: "",
-      loading:false, //控制加载状态
-      imgsrc:require("../assets/logo.png")
+      loading: false, //控制加载状态
+      imgsrc: require("../assets/logo.png")
     };
   },
-    created() {
+  created() {
     this.$store.state.adminleftnavnum = "0"; //设置左侧导航2-2 active
+  },
+  mounted(){
+    const _this=this;
+       this.$fetch('/api/admin/index/index')
+      .then((response) => {
+        console.log(111)
+        console.log(response)
+        console.log(_this.$store.state.user_data)
+      })
   },
   methods: {
     // 控制搜索
@@ -81,7 +90,7 @@ export default {
     },
     handleDelete(index, row) {
       console.log(index, row);
-      this.$router.push({path:'/editor'})
+      this.$router.push({ path: "/editor" });
     }
   }
 };

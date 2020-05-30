@@ -1,7 +1,7 @@
 'use strict'
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
-
+// http://chaifen.yangruican.cn/admin/index/index
 const path = require('path')
 
 module.exports = {
@@ -10,7 +10,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    // 配置代理解决跨域问题
+    proxyTable: { 
+      '/api': {  //使用"/api"来代替"http://f.apiplus.c" 
+        target: 'http://chaifen.yangruican.cn', //源地址 
+        changeOrigin: true, //改变源 
+        pathRewrite: { 
+          '^/api': 'http://chaifen.yangruican.cn' //路径重写 
+          } 
+      } 
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -23,7 +32,7 @@ module.exports = {
     // Use Eslint Loader?
     // If true, your code will be linted during bundling and
     // linting errors and warnings will be shown in the console.
-    useEslint: true,
+    useEslint: false,
     // If true, eslint errors and warnings will also be shown in the error overlay
     // in the browser.
     showEslintErrorsInOverlay: false,

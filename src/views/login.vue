@@ -32,7 +32,11 @@ export default {
   methods: {
     clickLogin() {
       console.log(this.userName, this.userPassword);
-      this.$router.push({path:'/'})
+      // this.$router.push({path:'/'})
+      const _this=this
+      localStorage.setItem("user_datas",JSON.stringify({'userNamess':_this.userName,'userPasswordss':_this.userPassword}));
+       console.log(JSON.parse(localStorage.getItem('user_datas')))
+           this.$router.push({path:'/'})
     },
   }
 };
