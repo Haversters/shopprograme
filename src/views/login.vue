@@ -10,7 +10,13 @@
           </div>
           <div class="divBox">
             <span class="margin_right10">密码</span>
-            <input type="password" placeholder="请输入密码" v-model="userPassword" class="cms_login_ipt" maxlength="16" />
+            <input
+              type="password"
+              placeholder="请输入密码"
+              v-model="userPassword"
+              class="cms_login_ipt"
+              maxlength="16"
+            />
           </div>
           <div class="divBox margin_top60">
             <button class="login_btn" @click="clickLogin()">登录</button>
@@ -31,13 +37,24 @@ export default {
   },
   methods: {
     clickLogin() {
-      console.log(this.userName, this.userPassword);
-      // this.$router.push({path:'/'})
-      const _this=this
-      localStorage.setItem("user_datas",JSON.stringify({'userNamess':_this.userName,'userPasswordss':_this.userPassword}));
-       console.log(JSON.parse(localStorage.getItem('user_datas')))
-           this.$router.push({path:'/'})
-    },
+      const _this = this;
+      if (this.userName) {
+        this.$fetch("/api/admin/login/userlogin",{'number':_this.userName,'passwd':_this.userPassword}).then(response => {
+          console.log(111);
+          console.log(response);
+          // console.log(_this.$store.state.user_data);
+        });
+      } else {
+        console.log(222222);
+      }
+      return;
+      // console.log(this.userName, this.userPassword);
+      // // this.$router.push({path:'/'})
+      // const _this=this
+      // localStorage.setItem("user_datas",JSON.stringify({'userNamess':_this.userName,'userPasswordss':_this.userPassword}));
+      //  console.log(JSON.parse(localStorage.getItem('user_datas')))
+      //      this.$router.push({path:'/'})
+    }
   }
 };
 </script>

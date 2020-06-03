@@ -7,7 +7,7 @@ axios.defaults.timeout = 5000;
 axios.defaults.crossDomain = true;
 axios.defaults.withCredentials = true; //设置cross跨域 并设置访问权限 允许跨域携带cookie信息
 //http request 拦截器
-console.log(store.state.user_data,11111)
+// console.log(store.state.user_data,11111)
 axios.interceptors.request.use(
   config => {
     // const token = getCookie('名称');注意使用的时候需要引入cookie方法，推荐js-cookie
