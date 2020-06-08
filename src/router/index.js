@@ -90,9 +90,10 @@ router.beforeEach((to, from, next) => {
 	if (to.path == '/login') {
 	  next();
 	} else {
-	  let token = localStorage.getItem('user_datas');
+	  let token = localStorage.getItem('user_data');
 	  console.log(token)
 	  if (token == null || token == '') {
+		  console.log(token)
 		next('/login');
 	  } else {
 		next();

@@ -90,8 +90,18 @@ export default {
     },
     selectItems(index) {
       console.log(index);
-      this.$store.state.adminleftnavnum = index;
       //按钮选中之后设置当前的index为store里的值。
+      this.$store.state.adminleftnavnum = index;
+      //设置请求token是否过期
+      const _this=this;
+      console.log(_this.$store.state.user_data)
+       this.$fetch('/api/admin/login/checktoken',{'token':_this.$store.state.user_data.token})
+      .then((e) => {
+        if(e.code!=4){
+          this.$message.error('登录已过期，请重新登录');
+          this.$router.push({ path: "/login" })
+        }
+      })
     }
   },
   watch: {

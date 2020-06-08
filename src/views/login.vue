@@ -32,28 +32,56 @@ export default {
   data() {
     return {
       userName: "",
-      userPassword: ""
+      userPassword: "",
     };
+  },
+  mounted(){
+ console.log(localStorage.getItem('user_data'))
   },
   methods: {
     clickLogin() {
-      const _this = this;
+      let _this = this;
       if (this.userName) {
-        this.$fetch("/api/admin/login/userlogin",{'number':_this.userName,'passwd':_this.userPassword}).then(response => {
-          console.log(111);
-          console.log(response);
-          // console.log(_this.$store.state.user_data);
-        });
+        if (this.userPassword) {
+          this.$fetch("/api/admin/login/userlogin", {
+            number: _this.userName,
+            passwd: _this.userPassword
+          }).then(e => {
+            console.log(e);
+           localStorage.setItem("user_data",JSON.stringify(e.data));             
+            console.log(localStorage.getItem('user_data'))
+            if(e.code==0){
+              this.$router.push({path:'/'})
+            }else{
+              _this.loginFalse();
+            }
+            // console.log(_this.$store.state.user_data);
+          });
+        } else {
+          _this.loginInfo('请输入密码');
+        }
       } else {
-        console.log(222222);
+        _this.loginInfo('请输入账号');
       }
-      return;
+
       // console.log(this.userName, this.userPassword);
       // // this.$router.push({path:'/'})
       // const _this=this
       // localStorage.setItem("user_datas",JSON.stringify({'userNamess':_this.userName,'userPasswordss':_this.userPassword}));
       //  console.log(JSON.parse(localStorage.getItem('user_datas')))
       //      this.$router.push({path:'/'})
+    },
+    // 登录提示信息
+    loginInfo(message) {
+      this.$message({
+        message: message,
+        type: "warning"
+      });
+    },
+    // 登录报错
+    loginFalse() {
+      console.log(122121);
+      this.$message.error("登录失败");
     }
   }
 };
