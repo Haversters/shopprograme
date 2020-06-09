@@ -51,12 +51,12 @@
             <el-dropdown>
               <i class="el-icon-setting" style="margin-right: 5px"></i>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>查看</el-dropdown-item>
-                <el-dropdown-item>新增</el-dropdown-item>
-                <el-dropdown-item>删除</el-dropdown-item>
+                <el-dropdown-item>退出</el-dropdown-item>
+                <!-- <el-dropdown-item>新增</el-dropdown-item>
+                <el-dropdown-item>删除</el-dropdown-item> -->
               </el-dropdown-menu>
             </el-dropdown>
-            <span>王小虎</span>
+            <span>{{userName}}</span>
           </el-header>
           <router-view />
         </el-main>
@@ -73,8 +73,13 @@ export default {
       isCollapse: false, //控制侧边栏的显示
       search: "",
       fullHeight: document.documentElement.clientHeight,
-      navselected: "0"
+      navselected: "0",
+      userName:'',
     };
+  },
+  mounted(){
+ this.userName=this.$store.state.user_data.name
+ console.log(this.userName,this.$store.state.user_data.name)
   },
   methods: {
     handleOpen(key, keyPath) {

@@ -1,39 +1,34 @@
 <template>
-  <el-form
-    :model="dynamicValidateForm"
-    ref="dynamicValidateForm"
-    label-width="140px"
-    class="demo-dynamic"
-  >
+  <el-form :model="editorInfo" ref="editorInfo" label-width="140px" class="demo-dynamic">
     <el-form-item
-      prop="POnumber"
+      prop="id"
       label="PO"
       :rules="[
       {required: true, message: '请输入PO', trigger: 'blur' },
       {message: '请输入PO', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.POnumber"></el-input>
+      <el-input v-model="editorInfo.id"></el-input>
     </el-form-item>
     <el-form-item
-      prop="charge"
+      prop="person_charge"
       label="负责人"
       :rules="[
       {required: true, message: '请输入负责人', trigger: 'blur' },
       {message: '请输入负责人', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.charge"></el-input>
+      <el-input v-model="editorInfo.person_charge"></el-input>
     </el-form-item>
     <el-form-item
-      prop="purchasePrice"
+      prop="size"
       label="采购价"
       :rules="[
       {required: true, message: '请输入采购价', trigger: 'blur' },
       {message: '请输入采购价', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.purchasePrice"></el-input>
+      <el-input v-model="editorInfo.size"></el-input>
     </el-form-item>
     <el-form-item
       prop="weight"
@@ -43,37 +38,37 @@
       {message: '请输入重量', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.weight"></el-input>
+      <el-input v-model="editorInfo.weight"></el-input>
     </el-form-item>
     <el-form-item
-      prop="oceanShipping"
+      prop="ocean_profit"
       label="海运预估利润 "
       :rules="[
       {required: true, message: '请输入海运预估利润 ', trigger: 'blur' },
       {message: '请输入海运预估利润 ', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.oceanShipping"></el-input>
+      <el-input v-model="editorInfo.ocean_profit"></el-input>
     </el-form-item>
     <el-form-item
-      prop="airTransport"
+      prop="air_profit"
       label="空运预估利润"
       :rules="[
       {required: true, message: '请输入空运预估利润', trigger: 'blur' },
       {message: '请输入空运预估利润', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.airTransport"></el-input>
+      <el-input v-model="editorInfo.air_profit"></el-input>
     </el-form-item>
     <el-form-item
-      prop="shipmentId"
+      prop="shipment_id"
       label="shipmentId"
       :rules="[
       {required: true, message: '请输入shipmentId', trigger: 'blur' },
       {message: '请输入shipmentId', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.shipmentId"></el-input>
+      <el-input v-model="editorInfo.shipment_id"></el-input>
     </el-form-item>
     <el-form-item
       prop="invoice"
@@ -83,41 +78,41 @@
       {message: '请输入invoice', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.invoice"></el-input>
+      <el-input v-model="editorInfo.invoice"></el-input>
     </el-form-item>
     <el-form-item
-      prop="InvoiceAmount"
+      prop="Invoice_payment_amount"
       label="发票付款金额 "
       :rules="[
       {required: true, message: '请输入发票付款金额 ', trigger: 'blur' },
       {message: '请输入发票付款金额 ', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.InvoiceAmount"></el-input>
+      <el-input v-model="editorInfo.Invoice_payment_amount"></el-input>
     </el-form-item>
     <el-form-item
-      prop="isPay"
+      prop="pay_state"
       label="是否已经付全款"
       :rules="[
       {required: true, message: '请输入是否已经付全款', trigger: 'blur' },
       {message: '请输入是否已经付全款', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.isPay"></el-input>
+      <el-input v-model="editorInfo.pay_state"></el-input>
     </el-form-item>
     <el-form-item
-      prop="remarks"
+      prop="AISN"
       label="备注"
       :rules="[
       {message: '请输入备注', trigger: 'blur' },
       {message: '请输入备注', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.email"></el-input>
+      <el-input v-model="editorInfo.AISN"></el-input>
     </el-form-item>
 
     <el-form-item
-      v-for="(domain, index) in dynamicValidateForm.domains"
+      v-for="(domain, index) in editorInfo.domains"
       :label="'Invoice' + index"
       :key="domain.key"
       :prop="'domains.' + index + '.value'"
@@ -129,7 +124,7 @@
       <el-button @click.prevent="removeDomain(domain)">删除</el-button>
     </el-form-item>
     <el-form-item>
-      <el-button type="success" plain @click="submitForm('dynamicValidateForm')">提交</el-button>
+      <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
       <el-button @click="addDomain" type="danger" plain>新增 Invoice</el-button>
     </el-form-item>
   </el-form>
@@ -138,26 +133,35 @@
 export default {
   data() {
     return {
-      dynamicValidateForm: {
-        POnumber: "", //PO
-        charge: "", //负责人
-        purchasePrice: "", //采购价
-        weight: "", //重量
-        oceanShipping: "", //海运预估利润
-        airTransport: "", //空运预估利润
-        shipmentId: "", //shipmentId
-        invoice: "", //invoice
-        InvoiceAmount: "", //发票付款金额
-        isPay: "", //是否已经付全款
-        amazonNumber: "", //Amazon接收的到货数量
-        remarks: "", //备注
-        domains: [] //新增invioce
-      }
+      // 编辑列表的信息
+      editorInfo: {},
+      editorIndex: ""
+      //  editorInfo: {
+      //   POnumber: "", //PO
+      //   charge: "", //负责人
+      //   purchasePrice: "", //采购价
+      //   weight: "", //重量
+      //   oceanShipping: "", //海运预估利润
+      //   airTransport: "", //空运预估利润
+      //   shipmentId: "", //shipmentId
+      //   invoice: "", //invoice
+      //   InvoiceAmount: "", //发票付款金额
+      //   isPay: "", //是否已经付全款
+      //   amazonNumber: "", //Amazon接收的到货数量
+      //   remarks: "", //备注
+      //   domains: [], //新增invioce
+      //   // 编辑列表的信息
+      //   editorInfo: {},
+      //   editorIndex: ""
+      // }
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "2"; //设置左侧导航2-2 active
-    console.log(this.$store)
+  },
+  mounted() {
+    this.index = this.$route.query.index;
+    this.getTeamData(this.index);
   },
   methods: {
     //点击提交按钮
@@ -165,7 +169,7 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(_this.dynamicValidateForm);
+          console.log(_this.editorInfo);
           // alert('submit!');
         } else {
           console.log("error submit!!");
@@ -175,18 +179,29 @@ export default {
     },
     //删除新增invioce
     removeDomain(item) {
-      var index = this.dynamicValidateForm.domains.indexOf(item);
+      var index = this.editorInfo.domains.indexOf(item);
       if (index !== -1) {
-        this.dynamicValidateForm.domains.splice(index, 1);
+        this.editorInfo.domains.splice(index, 1);
       }
     },
     //新增invioce
     addDomain() {
       var _this = this;
-      console.log(this.dynamicValidateForm.domains);
-      this.dynamicValidateForm.domains.push({
+      console.log(this.editorInfo.domains);
+      this.editorInfo.domains.push({
         value: "",
-        key: "invoice" + _this.dynamicValidateForm.domains.length
+        key: "invoice" + _this.editorInfo.domains.length
+      });
+    },
+    // 获取编辑列表的信息
+    // 获取编辑列表的信息
+    getTeamData(index) {
+      const _this = this;
+      this.$fetch("/api/admin/index/index").then(e => {
+        if (e.code == 6) {
+          _this.editorInfo =JSON.parse(JSON.stringify(e.data[index]));
+        }
+        console.log(_this.editorInfo);
       });
     }
   }

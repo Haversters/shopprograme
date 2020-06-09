@@ -48,7 +48,8 @@ export default {
             passwd: _this.userPassword
           }).then(e => {
             console.log(e);
-           localStorage.setItem("user_data",JSON.stringify(e.data));             
+           localStorage.setItem("user_data",JSON.stringify(e.data));       
+           this.$store.state.user_data=e.data   
             console.log(localStorage.getItem('user_data'))
             if(e.code==0){
               this.$router.push({path:'/'})

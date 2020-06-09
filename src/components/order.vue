@@ -24,8 +24,10 @@
         <el-table-column align="center" prop="pay_state" label="是否已经付全款"></el-table-column>
         <el-table-column align="center" prop="received_quantity" label="Amazon接收的到货数量"></el-table-column>
         <el-table-column align="center" prop="AISN" label="备注"></el-table-column>
-        <el-table-column align="center" prop="address" label="操作">
-          <el-button size="mini" type="danger" @click="handleDelete(11, 111)">编辑</el-button>
+        <el-table-column align="center" prop label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">编辑</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-main>
@@ -37,9 +39,7 @@ export default {
   name: "Chargeback",
   data() {
     return {
-      tableData: [
-
-      ],
+      tableData: [],
       isCollapse: true, //控制侧边栏的显示
       search: "",
       input3: "",
@@ -50,27 +50,31 @@ export default {
   created() {
     this.$store.state.adminleftnavnum = "0"; //设置左侧导航2-2 active
   },
-  mounted(){
-    const _this=this;
-       this.$fetch('/api/admin/index/index')
-      .then((e) => {
-        console.log(111)
-        console.log(e)
-        if(e.code==6){
-        _this.tableData=e.data
-        }
-
-        console.log(_this.$store.state.user_data)
-      })
+  mounted() {
+    this.getTeamData();
   },
   methods: {
     // 控制搜索
     handleEdit(index, row) {
       console.log(index, row);
     },
-    handleDelete(index, row) {
-      console.log(index, row);
-      this.$router.push({ path: "/editor" });
+    handleDelete(index) {
+      console.log(index);
+      let urls = "/editor?index=" + index;
+      this.$router.push({ path: urls });
+    },
+    // 获取编辑列表的信息
+    getTeamData() {
+      const _this = this;
+      this.$fetch("/api/admin/index/index").then(e => {
+        console.log(111);
+        console.log(e);
+        if (e.code == 6) {
+          _this.tableData = e.data;
+        }
+
+        console.log(_this.$store.state.user_data);
+      });
     }
   }
 };
