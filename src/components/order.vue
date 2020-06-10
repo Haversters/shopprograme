@@ -14,7 +14,7 @@
       >
         <el-table-column align="center" sortable prop="id" label="PO" width></el-table-column>
         <el-table-column align="center" prop="person_charge" label="负责人" width></el-table-column>
-        <el-table-column align="center" prop="size" label="采购价" width></el-table-column>
+        <el-table-column align="center" prop="charge_price" label="采购价" width></el-table-column>
         <el-table-column align="center" prop="weight" label="重量"></el-table-column>
         <el-table-column align="center" prop="ocean_profit" label="海运预估利润 "></el-table-column>
         <el-table-column align="center" prop="air_profit" label="空运预估利润"></el-table-column>
@@ -23,7 +23,7 @@
         <el-table-column align="center" prop="Invoice_payment_amount" label="发票付款金额 "></el-table-column>
         <el-table-column align="center" prop="pay_state" label="是否已经付全款"></el-table-column>
         <el-table-column align="center" prop="received_quantity" label="Amazon接收的到货数量"></el-table-column>
-        <el-table-column align="center" prop="AISN" label="备注"></el-table-column>
+        <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
         <el-table-column align="center" prop label="操作">
           <template slot-scope="scope">
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">编辑</el-button>
@@ -69,13 +69,16 @@ export default {
       this.$fetch("/api/admin/index/index").then(e => {
         console.log(111);
         console.log(e);
-        if (e.code == 6) {
+        if (e.code == 0) {
           _this.tableData = e.data;
+        }else{
+          let messages=e.msg
+           this.$message.error(messages);
         }
 
         console.log(_this.$store.state.user_data);
       });
-    }
+    },
   }
 };
 </script>

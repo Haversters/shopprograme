@@ -195,12 +195,17 @@ export default {
     },
     // 获取编辑列表的信息
     // 获取编辑列表的信息
-    getTeamData(index) {
+    getTeamData(indexs) {
       const _this = this;
       this.$fetch("/api/admin/index/index").then(e => {
-        if (e.code == 6) {
-          _this.editorInfo =JSON.parse(JSON.stringify(e.data[index]));
+        if (e.code == 0) {
+          // _this.editorInfo =JSON.parse(JSON.stringify(e.data[index]));
+          for(let key in e.data[indexs]){
+            console.log(key,e.data[indexs][key])
+            e.data[indexs][key]=String(e.data[indexs][key])
+          }
         }
+                  _this.editorInfo =e.data[indexs];
         console.log(_this.editorInfo);
       });
     }
