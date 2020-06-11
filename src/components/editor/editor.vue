@@ -130,6 +130,9 @@
   </el-form>
 </template>
 <script>
+import axios from "axios";
+
+import { post } from "../../../config/http";
 export default {
   data() {
     return {
@@ -169,13 +172,22 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(_this.editorInfo);
           // alert('submit!');
           // let editorInfo=String(_this.editorInfo)
-          let params={array:_this.editorInfo}
-          _this.$post("/api/admin/index/update",params).then(function(e){
-            console.log(e);
-          })
+          let params = { array: 111 };
+          console.log(params);
+          axios({
+            method: 'post',
+            url: '/api/admin/index/update',
+            data: {
+              'array':21111,
+            }
+          }).then(function(e){
+            console.log(e)
+          });
+          // _this.$post("/api/admin/index/update", params).then(function(e) {
+          //   console.log(e);
+          // });
         } else {
           console.log("error submit!!");
           return false;
@@ -205,12 +217,12 @@ export default {
       this.$fetch("/api/admin/index/index").then(e => {
         if (e.code == 0) {
           // _this.editorInfo =JSON.parse(JSON.stringify(e.data[index]));
-          for(let key in e.data[indexs]){
-            console.log(key,e.data[indexs][key])
-            e.data[indexs][key]=String(e.data[indexs][key])
+          for (let key in e.data[indexs]) {
+            console.log(key, e.data[indexs][key]);
+            e.data[indexs][key] = String(e.data[indexs][key]);
           }
         }
-                  _this.editorInfo =e.data[indexs];
+        _this.editorInfo = e.data[indexs];
         console.log(_this.editorInfo);
       });
     }

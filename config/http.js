@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Message } from 'element-ui';
 import store from '../src/vuex/store'; //请求store数据
 import baseURLs from '../config/baseUrl'
+import qs from 'qs'
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL = baseURLs.serverUrl;
 axios.defaults.crossDomain = true;
