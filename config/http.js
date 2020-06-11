@@ -3,7 +3,7 @@ import { Message } from 'element-ui';
 import store from '../src/vuex/store'; //请求store数据
 import baseURLs from '../config/baseUrl'
 axios.defaults.timeout = 5000;
-axios.defaults.baseURL =baseURLs.serverUrl;
+axios.defaults.baseURL = baseURLs.serverUrl;
 axios.defaults.crossDomain = true;
 axios.defaults.withCredentials = true; //设置cross跨域 并设置访问权限 允许跨域携带cookie信息
 //http request 拦截器
@@ -14,7 +14,7 @@ axios.interceptors.request.use(
     // const token = getCookie('名称');注意使用的时候需要引入cookie方法，推荐js-cookie
     config.data = JSON.stringify(config.data);
     config.headers = {
-      'Content-Type':'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
     // if(token){
     //   config.params = {'token':token}
@@ -31,10 +31,10 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => {
     console.log(response)
-    if(response.data.errCode ==2){
+    if (response.data.errCode == 2) {
       router.push({
-        path:"/login",
-        query:{redirect:router.currentRoute.fullPath}//从哪个页面跳转
+        path: "/login",
+        query: { redirect: router.currentRoute.fullPath }//从哪个页面跳转
       })
     }
     return response;
@@ -54,7 +54,7 @@ axios.interceptors.response.use(
 //   return new Promise((resolve,reject)=>{
 //     axios({
 //       method:methods,
-      
+
 //     })
 //   })
 // }
@@ -67,17 +67,17 @@ axios.interceptors.response.use(
  * @returns {Promise}
  */
 
-export function fetch(url,params={}){
-  return new Promise((resolve,reject) => {
-    axios.get(url,{
-      params:params
+export function fetch(url, params = {}) {
+  return new Promise((resolve, reject) => {
+    axios.get(url, {
+      params: params
     })
-    .then(response => {
-      resolve(response.data);
-    })
-    .catch(err => {
-      reject(err)
-    })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err)
+      })
   })
 }
 
@@ -89,49 +89,51 @@ export function fetch(url,params={}){
  * @returns {Promise}
  */
 
- export function post(url,data = {}){
-   return new Promise((resolve,reject) => {
-     axios.post(url,data)
-          .then(response => {
-            resolve(response.data);
-          },err => {
-            reject(err)
-          })
-   })
- }
+export function post(url, data = {}) {
+  return new Promise((resolve, reject) => {
+    axios.post(url, data)
+      .then(response => {
+        resolve(response.data);
+      }, err => {
+        reject(err)
+      })
+  })
+}
+//  封装所有请求
 
- /**
- * 封装patch请求
- * @param url
- * @param data
- * @returns {Promise}
- */
 
-export function patch(url,data = {}){
-  return new Promise((resolve,reject) => {
-    axios.patch(url,data)
-         .then(response => {
-           resolve(response.data);
-         },err => {
-           reject(err)
-         })
+/**
+* 封装patch请求
+* @param url
+* @param data
+* @returns {Promise}
+*/
+
+export function patch(url, data = {}) {
+  return new Promise((resolve, reject) => {
+    axios.patch(url, data)
+      .then(response => {
+        resolve(response.data);
+      }, err => {
+        reject(err)
+      })
   })
 }
 
- /**
- * 封装put请求
- * @param url
- * @param data
- * @returns {Promise}
- */
+/**
+* 封装put请求
+* @param url
+* @param data
+* @returns {Promise}
+*/
 
-export function put(url,data = {}){
-  return new Promise((resolve,reject) => {
-    axios.put(url,data)
-         .then(response => {
-           resolve(response.data);
-         },err => {
-           reject(err)
-         })
+export function put(url, data = {}) {
+  return new Promise((resolve, reject) => {
+    axios.put(url, data)
+      .then(response => {
+        resolve(response.data);
+      }, err => {
+        reject(err)
+      })
   })
 }

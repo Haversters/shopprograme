@@ -171,6 +171,11 @@ export default {
         if (valid) {
           console.log(_this.editorInfo);
           // alert('submit!');
+          // let editorInfo=String(_this.editorInfo)
+          let params={array:_this.editorInfo}
+          _this.$post("/api/admin/index/update",params).then(function(e){
+            console.log(e);
+          })
         } else {
           console.log("error submit!!");
           return false;
