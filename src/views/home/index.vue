@@ -53,7 +53,7 @@
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>退出</el-dropdown-item>
                 <!-- <el-dropdown-item>新增</el-dropdown-item>
-                <el-dropdown-item>删除</el-dropdown-item> -->
+                <el-dropdown-item>删除</el-dropdown-item>-->
               </el-dropdown-menu>
             </el-dropdown>
             <span>{{userName}}</span>
@@ -74,12 +74,14 @@ export default {
       search: "",
       fullHeight: document.documentElement.clientHeight,
       navselected: "0",
-      userName:'',
+      userName: ""
     };
   },
-  mounted(){
- this.userName=this.$store.state.user_data.name
- console.log(this.userName,this.$store.state.user_data.name)
+  mounted() {
+    if (this.$store.state.user_data.name) {
+      this.userName = this.$store.state.user_data.name;
+    }
+    console.log(this.userName, this.$store.state.user_data.name);
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -97,16 +99,23 @@ export default {
       console.log(index);
       //按钮选中之后设置当前的index为store里的值。
       this.$store.state.adminleftnavnum = index;
+      //本地token
+      let localStorageToken=localStorage.getItem('user_data')
       //设置请求token是否过期
-      const _this=this;
-      console.log(_this.$store.state.user_data)
-       this.$fetch('/api/admin/login/checktoken',{'token':_this.$store.state.user_data.token})
-      .then((e) => {
-        if(e.code!=4){
-          this.$message.error('登录已过期，请重新登录');
-          this.$router.push({ path: "/login" })
-        }
-      })
+      const _this = this;
+      if (_this.$store.state.user_data.token==null || localStorageToken==null) {
+        this.$message.error("登录已过期，请重新登录");
+        this.$router.push({ path: "/login" });
+      }
+      console.log(_this.$store.state.user_data);
+      this.$fetch("/api/admin/login/checktoken", {
+        token: _this.$store.state.user_data.token
+      }).then(e => {
+        // if (e.code != 4) {
+        //   this.$message.error("登录已过期，请重新登录");
+        //   this.$router.push({ path: "/login" });
+        // }
+      });
     }
   },
   watch: {

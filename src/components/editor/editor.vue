@@ -173,19 +173,17 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert('submit!');
-          // let editorInfo=String(_this.editorInfo)
+          let editorInfo=_this.editorInfo
           let params = { array: 111 };
           console.log(params);
           axios({
             method: 'post',
             url: '/api/admin/index/update',
-            data: {
-              'array':21111,
-            }
+            data:editorInfo
           }).then(function(e){
             console.log(e)
           });
-          // _this.$post("/api/admin/index/update", params).then(function(e) {
+          // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
           // });
         } else {

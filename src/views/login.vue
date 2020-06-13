@@ -52,7 +52,7 @@ export default {
            this.$store.state.user_data=e.data   
             console.log(localStorage.getItem('user_data'))
             if(e.code==0){
-              this.$router.push({path:'/'})
+              this.$router.push({path:'/order'})
             }else{
               _this.loginFalse();
             }

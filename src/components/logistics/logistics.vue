@@ -57,11 +57,15 @@ export default {
       isCollapse: true, //控制侧边栏的显示
       search: "",
       input3: "",
-      loading: false //控制加载状态
+      loading: false, //控制加载状态
+      logisticsData:[],//页面数据列表
     };
   },
  created() {
     this.$store.state.adminleftnavnum = "3"; //设置左侧导航2-2 active
+  },
+  mounted(){
+this.getlogisticsData();
   },
     methods: {
     // 控制搜索
@@ -71,7 +75,23 @@ export default {
     handleDelete(index, row) {
       console.log(index, row);
       this.$router.push({path:'/logistics/editor'})
-    }
+    },
+        // 获取chrgeback列表的信息
+    getlogisticsData() {
+      const _this = this;
+      this.$fetch("/api/admin/chargeback/index").then(e => {
+        console.log(111);
+        console.log(e);
+        // if (e.code == 0) {
+        //   _this.chargeData = e.data;
+        // } else {
+        //   let messages = e.msg;
+        //   this.$message.error(messages);
+        // }
+
+        console.log(_this.$store.state.user_data);
+      });
+    },
   },
 };
 </script>

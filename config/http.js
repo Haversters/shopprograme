@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Message } from 'element-ui';
 import store from '../src/vuex/store'; //请求store数据
 import baseURLs from '../config/baseUrl'
+import router from '../src/router/index'
 import qs from 'qs'
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL = baseURLs.serverUrl;
@@ -13,7 +14,7 @@ axios.interceptors.request.use(
   config => {
     // console.log(config)
     // const token = getCookie('名称');注意使用的时候需要引入cookie方法，推荐js-cookie
-    config.data = JSON.stringify(config.data);
+    config.data = qs.stringify(config.data);
     config.headers = {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
@@ -31,7 +32,13 @@ axios.interceptors.request.use(
 //http response 拦截器
 axios.interceptors.response.use(
   response => {
-    console.log(response)
+    console.log(response,store.state.user_data)
+    if(store.state.user_data==null){
+      router.push({
+        path: "/login",
+        query: { redirect: router.currentRoute.fullPath }//从哪个页面跳转
+      })
+    }
     if (response.data.errCode == 2) {
       router.push({
         path: "/login",
