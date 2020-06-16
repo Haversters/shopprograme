@@ -4,7 +4,7 @@
       <div style>
         <el-input placeholder="请输入PO/负责人" v-model="input3" class="input-with-select">
           <template slot="prepend">筛选</template>
-          <el-button slot="append" icon="el-icon-search">搜索</el-button>
+          <el-button slot="append" icon="el-icon-search" @click="getSearch()">搜索</el-button>
         </el-input>
       </div>
       <el-table
@@ -71,14 +71,30 @@ export default {
         console.log(e);
         if (e.code == 0) {
           _this.tableData = e.data;
-        }else{
-          let messages=e.msg
-           this.$message.error(messages);
+        } else {
+          let messages = e.msg;
+          this.$message.error(messages);
         }
 
         console.log(_this.$store.state.user_data);
       });
     },
+    // 搜索类型
+    getSearch() {
+      let urls='/api/admin/index/select?type=po&content='+this.input3
+      this.$fetch(urls).then(e => {
+        console.log(111);
+        console.log(e);
+        // if (e.code == 0) {
+        //   _this.tableData = e.data;
+        // } else {
+        //   let messages = e.msg;
+        //   this.$message.error(messages);
+        // }
+
+        console.log(_this.$store.state.user_data);
+      });
+    }
   }
 };
 </script>
