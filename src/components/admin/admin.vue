@@ -1,11 +1,7 @@
 <template>
   <el-container>
     <el-main>
-      <el-table
-        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-        style="width: 100%"
-        :border="true"
-      >
+      <el-table :data="adminData" style="width: 100%" :border="true">
         <el-table-column align="center" prop="date" label="账号" width></el-table-column>
         <el-table-column align="center" prop="name" label="登录ID" width></el-table-column>
         <el-table-column align="center" prop="address" label="密码"></el-table-column>
@@ -24,33 +20,7 @@
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎1",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎2",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎3",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎4",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎5",
-          address: "上海市普陀区金沙江路 1518 弄"
-        }
-      ],
+      adminData: [],
       isCollapse: true, //控制侧边栏的显示
       search: "",
       input3: "",
@@ -69,10 +39,25 @@ export default {
       console.log(index, row);
       this.$router.push({ path: "/finance/editor" });
     },
+    getfinanceData() {
+      const _this = this;
+      this.$fetch("/api/admin/finance/index").then(e => {
+        console.log(111);
+        console.log(e);
+        if (e.code == 6) {
+          _this.financeData = e.data;
+        } else {
+          let messages = e.msg;
+          this.$message.error(messages);
+        }
+
+        console.log(_this.$store.state.user_data);
+      });
+    },
     // 删除当前
     deleteRow(index, rows) {
       rows.splice(index, 1);
-    },
+    }
   }
 };
 </script>
