@@ -1,89 +1,99 @@
 <template>
   <el-form
-    :model="dynamicValidateForm"
-    ref="dynamicValidateForm"
+    :model="editorInfo"
+    ref="editorInfo"
     label-width="140px"
     class="demo-dynamic"
   >
     <el-form-item
-      prop="logisticsCharge"
-      label="负责人"
-      :rules="[
-      {required: true, message: '请输入负责人', trigger: 'blur' },
-      {message: '请输入负责人', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="dynamicValidateForm.logisticsCharge"></el-input>
-    </el-form-item>
-    <el-form-item
       prop="delivery"
-      label="发货方式"
+      label="delivery"
       :rules="[
-      {required: true, message: '请输入发货方式', trigger: 'blur' },
-      {message: '请输入发货方式', trigger: ['blur'] }
+      {required: true, message: '请输入delivery', trigger: 'blur' },
+      {message: '请输入delivery', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.delivery"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="trackingNumber"
-      label="追踪号"
-      :rules="[
-      {required: true, message: '请输入追踪号', trigger: 'blur' },
-      {message: '请输入追踪号', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="dynamicValidateForm.trackingNumber"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="transferNo"
-      label="转单号"
-      :rules="[
-      {required: true, message: '请输入转单号', trigger: 'blur' },
-      {message: '请输入转单号', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="dynamicValidateForm.transferNo"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="deliveryWeight"
-      label="发货重量 "
-      :rules="[
-      {required: true, message: '请输入发货重量 ', trigger: 'blur' },
-      {message: '请输入发货重量 ', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="dynamicValidateForm.deliveryWeight"></el-input>
+      <el-input v-model="editorInfo.delivery"></el-input>
     </el-form-item>
     <el-form-item
       prop="deliveryContent"
-      label="发货内容"
+      label="delivery_Content"
       :rules="[
-      {required: true, message: '请输入发货内容', trigger: 'blur' },
-      {message: '请输入发货内容', trigger: ['blur'] }
+      {required: true, message: '请输入delivery_Content', trigger: 'blur' },
+      {message: '请输入delivery_Content', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.deliveryContent"></el-input>
+      <el-input v-model="editorInfo.deliveryContent"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="deliveryWeight"
+      label="delivery_Weight"
+      :rules="[
+      {required: true, message: '请输入delivery_Weight', trigger: 'blur' },
+      {message: '请输入delivery_Weight', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.deliveryWeight"></el-input>
     </el-form-item>
     <el-form-item
       prop="freight"
-      label="运费"
+      label="freight"
       :rules="[
-      {required: true, message: '请输入运费', trigger: 'blur' },
-      {message: '请输入运费', trigger: ['blur'] }
+      {required: true, message: '请输入freight', trigger: 'blur' },
+      {message: '请输入freight', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.freight"></el-input>
+      <el-input v-model="editorInfo.freight"></el-input>
     </el-form-item>
     <el-form-item
       prop="isDelivered"
-      label="是否妥投了"
+      label="isDelivered "
       :rules="[
-      {required: true, message: '请输入是或者否', trigger: 'blur' },
-      {message: '请输入是或者否', trigger: ['blur'] }
+      {required: true, message: '请输入isDelivered ', trigger: 'blur' },
+      {message: '请输入isDelivered ', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.isDelivered"></el-input>
+      <el-input v-model="editorInfo.isDelivered"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="logisticsCharge"
+      label="logistics_Charge"
+      :rules="[
+      {required: true, message: '请输入logistics_Charge', trigger: 'blur' },
+      {message: '请输入logistics_Charge', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.logisticsCharge"></el-input>
+    </el-form-item>
+    <!-- <el-form-item
+      prop="logisticsRemarks"
+      label="logistics_Remarks"
+      :rules="[
+      {required: true, message: '请输入logistics_Remarks', trigger: 'blur' },
+      {message: '请输入logistics_Remarks', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.logisticsRemarks"></el-input>
+    </el-form-item> -->
+    <el-form-item
+      prop="trackingNumber"
+      label="tracking_Number"
+      :rules="[
+      {required: true, message: '请输入tracking_Number', trigger: 'blur' },
+      {message: '请输入tracking_Number', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.trackingNumber"></el-input>
+    </el-form-item>
+        <el-form-item
+      prop="transferNo"
+      label="transfer_No"
+      :rules="[
+      {required: true, message: '请输入transfer_No', trigger: 'blur' },
+      {message: '请输入transfer_No', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.transferNo"></el-input>
     </el-form-item>
     <el-form-item
       prop="remarks"
@@ -93,34 +103,32 @@
       {message: '请输入备注', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="dynamicValidateForm.email"></el-input>
+      <el-input v-model="editorInfo.remarks"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="success" plain @click="submitForm('dynamicValidateForm')">提交</el-button>
+      <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
 <script>
+import axios from "axios";
+
+import { post } from "../../../config/http";
 export default {
   data() {
     return {
-      dynamicValidateForm: {
-        logisticsCharge: "", //负责人
-        delivery: "", //发货方式
-        trackingNumber: "", //追踪号
-        transferNo: "", //转单号
-        deliveryWeight: "", //发货重量
-        deliveryContent: "", //发货内容
-        freight: "", //运费
-        isDelivered: "", //是否妥投了
-        isPay: "", //是否已经付全款
-        logisticsRemarks: "", //备注
-      }
+                    // 编辑列表的信息
+      editorInfo: {},
+      editorIndex: ""
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "3"; //设置左侧导航2-2 active
     console.log(this.$store)
+  },
+    mounted() {
+    this.index = this.$route.query.index;
+    this.getTeamData(this.index);
   },
   methods: {
     //点击提交按钮
@@ -128,8 +136,20 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(_this.dynamicValidateForm);
           // alert('submit!');
+          let editorInfo=_this.editorInfo
+          let params = { array: 111 };
+          console.log(params);
+          axios({
+            method: 'post',
+            url: '/api/admin/logistics/update',
+            data:editorInfo
+          }).then(function(e){
+            console.log(e)
+          });
+          // _this.$post("/api/admin/logistics/update", editorInfo).then(function(e) {
+          //   console.log(e);
+          // });
         } else {
           console.log("error submit!!");
           return false;
@@ -138,11 +158,27 @@ export default {
     },
     //删除新增invioce
     removeDomain(item) {
-      var index = this.dynamicValidateForm.domains.indexOf(item);
+      var index = this.editorInfo.domains.indexOf(item);
       if (index !== -1) {
-        this.dynamicValidateForm.domains.splice(index, 1);
+        this.editorInfo.domains.splice(index, 1);
       }
     },
+    // 获取编辑列表的信息
+    // 获取编辑列表的信息
+    getTeamData(indexs) {
+      const _this = this;
+      this.$fetch("/api/admin/logistics/index").then(e => {
+          console.log(e)
+        if (e.code == 6) {
+          for (let key in e.data[indexs]) {
+            console.log(key, e.data[indexs][key]);
+            e.data[indexs][key] = String(e.data[indexs][key]);
+          }
+        }
+        _this.editorInfo = e.data[indexs];
+        console.log(_this.editorInfo);
+      });
+    }
   },
 };
 </script>

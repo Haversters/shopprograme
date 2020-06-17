@@ -1,14 +1,14 @@
 <template>
   <el-form :model="editorInfo" ref="editorInfo" label-width="140px" class="demo-dynamic">
     <el-form-item
-      prop="id"
+      prop="po"
       label="PO"
       :rules="[
       {required: true, message: '请输入PO', trigger: 'blur' },
       {message: '请输入PO', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.id"></el-input>
+      <el-input v-model="editorInfo.po"></el-input>
     </el-form-item>
     <el-form-item
       prop="person_charge"
@@ -173,15 +173,24 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert('submit!');
-          let editorInfo=_this.editorInfo
+          let editorInfo = _this.editorInfo;
           let params = { array: 111 };
           console.log(params);
           axios({
-            method: 'post',
-            url: '/api/admin/index/update',
-            data:editorInfo
-          }).then(function(e){
-            console.log(e)
+            method: "post",
+            url: "/api/admin/index/update",
+            data: editorInfo
+          }).then(function(e) {
+            console.log(e.data);
+            if (e.data.code == 0) {
+              _this.$message.success("修改成功");
+               _this.$router.push({ path: '/order' });
+            } else if(e.data.code == 7){
+              _this.$message.error("未编辑数据");
+            }else{
+               let messages = e.data.msg;
+              _this.$message.error(messages);
+            }
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);

@@ -8,27 +8,30 @@
           <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
       </div>
-      <el-table
-        :data="chargeData"
-        style="width: 100%"
-        :border="true"
-      >
-        <!-- <el-table-column align="center" sortable prop="date" label="PO" width></el-table-column>
-        <el-table-column align="center" prop="date" label="负责人" width></el-table-column>
-        <el-table-column align="center" prop="name" label="采购价" width></el-table-column>
-        <el-table-column align="center" prop="address" label="重量"></el-table-column>
-        <el-table-column align="center" prop="address" label="海运预估利润 "></el-table-column>
-        <el-table-column align="center" prop="address" label="空运预估利润"></el-table-column>
-        <el-table-column align="center" prop="address" label="shipment ID"></el-table-column>
-        <el-table-column align="center" prop="address" label="invoice"></el-table-column>
-        <el-table-column align="center" prop="address" label="发票付款金额 "></el-table-column>
-        <el-table-column align="center" prop="address" label="是否已经付全款"></el-table-column>
-        <el-table-column align="center" prop="address" label="Amazon接收的到货数量"></el-table-column>
-        <el-table-column align="center" prop="address" label="备注"></el-table-column> -->
-        <el-table-column align="center" prop="address" label="操作">
-          <el-button size="mini" type="danger" @click="handleDelete(11, 22)">编辑</el-button>
+      <el-table :data="chargeData" style="width: 100%" :border="true">
+        <el-table-column align="center" sortable prop="ASIN" label="ASIN" width></el-table-column>
+        <el-table-column align="center" prop="ChargebackID" label="Chargeback_ID" width></el-table-column>
+        <el-table-column align="center" prop="Chargebacktype" label="Chargeback_type" width></el-table-column>
+        <el-table-column align="center" prop="Creationdate" label="Creationdate"></el-table-column>
+        <el-table-column align="center" prop="Financial_charge" label="Financial_charge "></el-table-column>
+        <el-table-column align="center" prop="Financialcharge" label="Financialcharge "></el-table-column>
+        <el-table-column align="center" prop="IssueID" label="Issue_ID"></el-table-column>
+        <el-table-column align="center" prop="Purchaseorder" label="Purchase_Order"></el-table-column>
+        <el-table-column align="center" prop="Quantity" label="Quantity "></el-table-column>
+        <el-table-column align="center" prop="ShipmentID" label="ShipmentID"></el-table-column>
+        <el-table-column align="center" prop="Vendorcode" label="Vendorcode"></el-table-column>
+        <el-table-column align="center" prop="person_charge" label="person_charge"></el-table-column>
+        <el-table-column align="center" prop="status" label="status"></el-table-column>
+        <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
+        <el-table-column align="center" prop label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">编辑</el-button>
+          </template>
         </el-table-column>
       </el-table>
+            <div class="paginations">
+        <el-pagination background layout="prev, pager, next" :total="1000" :page-size=7></el-pagination>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -38,43 +41,18 @@ export default {
   name: "Chargeback",
   data() {
     return {
-      chargeData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        }
-      ],
+      chargeData: [],
       isCollapse: true, //控制侧边栏的显示
       search: "",
-      input3: ""
+      input3: "",
+      tableData:[],
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "1"; //设置左侧导航2-2 active
   },
-  mounted(){
-this.getChargeData()
+  mounted() {
+    this.getChargeData();
   },
   methods: {
     // 控制搜索
@@ -82,7 +60,9 @@ this.getChargeData()
       console.log(index, row);
     },
     handleDelete(index, row) {
-      console.log(index, row);
+      console.log(index);
+      let urls = "/chargebackEditor?index=" + index;
+      this.$router.push({ path: urls });
     },
     // 获取chrgeback列表的信息
     getChargeData() {
@@ -91,15 +71,15 @@ this.getChargeData()
         console.log(111);
         console.log(e);
         if (e.code == 0) {
-          _this.chargeData = e.data;
+          _this.tableData = e.data;
+          _this.chargeData =  _this.tableData.slice(0,7);
         } else {
           let messages = e.msg;
           this.$message.error(messages);
         }
-
         console.log(_this.$store.state.user_data);
       });
-    },
+    }
   }
 };
 </script>
@@ -109,5 +89,14 @@ this.getChargeData()
 .input-with-select {
   width: 600px;
   margin-bottom: 20px;
+}
+/* 分页区域 */
+.paginations{
+  width: 100%;
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid red;
 }
 </style>

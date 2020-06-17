@@ -2,21 +2,25 @@
   <el-container>
     <el-main>
       <el-table
-        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+        :data="logisticsData"
         style="width: 100%"
         :border="true"
       >
-        <el-table-column align="center" prop="date" label="负责人" width></el-table-column>
-        <el-table-column align="center" prop="name" label="发货方式" width></el-table-column>
-        <el-table-column align="center" prop="address" label="追踪号"></el-table-column>
-        <el-table-column align="center" prop="address" label="转单号 "></el-table-column>
-        <el-table-column align="center" prop="address" label="发货重量"></el-table-column>
-        <el-table-column align="center" prop="address" label="发货内容"></el-table-column>
-        <el-table-column align="center" prop="address" label="运费"></el-table-column>
-        <el-table-column align="center" prop="address" label="是否妥投了 "></el-table-column>
-        <el-table-column align="center" prop="address" label="备注"></el-table-column>
-        <el-table-column align="center" prop="address" label="操作">
-          <el-button size="mini" type="danger" @click="handleDelete(11, 1211)">编辑</el-button>
+        <el-table-column align="center" prop="delivery" label="delivery" width></el-table-column>
+        <el-table-column align="center" prop="deliveryContent" label="delivery_Content" width></el-table-column>
+        <el-table-column align="center" prop="deliveryWeight" label="delivery_Weight"></el-table-column>
+        <el-table-column align="center" prop="freight" label="freight "></el-table-column>
+        <el-table-column align="center" prop="id" label="id"></el-table-column>
+        <el-table-column align="center" prop="isDelivered" label="isDelivered"></el-table-column>
+        <el-table-column align="center" prop="logisticsCharge" label="logistics_Charge"></el-table-column>
+        <!-- <el-table-column align="center" prop="logisticsRemarks" label="logistics_Remarks "></el-table-column> -->
+        <el-table-column align="center" prop="trackingNumber" label="tracking_Number"></el-table-column>
+         <el-table-column align="center" prop="transferNo" label="transfer_No"></el-table-column>
+                  <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
+       <el-table-column align="center" prop label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">编辑</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-main>
@@ -28,31 +32,6 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        }
       ],
       isCollapse: true, //控制侧边栏的显示
       search: "",
@@ -73,21 +52,22 @@ this.getlogisticsData();
       console.log(index, row);
     },
     handleDelete(index, row) {
-      console.log(index, row);
-      this.$router.push({path:'/logistics/editor'})
+      console.log(index);
+      let urls = "/logistics/editor?index=" + index;
+      this.$router.push({ path: urls });
     },
         // 获取chrgeback列表的信息
     getlogisticsData() {
       const _this = this;
-      this.$fetch("/api/admin/chargeback/index").then(e => {
+      this.$fetch("/api/admin/logistics/index").then(e => {
         console.log(111);
         console.log(e);
-        // if (e.code == 0) {
-        //   _this.chargeData = e.data;
-        // } else {
-        //   let messages = e.msg;
-        //   this.$message.error(messages);
-        // }
+        if (e.code == 6) {
+          _this.logisticsData = e.data;
+        } else {
+          let messages = e.msg;
+          this.$message.error(messages);
+        }
 
         console.log(_this.$store.state.user_data);
       });
