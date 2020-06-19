@@ -2,8 +2,9 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import login from '@/views/login'; //登录页面
 import home from '@/views/home/index';
-import chargeback from '@/components/chargeback/chargeback';
-import chargebackEditor from '@/components/chargeback/chargebackEditor';
+import chargeback from '@/components/chargeback/chargeback';//chargeback
+import chargebackEditor from '@/components/chargeback/chargebackEditor'; //chargeback编辑页面
+import chargebackAdd from '@/components/chargeback/chargebackAdd'; //chargeback新增
 import order from '@/components/order'; //PO订单页面
 import editor from '@/components/editor/editor'; //PO订单编辑
 import logistics from '@/components/logistics/logistics'; //物流管理版块
@@ -39,11 +40,17 @@ const router = new Router({
 					name: 'chargeback',
 					component: chargeback
 				},
-				// chargeback
+				// chargeback编辑
 				{
 					path: '/chargebackEditor',
 					name: 'chargebackEditor',
 					component: chargebackEditor
+				},
+				// chargeback新增
+				{
+					path: '/chargeback/chargebackAdd',
+					name: 'chargebackAdd',
+					component: chargebackAdd
 				},
 				// po订单编辑
 				{

@@ -1,131 +1,148 @@
 <template>
   <el-form :model="editorInfo" ref="editorInfo" label-width="140px" class="demo-dynamic">
     <el-form-item
-      prop="id"
-      label="PO"
+      prop="ASIN"
+      label="ASIN"
       :rules="[
-      {required: true, message: '请输入PO', trigger: 'blur' },
-      {message: '请输入PO', trigger: ['blur'] }
+      {required: true, message: '请输入ASIN', trigger: 'blur' },
+      {message: '请输入ASIN', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.id"></el-input>
+      <el-input v-model="editorInfo.ASIN"></el-input>
     </el-form-item>
     <el-form-item
-      prop="person_charge"
-      label="负责人"
+      prop="chargebackID"
+      label="chargebackID"
       :rules="[
-      {required: true, message: '请输入负责人', trigger: 'blur' },
-      {message: '请输入负责人', trigger: ['blur'] }
+      {required: true, message: '请输入chargebackID', trigger: 'blur' },
+      {message: '请输入chargebackID', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.chargebackID"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="chargeback_type"
+      label="chargeback_type"
+      :rules="[
+      {required: true, message: '请输入chargeback_type', trigger: 'blur' },
+      {message: '请输入chargeback_type', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.chargeback_type"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="creation_date"
+      label="creation_date"
+      :rules="[
+      {required: true, message: '请输入creation_date', trigger: 'blur' },
+      {message: '请输入creation_date', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.creation_date"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="financial_charge"
+      label="financial_charge "
+      :rules="[
+      {required: true, message: '请输入financial_charge ', trigger: 'blur' },
+      {message: '请输入financial_charge ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.financial_charge"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="Financialcharge"
+      label="Financialcharge"
+      :rules="[
+      {required: true, message: '请输入Financialcharge', trigger: 'blur' },
+      {message: '请输入Financialcharge', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.Financialcharge"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="issueID"
+      label="issueID"
+      :rules="[
+      {required: true, message: '请输入issueID', trigger: 'blur' },
+      {message: '请输入issueID', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.issueID"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="purchase_order"
+      label="purchase_order"
+      :rules="[
+      {required: true, message: '请输入purchase_order', trigger: 'blur' },
+      {message: '请输入purchase_order', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.purchase_order"></el-input>
+    </el-form-item>
+        <el-form-item
+      prop="quantity"
+      label="quantity"
+      :rules="[
+      {required: true, message: '请输入quantity', trigger: 'blur' },
+      {message: '请输入quantity', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.quantity"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="shipmentID"
+      label="shipmentID "
+      :rules="[
+      {required: true, message: '请输入shipmentID ', trigger: 'blur' },
+      {message: '请输入shipmentID ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.shipmentID"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="vendor_code"
+      label="vendor_code"
+      :rules="[
+      {required: true, message: '请输入vendor_code', trigger: 'blur' },
+      {message: '请输入vendor_code', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.vendor_code"></el-input>
+    </el-form-item>
+        <el-form-item
+      prop="person_charge"
+      label="person_charge"
+      :rules="[
+      {required: true, message: '请输入person_charge', trigger: 'blur' },
+      {message: '请输入person_charge', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.person_charge"></el-input>
     </el-form-item>
-    <el-form-item
-      prop="size"
-      label="采购价"
+        <el-form-item
+      prop="Status"
+      label="Status"
       :rules="[
-      {required: true, message: '请输入采购价', trigger: 'blur' },
-      {message: '请输入采购价', trigger: ['blur'] }
+      {required: true, message: '请输入Status', trigger: 'blur' },
+      {message: '请输入Status', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.size"></el-input>
+      <el-input v-model="editorInfo.Status"></el-input>
     </el-form-item>
     <el-form-item
-      prop="weight"
-      label="重量"
+      prop="remarks"
+      label="remarks"
       :rules="[
-      {required: true, message: '请输入重量', trigger: 'blur' },
-      {message: '请输入重量', trigger: ['blur'] }
+      {message: '请输入remarks', trigger: 'blur' },
+      {message: '请输入remarks', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.weight"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="ocean_profit"
-      label="海运预估利润 "
-      :rules="[
-      {required: true, message: '请输入海运预估利润 ', trigger: 'blur' },
-      {message: '请输入海运预估利润 ', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.ocean_profit"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="air_profit"
-      label="空运预估利润"
-      :rules="[
-      {required: true, message: '请输入空运预估利润', trigger: 'blur' },
-      {message: '请输入空运预估利润', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.air_profit"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="shipment_id"
-      label="shipmentId"
-      :rules="[
-      {required: true, message: '请输入shipmentId', trigger: 'blur' },
-      {message: '请输入shipmentId', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.shipment_id"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="invoice"
-      label="invoice"
-      :rules="[
-      {required: true, message: '请输入invoice', trigger: 'blur' },
-      {message: '请输入invoice', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.invoice"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="Invoice_payment_amount"
-      label="发票付款金额 "
-      :rules="[
-      {required: true, message: '请输入发票付款金额 ', trigger: 'blur' },
-      {message: '请输入发票付款金额 ', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.Invoice_payment_amount"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="pay_state"
-      label="是否已经付全款"
-      :rules="[
-      {required: true, message: '请输入是否已经付全款', trigger: 'blur' },
-      {message: '请输入是否已经付全款', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.pay_state"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="AISN"
-      label="备注"
-      :rules="[
-      {message: '请输入备注', trigger: 'blur' },
-      {message: '请输入备注', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.AISN"></el-input>
+      <el-input v-model="editorInfo.remarks"></el-input>
     </el-form-item>
 
-    <el-form-item
-      v-for="(domain, index) in editorInfo.domains"
-      :label="'Invoice' + index"
-      :key="domain.key"
-      :prop="'domains.' + index + '.value'"
-      :rules="{
-      required: true, message: '域名不能为空', trigger: 'blur'
-    }"
-    >
-      <el-input v-model="domain.value"></el-input>
-      <el-button @click.prevent="removeDomain(domain)">删除</el-button>
-    </el-form-item>
     <el-form-item>
       <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
-      <el-button @click="addDomain" type="danger" plain>新增 Invoice</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -139,32 +156,13 @@ export default {
       // 编辑列表的信息
       editorInfo: {},
       editorIndex: ""
-      //  editorInfo: {
-      //   POnumber: "", //PO
-      //   charge: "", //负责人
-      //   purchasePrice: "", //采购价
-      //   weight: "", //重量
-      //   oceanShipping: "", //海运预估利润
-      //   airTransport: "", //空运预估利润
-      //   shipmentId: "", //shipmentId
-      //   invoice: "", //invoice
-      //   InvoiceAmount: "", //发票付款金额
-      //   isPay: "", //是否已经付全款
-      //   amazonNumber: "", //Amazon接收的到货数量
-      //   remarks: "", //备注
-      //   domains: [], //新增invioce
-      //   // 编辑列表的信息
-      //   editorInfo: {},
-      //   editorIndex: ""
-      // }
     };
   },
   created() {
-    this.$store.state.adminleftnavnum = "2"; //设置左侧导航2-2 active
+    this.$store.state.adminleftnavnum = "1"; //设置左侧导航2-2 active
   },
   mounted() {
-    this.index = this.$route.query.index;
-    this.getTeamData(this.index);
+
   },
   methods: {
     //点击提交按钮
@@ -178,7 +176,7 @@ export default {
           console.log(params);
           axios({
             method: 'post',
-            url: '/api/admin/index/update',
+            url: '/api/admin/chargeback/save',
             data:editorInfo
           }).then(function(e){
             console.log(e)
@@ -205,7 +203,7 @@ export default {
       console.log(this.editorInfo.domains);
       this.editorInfo.domains.push({
         value: "",
-        key: "invoice" + _this.editorInfo.domains.length
+        key: "purchase_order" + _this.editorInfo.domains.length
       });
     },
     // 获取编辑列表的信息

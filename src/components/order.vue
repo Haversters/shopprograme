@@ -19,11 +19,11 @@
         </el-input>
       </div>
       <el-table
-        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+        :data="orderData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         style="width: 100%"
         :border="true"
       >
-        <el-table-column align="center" sortable prop="po" label="PO" width></el-table-column>
+        <el-table-column align="center" prop="po" label="PO" width></el-table-column>
         <el-table-column align="center" prop="person_charge" label="负责人" width></el-table-column>
         <el-table-column align="center" prop="charge_price" label="采购价" width></el-table-column>
         <el-table-column align="center" prop="weight" label="重量"></el-table-column>
@@ -37,14 +37,14 @@
         <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
         <el-table-column width="160" align="center" prop label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="danger" @click="handleEdit(scope.$index)">编辑</el-button>
+            <el-button size="mini" type="success" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row.po)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
       <div class="paginations">
-        <el-pagination background layout="prev, pager, next" :total="70" :page-size=7></el-pagination>
+        <el-pagination background layout="prev, pager, next" :total="listTotal" :page-size=pageSize @current-change="pageChange"></el-pagination>
       </div>
     </el-main>
   </el-container>
@@ -55,6 +55,7 @@ export default {
   name: "Chargeback",
   data() {
     return {
+      orderData: [],
       tableData: [],
       isCollapse: true, //控制侧边栏的显示
       search: "",
@@ -63,7 +64,9 @@ export default {
       deleteId: "", ///删除数据deleteId
       deleteIndex: "", ///删除数据index
       imgsrc: require("../assets/logo.png"),
-      select: "po" //默认筛选类型
+      select: "po", //默认筛选类型
+      listTotal:0,
+      pageSize:7, //显示数据量
     };
   },
   created() {
@@ -76,6 +79,7 @@ export default {
     // 控制编辑
     handleEdit(index) {
       console.log(index);
+      index = JSON.stringify(index);
       let urls = "/editor?index=" + index;
       this.$router.push({ path: urls });
     },
@@ -106,7 +110,7 @@ export default {
             console.log(111);
             console.log(e);
             if (e.code == 0) {
-              _this.tableData.splice(_this.deleteIndex, 1);
+              _this.orderData.splice(_this.deleteIndex, 1);
               this.$message({
                 type: "success",
                 message: "删除成功!"
@@ -134,6 +138,8 @@ export default {
         console.log(e);
         if (e.code == 0) {
           _this.tableData = e.data;
+          _this.listTotal=e.data.length;
+          _this.orderData =  _this.tableData.slice(0,7);
         } else {
           let messages = e.msg;
           this.$message.error(messages);
@@ -153,16 +159,27 @@ export default {
       this.$fetch(urls).then(e => {
         console.log(urls);
         console.log(e);
-        // if (e.code == 0) {
-        //   _this.tableData = e.data;
-        // } else {
-        //   let messages = e.msg;
-        //   this.$message.error(messages);
-        // }
+        if (e.code == 0) {
+          _this.tableData = e.data;
+          _this.listTotal=e.data.length;
+          _this.orderData =  _this.tableData.slice(0,7);
+        } else {
+          let messages = e.msg;
+          this.$message.error(messages);
+        }
 
         console.log(_this.$store.state.user_data);
       });
-    }
+    },
+        // 页数发生改变
+    pageChange(e){
+      console.log(e);
+      let num1=(e-1)*this.pageSize
+      let num2=e*this.pageSize
+      this.orderData= this.tableData.slice(num1,num2);
+      console.log(this.orderData)
+    },
+
   }
 };
 </script>

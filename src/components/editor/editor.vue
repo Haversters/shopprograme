@@ -163,8 +163,9 @@ export default {
     this.$store.state.adminleftnavnum = "2"; //设置左侧导航2-2 active
   },
   mounted() {
-    this.index = this.$route.query.index;
-    this.getTeamData(this.index);
+    console.log(this.$router.currentRoute.query)
+    this.editorInfo=JSON.parse(this.$router.currentRoute.query.index)
+    console.log(this.editorInfo)
   },
   methods: {
     //点击提交按钮

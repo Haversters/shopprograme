@@ -2,35 +2,52 @@
   <el-container>
     <el-main>
       <div style>
-        1111
         <el-input placeholder="请输入PO/负责人" v-model="input3" class="input-with-select">
-          <template slot="prepend">筛选</template>
-          <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-select
+            v-model="select"
+            slot="prepend"
+            placeholder="PO"
+            @change="searchselect"
+            style="width:100px"
+          >
+            <el-option label="PO" value="po"></el-option>
+            <el-option label="负责人" value="name"></el-option>
+            <el-option label="ASIN" value="ASIN"></el-option>
+            <el-option label="PO" value="3"></el-option>
+          </el-select>
+          <el-button slot="append" icon="el-icon-search" @click="getSearch()">搜索</el-button>
         </el-input>
       </div>
       <el-table :data="chargeData" style="width: 100%" :border="true">
         <el-table-column align="center" sortable prop="ASIN" label="ASIN" width></el-table-column>
-        <el-table-column align="center" prop="ChargebackID" label="Chargeback_ID" width></el-table-column>
-        <el-table-column align="center" prop="Chargebacktype" label="Chargeback_type" width></el-table-column>
-        <el-table-column align="center" prop="Creationdate" label="Creationdate"></el-table-column>
-        <el-table-column align="center" prop="Financial_charge" label="Financial_charge "></el-table-column>
+        <el-table-column align="center" prop="chargebackID" label="Chargeback_ID" width></el-table-column>
+        <el-table-column align="center" prop="chargeback_type" label="Chargeback_type" width></el-table-column>
+        <el-table-column align="center" prop="creation_date" label="Creationdate"></el-table-column>
+        <el-table-column align="center" prop="financial_charge" label="Financial_charge "></el-table-column>
         <el-table-column align="center" prop="Financialcharge" label="Financialcharge "></el-table-column>
-        <el-table-column align="center" prop="IssueID" label="Issue_ID"></el-table-column>
-        <el-table-column align="center" prop="Purchaseorder" label="Purchase_Order"></el-table-column>
-        <el-table-column align="center" prop="Quantity" label="Quantity "></el-table-column>
-        <el-table-column align="center" prop="ShipmentID" label="ShipmentID"></el-table-column>
-        <el-table-column align="center" prop="Vendorcode" label="Vendorcode"></el-table-column>
+        <el-table-column align="center" prop="issueID" label="Issue_ID"></el-table-column>
+        <el-table-column align="center" prop="purchase_order" label="Purchase_Order"></el-table-column>
+        <el-table-column align="center" prop="quantity" label="Quantity "></el-table-column>
+        <el-table-column align="center" prop="shipmentID" label="ShipmentID"></el-table-column>
+        <el-table-column align="center" prop="vendor_code" label="Vendorcode"></el-table-column>
         <el-table-column align="center" prop="person_charge" label="person_charge"></el-table-column>
-        <el-table-column align="center" prop="status" label="status"></el-table-column>
+        <el-table-column align="center" prop="Status" label="status"></el-table-column>
         <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
-        <el-table-column align="center" prop label="操作">
+        <el-table-column width="160" align="center" prop label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">编辑</el-button>
+            <el-button size="mini" type="success" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-            <div class="paginations">
-        <el-pagination background layout="prev, pager, next" :total="1000" :page-size=7></el-pagination>
+      <div class="paginations">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="listTotal"
+          :page-size="pageSize"
+          @current-change="pageChange"
+        ></el-pagination>
       </div>
     </el-main>
   </el-container>
@@ -42,10 +59,16 @@ export default {
   data() {
     return {
       chargeData: [],
+      tableData: [],
       isCollapse: true, //控制侧边栏的显示
+      loading: false, //刷新状态
       search: "",
       input3: "",
-      tableData:[],
+      deleteId: "", ///删除数据deleteId
+      deleteIndex: "", ///删除数据index
+      select: "po", //默认筛选类型
+      listTotal: 0,
+      pageSize: 7 //显示数据量
     };
   },
   created() {
@@ -55,14 +78,80 @@ export default {
     this.getChargeData();
   },
   methods: {
-    // 控制搜索
+    // 控制编辑
     handleEdit(index, row) {
-      console.log(index, row);
-    },
-    handleDelete(index, row) {
-      console.log(index);
+      index = JSON.stringify(index);
       let urls = "/chargebackEditor?index=" + index;
       this.$router.push({ path: urls });
+    },
+        // 搜索选择
+    searchselect(e) {
+      console.log(e);
+      this.select = e;
+    },
+      // 搜索类型
+    getSearch() {
+      let _this = this;
+      let urls =
+        "/api/admin/chargeback/index?type=" +
+        this.select +
+        "&content=" +
+        this.input3;
+      this.$fetch(urls).then(e => {
+        console.log(urls);
+        console.log(e);
+        if (e.code == 0) {
+          _this.tableData = e.data;
+          _this.listTotal=e.data.length;
+          _this.chargeData =  _this.tableData.slice(0,7);
+        } else {
+          let messages = e.msg;
+          this.$message.error(messages);
+        }
+
+        console.log(_this.$store.state.user_data);
+      });
+    },
+    // 删除当前数据
+    handleDelete(index, id) {
+      this.deleteIndex = index;
+      this.deleteId = id;
+      this.open();
+    },
+    // 删除提示
+    open() {
+      const _this = this;
+      let urls = "/admin/chargeback/delete?id" + this.deleteId;
+      this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          _this.$fetch(urls).then(e => {
+            console.log(111);
+            console.log(e);
+            if (e.code == 0) {
+              _this.orderData.splice(_this.deleteIndex, 1);
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+            } else {
+              let messages = e.msg;
+              this.$message.error(messages);
+            }
+
+            console.log(_this.$store.state.user_data);
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     // 获取chrgeback列表的信息
     getChargeData() {
@@ -72,13 +161,22 @@ export default {
         console.log(e);
         if (e.code == 0) {
           _this.tableData = e.data;
-          _this.chargeData =  _this.tableData.slice(0,7);
+          _this.listTotal = e.data.length;
+          _this.chargeData = _this.tableData.slice(0, 7);
         } else {
           let messages = e.msg;
           this.$message.error(messages);
         }
-        console.log(_this.$store.state.user_data);
+        console.log(_this.chargeData, _this.tableData);
       });
+    },
+    // 页数发生改变
+    pageChange(e) {
+      console.log(e);
+      let num1 = (e - 1) * this.pageSize;
+      let num2 = e * this.pageSize;
+      this.chargeData = this.tableData.slice(num1, num2);
+      console.log(this.chargeData);
     }
   }
 };
@@ -91,7 +189,7 @@ export default {
   margin-bottom: 20px;
 }
 /* 分页区域 */
-.paginations{
+.paginations {
   width: 100%;
   margin-top: 40px;
   display: flex;

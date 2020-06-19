@@ -21,14 +21,14 @@
       <el-input v-model="editorInfo.person_charge"></el-input>
     </el-form-item>
     <el-form-item
-      prop="size"
+      prop="charge_price"
       label="采购价"
       :rules="[
       {required: true, message: '请输入采购价', trigger: 'blur' },
       {message: '请输入采购价', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.size"></el-input>
+      <el-input v-model="editorInfo.charge_price"></el-input>
     </el-form-item>
     <el-form-item
       prop="weight"
@@ -100,15 +100,25 @@
     >
       <el-input v-model="editorInfo.pay_state"></el-input>
     </el-form-item>
+        <el-form-item
+      prop="received_quantity"
+      label="Amazon接收的到货数量"
+      :rules="[
+      {required: true, message: '请输入Amazon接收的到货数量', trigger: 'blur' },
+      {message: '请输入Amazon接收的到货数量', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.received_quantity"></el-input>
+    </el-form-item>
     <el-form-item
-      prop="AISN"
+      prop="remarks"
       label="备注"
       :rules="[
       {message: '请输入备注', trigger: 'blur' },
       {message: '请输入备注', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.AISN"></el-input>
+      <el-input v-model="editorInfo.remarks"></el-input>
     </el-form-item>
 
     <el-form-item
@@ -139,24 +149,6 @@ export default {
       editorInfo: {},
       editorIndex: "",
       deleatIndex:'',
-      //  editorInfo: {
-      //   POnumber: "", //PO
-      //   charge: "", //负责人
-      //   purchasePrice: "", //采购价
-      //   weight: "", //重量
-      //   oceanShipping: "", //海运预估利润
-      //   airTransport: "", //空运预估利润
-      //   shipmentId: "", //shipmentId
-      //   invoice: "", //invoice
-      //   InvoiceAmount: "", //发票付款金额
-      //   isPay: "", //是否已经付全款
-      //   amazonNumber: "", //Amazon接收的到货数量
-      //   remarks: "", //备注
-      //   domains: [], //新增invioce
-      //   // 编辑列表的信息
-      //   editorInfo: {},
-      //   editorIndex: ""
-      // }
     };
   },
   created() {
@@ -207,21 +199,7 @@ export default {
         key: "invoice" + _this.editorInfo.domains.length
       });
     },
-    // 获取编辑列表的信息
-    getTeamData(indexs) {
-      const _this = this;
-      this.$fetch("/api/admin/index/index").then(e => {
-        if (e.code == 0) {
-          // _this.editorInfo =JSON.parse(JSON.stringify(e.data[index]));
-          for (let key in e.data[indexs]) {
-            console.log(key, e.data[indexs][key]);
-            e.data[indexs][key] = String(e.data[indexs][key]);
-          }
-        }
-        _this.editorInfo = e.data[indexs];
-        console.log(_this.editorInfo);
-      });
-    }
+
   }
 };
 </script>
