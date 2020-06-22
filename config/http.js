@@ -39,12 +39,12 @@ axios.interceptors.response.use(
         query: { redirect: router.currentRoute.fullPath }//从哪个页面跳转
       })
     }
-    if (response.data.errCode == 2) {
-      router.push({
-        path: "/login",
-        query: { redirect: router.currentRoute.fullPath }//从哪个页面跳转
-      })
-    }
+    // if (response.data.errCode == 2) {
+    //   router.push({
+    //     path: "/login",
+    //     query: { redirect: router.currentRoute.fullPath }//从哪个页面跳转
+    //   })
+    // }
     return response;
   },
   error => {

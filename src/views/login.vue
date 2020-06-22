@@ -40,6 +40,7 @@ export default {
   },
   methods: {
     clickLogin() {
+      console.log(this.userName,this.userPassword)
       let _this = this;
       if (this.userName) {
         if (this.userPassword) {
@@ -54,6 +55,7 @@ export default {
             if(e.code==0){
               this.$router.push({path:'/order'})
             }else{
+              localStorage.clear("user_data")
               _this.loginFalse();
             }
             // console.log(_this.$store.state.user_data);

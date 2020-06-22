@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main>
-      <div style>
+      <div style class="topBtn">
         <el-input placeholder="请输入PO/负责人" v-model="input3" class="input-with-select">
           <el-select
             v-model="select"
@@ -10,13 +10,17 @@
             @change="searchselect"
             style="width:100px"
           >
-            <el-option label="PO" value="po"></el-option>
+            <el-option label="issueID" value="PO"></el-option>
             <el-option label="负责人" value="name"></el-option>
             <el-option label="ASIN" value="ASIN"></el-option>
             <el-option label="PO" value="3"></el-option>
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click="getSearch()">搜索</el-button>
         </el-input>
+          <div style="min-width:220px">
+          <el-button type="primary" plain @click="goAddPage('/chargeback/chargebackAdd')">添加数据</el-button>
+          <el-button type="success" plain>上传<i class="el-icon-upload el-icon--right"></i></el-button>
+        </div>
       </div>
       <el-table :data="chargeData" style="width: 100%" :border="true">
         <el-table-column align="center" sortable prop="ASIN" label="ASIN" width></el-table-column>
@@ -36,7 +40,7 @@
         <el-table-column width="160" align="center" prop label="操作">
           <template slot-scope="scope">
             <el-button size="mini" type="success" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row.id)">删除</el-button>
+            <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row.issueID)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -89,6 +93,12 @@ export default {
       console.log(e);
       this.select = e;
     },
+        // 去往添加页面
+    goAddPage(urls){
+      // let urls=''
+            // console.log(urls)
+  this.$router.push({ path: urls });
+    },
       // 搜索类型
     getSearch() {
       let _this = this;
@@ -121,7 +131,7 @@ export default {
     // 删除提示
     open() {
       const _this = this;
-      let urls = "/admin/chargeback/delete?id" + this.deleteId;
+      let urls = "/admin/chargeback/delete?issueID=" + this.deleteId;
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -133,7 +143,7 @@ export default {
             console.log(111);
             console.log(e);
             if (e.code == 0) {
-              _this.orderData.splice(_this.deleteIndex, 1);
+              _this.chargeData.splice(_this.deleteIndex, 1);
               this.$message({
                 type: "success",
                 message: "删除成功!"
@@ -195,6 +205,13 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid red;
+}
+/* 顶部区域 */
+.topBtn{
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
   border: 1px solid red;
 }
 </style>

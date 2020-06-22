@@ -1,10 +1,5 @@
 <template>
-  <el-form
-    :model="editorInfo"
-    ref="editorInfo"
-    label-width="140px"
-    class="demo-dynamic"
-  >
+  <el-form :model="editorInfo" ref="editorInfo" label-width="140px" class="demo-dynamic">
     <el-form-item
       prop="financeCharge"
       label="负责人"
@@ -37,10 +32,10 @@
     </el-form-item>
     <el-form-item
       prop="transferAmount"
-      label="转款金额"
+      label="转款金额 "
       :rules="[
-      {required: true, message: '请输入转款金额', trigger: 'blur' },
-      {message: '请输入转款金额', trigger: ['blur'] }
+      {required: true, message: '转款金额 ', trigger: 'blur' },
+      {message: '转款金额', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.transferAmount"></el-input>
@@ -49,13 +44,14 @@
       prop="isEntry"
       label="是否入账"
       :rules="[
-      {required: true, message: '请输入是或者否 ', trigger: 'blur' },
-      {message: '请输入是或者否', trigger: ['blur'] }
+      {required: true, message: '请输入是否入账', trigger: 'blur' },
+      {message: '请输入是否入账', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.isEntry"></el-input>
     </el-form-item>
-       <el-form-item
+
+    <el-form-item
       prop="remarks"
       label="备注"
       :rules="[
@@ -65,39 +61,44 @@
     >
       <el-input v-model="editorInfo.remarks"></el-input>
     </el-form-item>
+
+    <el-form-item
+      v-for="(domain, index) in editorInfo.domains"
+      :label="'Invoice' + index"
+      :key="domain.key"
+      :prop="'domains.' + index + '.value'"
+      :rules="{
+      required: true, message: '域名不能为空', trigger: 'blur'
+    }"
+    >
+      <el-input v-model="domain.value"></el-input>
+      <el-button @click.prevent="removeDomain(domain)">删除</el-button>
+    </el-form-item>
     <el-form-item>
       <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
 <script>
+import axios from "axios";
+
+import { post } from "../../../config/http";
 export default {
   data() {
     return {
-      editorInfo: {
-        financeCharge: "", //负责人
-        accountNumber: "", //账号
-        transferDate: "", //转款日
-        transferAmount: "", //转款金额
-        isEntry: "", //是否入账
-        level:3,
-      }
+      // 编辑列表的信息
+      editorInfo: {},
+      editorIndex: "",
+      deleatIndex: "",
+      level: 3
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "4"; //设置左侧导航2-2 active
-     this.level = this.$store.state.user_data.level; //获取用户等级
-    console.log(this.$store)
+    this.level = this.$store.state.user_data.level; //获取用户等级
   },
-  mounted(){
-     this.level = this.$store.state.user_data.level; //获取用户等级
-    console.log(this.$router.currentRoute.query);
-    let editorInfos=JSON.parse(this.$router.currentRoute.query.index)
-    for (let key in editorInfos) {
-     editorInfos[key] = String(editorInfos[key]);
-    }
-    this.editorInfo = editorInfos;
-    console.log(this.editorInfo);
+  mounted() {
+    this.level = this.$store.state.user_data.level; //获取用户等级
   },
   methods: {
     //点击提交按钮
@@ -105,8 +106,21 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(_this.editorInfo);
           // alert('submit!');
+          let editorInfo = _this.editorInfo;
+          //   editorInfo.level=this.level;
+          let params = { array: 111 };
+          console.log(editorInfo);
+          axios({
+            method: "post",
+            url: "/api/admin/finance/save",
+            data: editorInfo
+          }).then(function(e) {
+            console.log(e);
+          });
+          // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
+          //   console.log(e);
+          // });
         } else {
           console.log("error submit!!");
           return false;
@@ -120,7 +134,16 @@ export default {
         this.editorInfo.domains.splice(index, 1);
       }
     },
-  },
+    //新增invioce
+    addDomain() {
+      var _this = this;
+      console.log(this.editorInfo.domains);
+      this.editorInfo.domains.push({
+        value: "",
+        key: "invoice" + _this.editorInfo.domains.length
+      });
+    }
+  }
 };
 </script>
 <style scoped>

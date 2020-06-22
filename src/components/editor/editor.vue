@@ -21,14 +21,14 @@
       <el-input v-model="editorInfo.person_charge"></el-input>
     </el-form-item>
     <el-form-item
-      prop="size"
+      prop="charge_price"
       label="采购价"
       :rules="[
       {required: true, message: '请输入采购价', trigger: 'blur' },
       {message: '请输入采购价', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.size"></el-input>
+      <el-input v-model="editorInfo.charge_price"></el-input>
     </el-form-item>
     <el-form-item
       prop="weight"
@@ -80,6 +80,16 @@
     >
       <el-input v-model="editorInfo.invoice"></el-input>
     </el-form-item>
+       <el-form-item
+      prop="AISN"
+      label="AISN"
+      :rules="[
+      {required: true, message: '请输入AISN', trigger: 'blur' },
+      {message: '请输入AISN', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.AISN"></el-input>
+    </el-form-item>
     <el-form-item
       prop="Invoice_payment_amount"
       label="发票付款金额 "
@@ -101,14 +111,14 @@
       <el-input v-model="editorInfo.pay_state"></el-input>
     </el-form-item>
     <el-form-item
-      prop="AISN"
+      prop="remarks"
       label="备注"
       :rules="[
       {message: '请输入备注', trigger: 'blur' },
       {message: '请输入备注', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.AISN"></el-input>
+      <el-input v-model="editorInfo.remarks"></el-input>
     </el-form-item>
 
     <el-form-item
@@ -160,12 +170,16 @@ export default {
     };
   },
   created() {
-    this.$store.state.adminleftnavnum = "2"; //设置左侧导航2-2 active
+    this.$store.state.adminleftnavnum = "0"; //设置左侧导航2-2 active
   },
   mounted() {
-    console.log(this.$router.currentRoute.query)
-    this.editorInfo=JSON.parse(this.$router.currentRoute.query.index)
-    console.log(this.editorInfo)
+    console.log(this.$router.currentRoute.query);
+    let editorInfos=JSON.parse(this.$router.currentRoute.query.index)
+    for (let key in editorInfos) {
+     editorInfos[key] = String(editorInfos[key]);
+    }
+    this.editorInfo = editorInfos;
+    console.log(this.editorInfo);
   },
   methods: {
     //点击提交按钮
@@ -185,11 +199,11 @@ export default {
             console.log(e.data);
             if (e.data.code == 0) {
               _this.$message.success("修改成功");
-               _this.$router.push({ path: '/order' });
-            } else if(e.data.code == 7){
+              _this.$router.push({ path: "/order" });
+            } else if (e.data.code == 7) {
               _this.$message.error("未编辑数据");
-            }else{
-               let messages = e.data.msg;
+            } else {
+              let messages = e.data.msg;
               _this.$message.error(messages);
             }
           });

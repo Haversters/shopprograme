@@ -1,28 +1,60 @@
 <template>
   <el-container>
     <el-main>
-      <el-table
-        :data="logisticsData"
-        style="width: 100%"
-        :border="true"
-      >
-        <el-table-column align="center" prop="delivery" label="delivery" width></el-table-column>
-        <el-table-column align="center" prop="deliveryContent" label="delivery_Content" width></el-table-column>
-        <el-table-column align="center" prop="deliveryWeight" label="delivery_Weight"></el-table-column>
-        <el-table-column align="center" prop="freight" label="freight "></el-table-column>
-        <el-table-column align="center" prop="id" label="id"></el-table-column>
-        <el-table-column align="center" prop="isDelivered" label="isDelivered"></el-table-column>
-        <el-table-column align="center" prop="logisticsCharge" label="logistics_Charge"></el-table-column>
+      <div style class="topBtn">
+        <el-input placeholder="请输入PO/负责人" v-model="input3" class="input-with-select">
+          <el-select
+            v-model="select"
+            slot="prepend"
+            placeholder="PO"
+            @change="searchselect"
+            style="width:100px"
+          >
+            <el-option label="PO" value="PO"></el-option>
+            <el-option label="负责人" value="person_charge"></el-option>
+            <el-option label="ASIN" value="ASIN"></el-option>
+            <el-option label="returnID" value="returnID"></el-option>
+            <el-option label="Invoice_Number" value="Invoice_Number"></el-option>
+            <el-option label="Transaction_date" value="Transaction_date"></el-option>
+          </el-select>
+          <el-button slot="append" icon="el-icon-search" @click="getSearch()">搜索</el-button>
+        </el-input>
+        <div style="min-width:220px">
+          <el-button type="primary" plain @click="goAddPage('/logistics/logisticsAdd')">添加数据</el-button>
+          <el-button type="success" plain>
+            上传
+            <i class="el-icon-upload el-icon--right"></i>
+          </el-button>
+        </div>
+      </div>
+      <el-table :data="logisticsData" style="width: 100%" :border="true">
+        <el-table-column align="center" prop="logisticsCharge" label="负责人"></el-table-column>
+        <el-table-column align="center" prop="delivery" label="发货方式" width></el-table-column>
+        <el-table-column align="center" prop="trackingNumber" label="追踪号 "></el-table-column>
+        <el-table-column align="center" prop="transferNo" label="转单号"></el-table-column>
+        <el-table-column align="center" prop="deliveryWeight" label="发货重量"></el-table-column>
+        <el-table-column align="center" prop="deliveryContent" label="发货内容" width></el-table-column>
+        <el-table-column align="center" prop="freight" label="运费 "></el-table-column>
+        <!-- <el-table-column align="center" prop="id" label="id"></el-table-column> -->
+        <el-table-column align="center" prop="isDelivered" label="是否妥投了"></el-table-column>
         <!-- <el-table-column align="center" prop="logisticsRemarks" label="logistics_Remarks "></el-table-column> -->
-        <el-table-column align="center" prop="trackingNumber" label="tracking_Number"></el-table-column>
-         <el-table-column align="center" prop="transferNo" label="transfer_No"></el-table-column>
-                  <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
-       <el-table-column align="center" prop label="操作">
+        <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
+        <el-table-column align="center" prop label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">编辑</el-button>
+            <el-button size="mini" type="success" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <div class="paginations">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="listTotal"
+          :page-size="pageSize"
+          @current-change="pageChange"
+        ></el-pagination>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -31,39 +63,58 @@
 export default {
   data() {
     return {
-      tableData: [
-      ],
+      logisticsData: [],
+      tableData: [],
       isCollapse: true, //控制侧边栏的显示
+      loading: false, //刷新状态
       search: "",
       input3: "",
-      loading: false, //控制加载状态
-      logisticsData:[],//页面数据列表
+      deleteId: "", ///删除数据deleteId
+      deleteIndex: "", ///删除数据index
+      select: "po", //默认筛选类型
+      listTotal: 0,
+      pageSize: 7 //显示数据量
     };
   },
- created() {
+  created() {
     this.$store.state.adminleftnavnum = "3"; //设置左侧导航2-2 active
   },
-  mounted(){
-this.getlogisticsData();
+  mounted() {
+    this.getlogisticsData();
   },
-    methods: {
-    // 控制搜索
+  methods: {
+    // 控制编辑
     handleEdit(index, row) {
-      console.log(index, row);
-    },
-    handleDelete(index, row) {
-      console.log(index);
+      index = JSON.stringify(index);
       let urls = "/logistics/editor?index=" + index;
       this.$router.push({ path: urls });
     },
-        // 获取chrgeback列表的信息
-    getlogisticsData() {
-      const _this = this;
-      this.$fetch("/api/admin/logistics/index").then(e => {
-        console.log(111);
+    // 搜索选择
+    searchselect(e) {
+      console.log(e);
+      this.select = e;
+    },
+    // 去往添加页面
+    goAddPage(urls){
+      // let urls=''
+            // console.log(urls)
+  this.$router.push({ path: urls });
+    },
+    // 搜索类型
+    getSearch() {
+      let _this = this;
+      let urls =
+        "/admin/chargeback/index?type=" +
+        this.select +
+        "&content=" +
+        this.input3;
+      this.$fetch(urls).then(e => {
+        console.log(urls);
         console.log(e);
-        if (e.code == 6) {
-          _this.logisticsData = e.data;
+        if (e.code == 0) {
+          _this.tableData = e.data;
+          _this.listTotal = e.data.length;
+          _this.logisticsData = _this.tableData.slice(0, 7);
         } else {
           let messages = e.msg;
           this.$message.error(messages);
@@ -72,8 +123,96 @@ this.getlogisticsData();
         console.log(_this.$store.state.user_data);
       });
     },
-  },
+    // 删除当前数据
+    handleDelete(index, id) {
+      this.deleteIndex = index;
+      this.deleteId = id;
+      this.open();
+    },
+    // 删除提示
+    open() {
+      const _this = this;
+      let urls = "/admin/logistics/delete?id=" + this.deleteId;
+      this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          _this.$fetch(urls).then(e => {
+            console.log(111);
+            console.log(e);
+            if (e.code == 0) {
+              _this.logisticsData.splice(_this.deleteIndex, 1);
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+            } else {
+              let messages = e.msg;
+              this.$message.error(messages);
+            }
+
+            console.log(_this.$store.state.user_data);
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    // 获取chrgeback列表的信息
+    getlogisticsData() {
+      const _this = this;
+      this.$fetch("/api/admin/logistics/index").then(e => {
+        console.log(111);
+        console.log(e);
+        if (e.code == 0) {
+          _this.tableData = e.data;
+          _this.listTotal = e.data.length;
+          _this.logisticsData = _this.tableData.slice(0, 7);
+        } else {
+          let messages = e.msg;
+          this.$message.error(messages);
+        }
+        console.log(_this.logisticsData, _this.tableData);
+      });
+    },
+    // 页数发生改变
+    pageChange(e) {
+      console.log(e);
+      let num1 = (e - 1) * this.pageSize;
+      let num2 = e * this.pageSize;
+      this.logisticsData = this.tableData.slice(num1, num2);
+      console.log(this.logisticsData);
+    }
+  }
 };
 </script>
-<style scoped>
+
+<style>
+/* 控制搜索栏 */
+.input-with-select {
+  width: 600px;
+  margin-bottom: 20px;
+}
+/* 分页区域 */
+.paginations {
+  width: 100%;
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid red;
+}
+/* 顶部区域 */
+.topBtn {
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  border: 1px solid red;
+}
 </style>

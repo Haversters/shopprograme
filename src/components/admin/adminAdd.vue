@@ -40,6 +40,7 @@
     >
       <el-input v-model="editorInfo.level"></el-input>
     </el-form-item>
+    
     <el-form-item
       prop="remarks"
       label="备注"
@@ -50,6 +51,7 @@
     >
       <el-input v-model="editorInfo.remarks"></el-input>
     </el-form-item>
+
     <el-form-item>
       <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
@@ -65,22 +67,14 @@ export default {
       // 编辑列表的信息
       editorInfo: {},
       editorIndex: "",
-      level: 3
+      deleatIndex:'',
     };
   },
   created() {
-    this.$store.state.adminleftnavnum = "5"; //设置左侧导航2-2 active
-    this.level = this.$store.state.user_data.level;
+    this.$store.state.adminleftnavnum = "0"; //设置左侧导航2-2 active
   },
   mounted() {
-    this.level = this.$store.state.user_data.level;
-    console.log(this.$router.currentRoute.query);
-    let editorInfos = JSON.parse(this.$router.currentRoute.query.index);
-    for (let key in editorInfos) {
-      editorInfos[key] = String(editorInfos[key]);
-    }
-    this.editorInfo = editorInfos;
-    console.log(this.editorInfo);
+
   },
   methods: {
     //点击提交按钮
@@ -89,24 +83,15 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert('submit!');
-          let editorInfo = _this.editorInfo;
+          let editorInfo=_this.editorInfo
           let params = { array: 111 };
-          console.log(params);
+          console.log(editorInfo);
           axios({
-            method: "post",
-            url: "/api/admin/adminstor/update",
-            data: editorInfo
-          }).then(function(e) {
-            console.log(e.data);
-            if (e.data.code == 0) {
-              _this.$message.success("修改成功");
-              _this.$router.push({ path: "/order" });
-            } else if (e.data.code == 7) {
-              _this.$message.error("未编辑数据");
-            } else {
-              let messages = e.data.msg;
-              _this.$message.error(messages);
-            }
+            method: 'post',
+            url: '/api/admin/index/save',
+            data:editorInfo
+          }).then(function(e){
+            console.log(e)
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
@@ -116,7 +101,24 @@ export default {
           return false;
         }
       });
-    }
+    },
+    //删除新增invioce
+    removeDomain(item) {
+      var index = this.editorInfo.domains.indexOf(item);
+      if (index !== -1) {
+        this.editorInfo.domains.splice(index, 1);
+      }
+    },
+    //新增invioce
+    addDomain() {
+      var _this = this;
+      console.log(this.editorInfo.domains);
+      this.editorInfo.domains.push({
+        value: "",
+        key: "invoice" + _this.editorInfo.domains.length
+      });
+    },
+
   }
 };
 </script>

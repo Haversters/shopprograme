@@ -27,9 +27,9 @@
             <i class="el-icon-document"></i>
             <span slot="title">chargeback</span>
           </el-menu-item>
-          <el-menu-item index="2" route="/editor">
+          <el-menu-item index="2" route="/product">
             <i class="el-icon-document"></i>
-            <span slot="title">导航三</span>
+            <span slot="title">Product Return</span>
           </el-menu-item>
           <el-menu-item index="3" route="/logistics">
             <i class="el-icon-setting"></i>
@@ -111,10 +111,11 @@ export default {
       this.$fetch("/api/admin/login/checktoken", {
         token: _this.$store.state.user_data.token
       }).then(e => {
-        // if (e.code != 4) {
-        //   this.$message.error("登录已过期，请重新登录");
-        //   this.$router.push({ path: "/login" });
-        // }
+        console.log(e);
+        if (e.code != 4) {
+          this.$message.error("登录已过期，请重新登录");
+          this.$router.push({ path: "/login" });
+        }
       });
     }
   },

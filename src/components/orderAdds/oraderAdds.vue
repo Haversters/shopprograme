@@ -80,6 +80,16 @@
     >
       <el-input v-model="editorInfo.invoice"></el-input>
     </el-form-item>
+        <el-form-item
+      prop="AISN"
+      label="AISN"
+      :rules="[
+      {required: true, message: '请输入AISN ', trigger: 'blur' },
+      {message: '请输入AISN', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.AISN"></el-input>
+    </el-form-item>
     <el-form-item
       prop="Invoice_payment_amount"
       label="发票付款金额 "
