@@ -50,10 +50,10 @@ export default {
           }).then(e => {
             console.log(e);
            localStorage.setItem("user_data",JSON.stringify(e.data));       
-           this.$store.state.user_data=e.data   
+           _this.$store.state.user_data=e.data   
             console.log(localStorage.getItem('user_data'))
             if(e.code==0){
-              this.$router.push({path:'/order'})
+              _this.$router.push({path:'/order'})
             }else{
               localStorage.clear("user_data")
               _this.loginFalse();

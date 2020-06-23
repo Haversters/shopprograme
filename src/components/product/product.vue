@@ -19,9 +19,19 @@
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click="getSearch()">搜索</el-button>
         </el-input>
-        <div style="min-width:220px">
+        <div style="min-width:220px;display:flex;">
           <el-button type="primary" plain @click="goAddPage('/product/productAdd')">添加数据</el-button>
-          <el-button type="success" plain>上传<i class="el-icon-upload el-icon--right"></i></el-button>
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+            :auto-upload="false"
+          >
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+          </el-upload>
         </div>
       </div>
       <el-table :data="productData" style="width: 100%" :border="true">
@@ -75,7 +85,8 @@ export default {
       deleteIndex: "", ///删除数据index
       select: "po", //默认筛选类型
       listTotal: 0,
-      pageSize: 7 //显示数据量
+      pageSize: 7, //显示数据量
+      fileList:[], //上传数据列表
     };
   },
   created() {
@@ -91,18 +102,45 @@ export default {
       let urls = "/product/productEditor?index=" + index;
       this.$router.push({ path: urls });
     },
-        // 搜索选择
+    // 搜索选择
     searchselect(e) {
       console.log(e);
       this.select = e;
     },
-        // 去往添加页面
-    goAddPage(urls){
+    // 去往添加页面
+    goAddPage(urls) {
       // let urls=''
-            // console.log(urls)
-  this.$router.push({ path: urls });
+      // console.log(urls)
+      this.$router.push({ path: urls });
     },
-      // 搜索类型
+    // 上传文件操作
+          submitUpload() {
+        this.$refs.upload.submit();
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+    // 导入数据
+    importText() {
+      const _this = this;
+      this.$fetch("/api/admin/productreturns/index").then(e => {
+        console.log(111);
+        console.log(e);
+        // if (e.code == 0) {
+        //   _this.tableData = e.data;
+        //   _this.listTotal = e.data.length;
+        //   _this.productData = _this.tableData.slice(0, 7);
+        // } else {
+        //   let messages = e.msg;
+        //   this.$message.error(messages);
+        // }
+        // console.log(_this.productData, _this.tableData);
+      });
+    },
+    // 搜索类型
     getSearch() {
       let _this = this;
       let urls =
@@ -115,8 +153,8 @@ export default {
         console.log(e);
         if (e.code == 0) {
           _this.tableData = e.data;
-          _this.listTotal=e.data.length;
-          _this.productData =  _this.tableData.slice(0,7);
+          _this.listTotal = e.data.length;
+          _this.productData = _this.tableData.slice(0, 7);
         } else {
           let messages = e.msg;
           this.$message.error(messages);
@@ -211,7 +249,7 @@ export default {
   border: 1px solid red;
 }
 /* 顶部区域 */
-.topBtn{
+.topBtn {
   display: flex;
   justify-content: space-between;
   /* align-items: center; */

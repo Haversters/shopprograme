@@ -19,12 +19,12 @@
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click="getSearch()">搜索</el-button>
         </el-input>
-        <div style="min-width:220px">
+        <div style="min-width:110px">
           <el-button type="primary" plain @click="goAddPage('/logistics/logisticsAdd')">添加数据</el-button>
-          <el-button type="success" plain>
+          <!-- <el-button type="success" plain>
             上传
             <i class="el-icon-upload el-icon--right"></i>
-          </el-button>
+          </el-button> -->
         </div>
       </div>
       <el-table :data="logisticsData" style="width: 100%" :border="true">
