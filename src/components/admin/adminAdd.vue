@@ -31,14 +31,10 @@
       <el-input v-model="editorInfo.passwd"></el-input>
     </el-form-item>
     <el-form-item
-      prop="level"
       label="级别"
-      :rules="[
-      {required: true, message: '请输入级别', trigger: 'blur' },
-      {message: '请输入级别', trigger: ['blur'] }
-    ]"
     >
-      <el-input v-model="editorInfo.level"></el-input>
+     <el-radio v-model="editorInfo.level" label="3">普通管理员</el-radio>
+        <el-radio v-model="editorInfo.level" label="2">财务</el-radio>
     </el-form-item>
 
     <el-form-item
@@ -65,7 +61,9 @@ export default {
   data() {
     return {
       // 编辑列表的信息
-      editorInfo: {},
+      editorInfo: {
+        "level":'3'
+      },
       editorIndex: "",
       deleatIndex: ""
     };
@@ -89,15 +87,16 @@ export default {
             method: "post",
             url: "/api/admin/adminstor/save",
             data: editorInfo
-          }).then(function(e) {
+          }).then(function(res) {
+                        let e = JSON.parse(JSON.stringify(res.data));
             console.log(e);
             if (e.code == 0) {
               let messages = e.msg;
-              this.$message.success(messages);
-              this.$router.push({ path: '/admin' });
+              _this.$message.success(messages);
+              _this.$router.push({ path: '/admin' });
             } else {
               let messages = e.msg;
-              this.$message.error(messages);
+              _this.$message.error(messages);
             }
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {

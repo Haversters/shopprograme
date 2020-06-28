@@ -142,7 +142,7 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
+      <el-button type="success" :disabled="isBtn"  plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -155,7 +155,8 @@ export default {
     return {
       // 编辑列表的信息
       editorInfo: {},
-      editorIndex: ""
+      editorIndex: "",
+      isBtn:false,
     };
   },
   created() {
@@ -185,9 +186,7 @@ export default {
               let messages = e.msg;
               _this.$message.success(messages);
               _this.$router.push({ path: "/chargeback" });
-            }else if(e.code == 14){
-              _this.$message.error("数据未更改");
-            } else {
+            }else {
               let messages = e.msg;
               _this.$message.error(messages);
             }

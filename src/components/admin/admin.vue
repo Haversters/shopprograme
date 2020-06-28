@@ -4,11 +4,16 @@
       <div style class="topBtn">
         <div></div>
         <div>
-          <el-button type="primary" plain @click="goAddPage('/admin/adminAdd')">添加账户</el-button>
+          <el-button
+            type="primary"
+            :disabled="levels!=1"
+            plain
+            @click="goAddPage('/admin/adminAdd')"
+          >添加账户</el-button>
           <!-- <el-button type="success" plain>
             上传
             <i class="el-icon-upload el-icon--right"></i>
-          </el-button> -->
+          </el-button>-->
         </div>
       </div>
       <el-table
@@ -23,8 +28,18 @@
         <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
         <el-table-column width="160" align="center" prop label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="success" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row.po)">删除</el-button>
+            <el-button
+              size="mini"
+              :disabled="levels!=1"
+              type="success"
+              @click="handleEdit(scope.row)"
+            >编辑</el-button>
+            <el-button
+              size="mini"
+              :disabled="levels!=1"
+              type="danger"
+              @click="handleDelete(scope.$index,scope.row.id)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -57,15 +72,26 @@ export default {
       deleteIndex: "", ///删除数据index
       select: "po", //默认筛选类型
       listTotal: 0,
-      pageSize: 7 //显示数据量
+      pageSize: 7, //显示数据量
+      levels: 3,
+      isBtn: true
     };
+  },
+  watch: {
+    level(level) {
+      if (level == 1) {
+        this.isBtn = false;
+      } else {
+        this.isBtn = true;
+      }
+    }
   },
   created() {
     this.$store.state.adminleftnavnum = "5"; //设置左侧导航2-2 active
-       this.level = this.$store.state.user_data.level; //获取用户等级
+    this.levels = this.$store.state.user_data.level; //获取用户等级
   },
   mounted() {
-         this.level = this.$store.state.user_data.level; //获取用户等级
+    this.levels = this.$store.state.user_data.level; //获取用户等级
     this.getTeamData();
   },
   methods: {
@@ -81,11 +107,11 @@ export default {
       console.log(e);
       this.select = e;
     },
-        // 去往添加页面
-    goAddPage(urls){
+    // 去往添加页面
+    goAddPage(urls) {
       // let urls=''
-            // console.log(urls)
-  this.$router.push({ path: urls });
+      // console.log(urls)
+      this.$router.push({ path: urls });
     },
     // 删除当前数据
     handleDelete(index, po) {
@@ -97,7 +123,11 @@ export default {
     // 删除提示
     open() {
       const _this = this;
-      let urls = "/api/admin/index/delete?po=" + this.deleteId;
+      let urls =
+        "/api/admin/index/delete?po=" +
+        this.deleteId +
+        "&level=" +
+        this.$store.state.user_data.level;
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -137,6 +167,17 @@ export default {
         console.log(e);
         if (e.code == 0) {
           _this.tableData = e.data.reverse();
+          _this.tableData.forEach(function(item, index) {
+            if (item.level == 2) {
+              item.level = "财务";
+            } else if (item.level == 1) {
+              item.level = "超级管理员";
+              _this.tableData.splice(index, 1);
+              console.log(index);
+            } else {
+              item.level = "普通管理员";
+            }
+          });
           _this.listTotal = e.data.length;
           _this.orderData = _this.tableData.slice(0, 7);
         } else {

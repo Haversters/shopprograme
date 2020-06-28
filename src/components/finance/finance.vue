@@ -4,7 +4,12 @@
       <div style class="topBtn">
         <div></div>
         <div style="min-width:110px">
-          <el-button type="primary" plain @click="goAddPage('/finance/financeAdd')">添加数据</el-button>
+          <el-button
+            type="primary"
+            :disabled="isBtn"
+            plain
+            @click="goAddPage('/finance/financeAdd')"
+          >添加数据</el-button>
         </div>
       </div>
       <el-table
@@ -20,8 +25,18 @@
         <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
         <el-table-column width="160" align="center" prop label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="success" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row.id)">删除</el-button>
+            <el-button
+              size="mini"
+              :disabled="isBtn"
+              type="success"
+              @click="handleEdit(scope.row)"
+            >编辑</el-button>
+            <el-button
+              size="mini"
+              :disabled="isBtn"
+              type="danger"
+              @click="handleDelete(scope.$index,scope.row.id)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -54,13 +69,26 @@ export default {
       deleteIndex: "", ///删除数据index
       select: "po", //默认筛选类型
       listTotal: 0,
-      pageSize: 7 //显示数据量
+      pageSize: 7, //显示数据量
+      level: 3,
+      isBtn: true
     };
+  },
+  watch: {
+    level(level) {
+      if (level == 1 || level == 2) {
+        this.isBtn = false;
+      } else {
+        this.isBtn = true;
+      }
+    }
   },
   created() {
     this.$store.state.adminleftnavnum = "4"; //设置左侧导航2-2 active
+    this.level = this.$store.state.user_data.level;
   },
   mounted() {
+    this.level = this.$store.state.user_data.level;
     this.getTeamData();
   },
   methods: {
@@ -76,11 +104,11 @@ export default {
       console.log(e);
       this.select = e;
     },
-        // 去往添加页面
-    goAddPage(urls){
+    // 去往添加页面
+    goAddPage(urls) {
       // let urls=''
-            // console.log(urls)
-  this.$router.push({ path: urls });
+      // console.log(urls)
+      this.$router.push({ path: urls });
     },
     // 删除当前数据
     handleDelete(index, po) {
@@ -92,7 +120,11 @@ export default {
     // 删除提示
     open() {
       const _this = this;
-      let urls = "/api/admin/finance/delete?id=" + this.deleteId+'&level='+this.$store.state.user_data.level;
+      let urls =
+        "/api/admin/finance/delete?id=" +
+        this.deleteId +
+        "&level=" +
+        this.$store.state.user_data.level;
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -131,7 +163,7 @@ export default {
         console.log(111);
         console.log(e);
         if (e.code == 0) {
-          _this.tableData = e.data;
+          _this.tableData = e.data.reverse();
           _this.listTotal = e.data.length;
           _this.orderData = _this.tableData.slice(0, 7);
         } else {

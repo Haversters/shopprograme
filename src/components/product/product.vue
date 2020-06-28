@@ -2,7 +2,7 @@
   <el-container>
     <el-main>
       <div style class="topBtn">
-        <el-input placeholder="请输入PO/负责人" v-model="input3" class="input-with-select">
+        <el-input placeholder="请输入搜索数据" v-model="input3" class="input-with-select">
           <el-select
             v-model="select"
             slot="prepend"

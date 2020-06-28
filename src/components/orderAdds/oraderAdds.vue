@@ -100,15 +100,9 @@
     >
       <el-input v-model="editorInfo.Invoice_payment_amount"></el-input>
     </el-form-item>
-    <el-form-item
-      prop="pay_state"
-      label="是否已经付全款"
-      :rules="[
-      {required: true, message: '请输入是否已经付全款', trigger: 'blur' },
-      {message: '请输入是否已经付全款', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.pay_state"></el-input>
+    <el-form-item prop="pay_state" label="是否已经付全款">
+      <el-radio v-model="editorInfo.pay_state" label="1">是</el-radio>
+      <el-radio v-model="editorInfo.pay_state" label="0">否</el-radio>
     </el-form-item>
     <el-form-item
       prop="received_quantity"
@@ -144,7 +138,7 @@
       <el-button @click.prevent="removeDomain(domain)">删除</el-button>
     </el-form-item>
     <el-form-item>
-      <el-button type="success" :disabled="isBtn"  plain @click="submitForm('editorInfo')">提交</el-button>
+      <el-button type="success" :disabled="isBtn" plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -156,10 +150,12 @@ export default {
   data() {
     return {
       // 编辑列表的信息
-      editorInfo: {},
+      editorInfo: {
+        pay_state:'0'
+      },
       editorIndex: "",
       deleatIndex: "",
-       isBtn:false,
+      isBtn: false
     };
   },
   created() {
@@ -173,7 +169,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert('submit!');
-           _this.isBtn=true;
+          _this.isBtn = true;
           let editorInfo = _this.editorInfo;
           let params = { array: 111 };
           console.log(editorInfo);
@@ -182,20 +178,18 @@ export default {
             url: "/api/admin/index/save",
             data: editorInfo
           }).then(function(res) {
-           let e=JSON.parse(JSON.stringify(res.data))
+            let e = JSON.parse(JSON.stringify(res.data));
             console.log(e);
             if (e.code == 0) {
-              console.log(121)
+              console.log(121);
               let messages = e.msg;
               _this.$message.success(messages);
               _this.$router.push({ path: "/order" });
-            }else if(e.code == 14){
-              _this.$message.error("数据未更改");
-            } else {
+            }else {
               let messages = e.msg;
               _this.$message.error(messages);
             }
-            _this.isBtn=false;
+            _this.isBtn = false;
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);

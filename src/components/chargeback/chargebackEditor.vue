@@ -124,7 +124,7 @@
       prop="Status"
       label="Status"
       :rules="[
-      {message: '请输入status', trigger: 'blur' },
+      {required: true,message: '请输入status', trigger: 'blur' },
       {message: '请输入status', trigger: ['blur'] }
     ]"
     >
@@ -188,8 +188,8 @@ export default {
     submitForm(formName) {
       var _this = this;
       this.$refs[formName].validate(valid => {
-        _this.isBtn=true;
         if (valid) {
+          _this.isBtn=true;
           // alert('submit!');
           let editorInfo=_this.editorInfo
           let params = { array: 111 };

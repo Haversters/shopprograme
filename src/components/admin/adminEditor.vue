@@ -31,14 +31,10 @@
       <el-input v-model="editorInfo.passwd"></el-input>
     </el-form-item>
     <el-form-item
-      prop="level"
       label="级别"
-      :rules="[
-      {required: true, message: '请输入级别', trigger: 'blur' },
-      {message: '请输入级别', trigger: ['blur'] }
-    ]"
     >
-      <el-input v-model="editorInfo.level"></el-input>
+     <el-radio v-model="editorInfo.level" label="3">普通管理员</el-radio>
+        <el-radio v-model="editorInfo.level" label="2">财务</el-radio>
     </el-form-item>
     <el-form-item
       prop="remarks"
@@ -78,6 +74,11 @@ export default {
     let editorInfos = JSON.parse(this.$router.currentRoute.query.index);
     for (let key in editorInfos) {
       editorInfos[key] = String(editorInfos[key]);
+    }
+       if (editorInfos.level == "财务") {
+      editorInfos.level = '2';
+    } else {
+      editorInfos.level = '3';
     }
     this.editorInfo = editorInfos;
     console.log(this.editorInfo);

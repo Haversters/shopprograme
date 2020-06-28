@@ -46,14 +46,10 @@
       <el-input v-model="editorInfo.transferAmount"></el-input>
     </el-form-item>
     <el-form-item
-      prop="isEntry"
       label="是否入账"
-      :rules="[
-      {required: true, message: '请输入是或者否 ', trigger: 'blur' },
-      {message: '请输入是或者否', trigger: ['blur'] }
-    ]"
     >
-      <el-input v-model="editorInfo.isEntry"></el-input>
+               <el-radio v-model="editorInfo.isEntry" label="0">是</el-radio>
+        <el-radio v-model="editorInfo.isEntry" label="1">否</el-radio>
     </el-form-item>
        <el-form-item
       prop="remarks"
@@ -66,7 +62,7 @@
       <el-input v-model="editorInfo.remarks"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
+      <el-button type="success" :disabled="isBtn" plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -83,8 +79,9 @@ export default {
         transferDate: "", //转款日
         transferAmount: "", //转款金额
         isEntry: "", //是否入账
-        level:3,
-      }
+      },
+       level:3,
+       isBtn:false,
     };
   },
   created() {
@@ -99,6 +96,11 @@ export default {
     for (let key in editorInfos) {
      editorInfos[key] = String(editorInfos[key]);
     }
+        if (editorInfos.isEntry == "是") {
+      editorInfos.isEntry = "0";
+    } else {
+      editorInfos.isEntry = "1";
+    }
     this.editorInfo = editorInfos;
     console.log(this.editorInfo);
   },
@@ -108,6 +110,7 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
+            _this.isBtn=true;
           // alert('submit!');
           let editorInfo=_this.editorInfo
            editorInfo.levels=this.$store.state.user_data.level
@@ -117,8 +120,21 @@ export default {
             method: 'post',
             url: '/api/admin/finance/update',
             data:editorInfo
-          }).then(function(e){
-            console.log(e)
+          }).then(function(res){
+            let e=JSON.parse(JSON.stringify(res.data))
+            console.log(e);
+            if (e.code == 0) {
+              console.log(121)
+              let messages = e.msg;
+              _this.$message.success(messages);
+              _this.$router.push({ path: "/finance" });
+            }else if(e.code == 7){
+              _this.$message.error("数据未更改");
+            } else {
+              let messages = e.msg;
+              _this.$message.error(messages);
+            }
+            _this.isBtn=false;
           });
         } else {
           console.log("error submit!!");

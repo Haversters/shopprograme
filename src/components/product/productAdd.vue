@@ -28,7 +28,7 @@
       {message: '请输入Transaction_date', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.Transaction_date"></el-input>
+      <el-input placeholder="请输入yyyy-mm-dd格式" v-model="editorInfo.Transaction_date"></el-input>
     </el-form-item>
     <el-form-item
       prop="Transaction_type"
@@ -71,7 +71,7 @@
       <el-input v-model="editorInfo.Balance_amount"></el-input>
     </el-form-item>
     <el-form-item
-    v-if="level==1 || level==2"
+      v-if="level==1 || level==2"
       prop="PO"
       label="PO"
       :rules="[
@@ -82,7 +82,7 @@
       <el-input v-model="editorInfo.PO"></el-input>
     </el-form-item>
     <el-form-item
-    v-if="level==1 || level==2"
+      v-if="level==1 || level==2"
       prop="ASIN"
       label="ASIN"
       :rules="[
@@ -93,7 +93,7 @@
       <el-input v-model="editorInfo.ASIN"></el-input>
     </el-form-item>
     <el-form-item
-    v-if="level==1 || level==2"
+      v-if="level==1 || level==2"
       prop="Invoice_Number"
       label="Invoice_Number "
       :rules="[
@@ -104,7 +104,7 @@
       <el-input v-model="editorInfo.Invoice_Number"></el-input>
     </el-form-item>
     <el-form-item
-    v-if="level==1 || level==2"
+      v-if="level==1 || level==2"
       prop="returnID"
       label="returnID"
       :rules="[
@@ -115,7 +115,7 @@
       <el-input v-model="editorInfo.returnID"></el-input>
     </el-form-item>
     <el-form-item
-    v-if="level==1 || level==2"
+      v-if="level==1 || level==2"
       prop="person_charge"
       label="person_charge"
       :rules="[
@@ -126,7 +126,7 @@
       <el-input v-model="editorInfo.person_charge"></el-input>
     </el-form-item>
     <el-form-item
-    v-if="level==1 || level==2"
+      v-if="level==1 || level==2"
       prop="return_goods_amount"
       label="return_goods_amount"
       :rules="[
@@ -137,7 +137,7 @@
       <el-input v-model="editorInfo.return_goods_amount"></el-input>
     </el-form-item>
     <el-form-item
-    v-if="level==1 || level==2"
+      v-if="level==1 || level==2"
       prop="return_money"
       label="return_money"
       :rules="[
@@ -149,7 +149,7 @@
     </el-form-item>
 
     <el-form-item
-    v-if="level==1 || level==2"
+      v-if="level==1 || level==2"
       prop="remarks"
       label="remarks"
       :rules="[
@@ -161,7 +161,7 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
+      <el-button type="success" :disabled="isBtn" plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -175,16 +175,17 @@ export default {
       // 编辑列表的信息
       editorInfo: {},
       editorIndex: "",
-      level:3,
+      level: 3,
+      isBtn: false
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "2"; //设置左侧导航2-2 active
-        this.level = this.$store.state.user_data.level; //获取用户等级
+    this.level = this.$store.state.user_data.level; //获取用户等级
   },
   mounted() {
     console.log(this.$store.state);
-        this.level = this.$store.state.user_data.level; //获取用户等级
+    this.level = this.$store.state.user_data.level; //获取用户等级
   },
   methods: {
     //点击提交按钮
@@ -192,17 +193,29 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
+          _this.isBtn = true;
           // alert('submit!');
           let editorInfo = _this.editorInfo;
-          editorInfo.level=this.$store.state.user_data.level
+          editorInfo.level = this.$store.state.user_data.level;
           let params = { array: 111 };
           console.log(params);
           axios({
             method: "post",
             url: "/api/admin/productreturns/save",
             data: editorInfo
-          }).then(function(e) {
+          }).then(function(res) {
+            let e = JSON.parse(JSON.stringify(res.data));
             console.log(e);
+            if (e.code == 0) {
+              console.log(121);
+              let messages = e.msg;
+              _this.$message.success(messages);
+              _this.$router.push({ path: "/product" });
+            } else {
+              let messages = e.msg;
+              _this.$message.error(messages);
+            }
+            _this.isBtn = false;
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);

@@ -40,15 +40,9 @@
     >
       <el-input v-model="editorInfo.transferAmount"></el-input>
     </el-form-item>
-    <el-form-item
-      prop="isEntry"
-      label="是否入账"
-      :rules="[
-      {required: true, message: '请输入是否入账', trigger: 'blur' },
-      {message: '请输入是否入账', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.isEntry"></el-input>
+    <el-form-item label="是否入账">
+      <el-radio v-model="editorInfo.isEntry" label="1">是</el-radio>
+      <el-radio v-model="editorInfo.isEntry" label="0">否</el-radio>
     </el-form-item>
 
     <el-form-item
@@ -75,7 +69,7 @@
       <el-button @click.prevent="removeDomain(domain)">删除</el-button>
     </el-form-item>
     <el-form-item>
-      <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
+      <el-button type="success" :disabled="isBtn" plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -87,10 +81,13 @@ export default {
   data() {
     return {
       // 编辑列表的信息
-      editorInfo: {},
+      editorInfo: {
+        isEntry: "0"
+      },
       editorIndex: "",
       deleatIndex: "",
-      level: 3
+      level: 3,
+      isBtn: false
     };
   },
   created() {
@@ -106,9 +103,10 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
+          _this.isBtn = true;
           // alert('submit!');
           let editorInfo = _this.editorInfo;
-          editorInfo.levels=this.$store.state.user_data.level
+          editorInfo.levels = this.$store.state.user_data.level;
           //   editorInfo.level=this.level;
           let params = { array: 111 };
           console.log(editorInfo);
@@ -116,14 +114,27 @@ export default {
             method: "post",
             url: "/api/admin/finance/save",
             data: editorInfo
-          }).then(function(e) {
+          }).then(function(res) {
+            let e = JSON.parse(JSON.stringify(res.data));
             console.log(e);
+            if (e.code == 0) {
+              console.log(121);
+              let messages = e.msg;
+              _this.$message.success(messages);
+              _this.$router.push({ path: "/finance" });
+            } else {
+              let messages = e.msg;
+              _this.$message.error(messages);
+            }
+            _this.isBtn = false;
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
           // });
         } else {
+          _this.$message.error(e.messages);
           console.log("error submit!!");
+          _this.isBtn = false;
           return false;
         }
       });

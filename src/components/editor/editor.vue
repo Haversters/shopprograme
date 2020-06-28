@@ -80,7 +80,7 @@
     >
       <el-input v-model="editorInfo.invoice"></el-input>
     </el-form-item>
-       <el-form-item
+    <el-form-item
       prop="AISN"
       label="AISN"
       :rules="[
@@ -100,15 +100,11 @@
     >
       <el-input v-model="editorInfo.Invoice_payment_amount"></el-input>
     </el-form-item>
-    <el-form-item
-      prop="pay_state"
-      label="是否已经付全款"
-      :rules="[
-      {required: true, message: '请输入是否已经付全款', trigger: 'blur' },
-      {message: '请输入是否已经付全款', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.pay_state"></el-input>
+    <el-form-item label="是否已经付全款">
+ 
+        <el-radio v-model="editorInfo.pay_state" label="1">是</el-radio>
+        <el-radio v-model="editorInfo.pay_state" label="0">否</el-radio>
+
     </el-form-item>
     <el-form-item
       prop="remarks"
@@ -149,17 +145,29 @@ export default {
       // 编辑列表的信息
       editorInfo: {},
       editorIndex: "",
-      isBtn:false,
+      isBtn: false
     };
+  },
+  watch: {
+    // editorInfo(editorInfo){
+    //   if(editorInfo.pay_state=="是" || editorInfo.pay_state==1 || editorInfos.pay_state == true){
+    //     editorInfos.pay_state = true;
+    //   }
+    // }
   },
   created() {
     this.$store.state.adminleftnavnum = "0"; //设置左侧导航2-2 active
   },
   mounted() {
     console.log(this.$router.currentRoute.query);
-    let editorInfos=JSON.parse(this.$router.currentRoute.query.index)
+    let editorInfos = JSON.parse(this.$router.currentRoute.query.index);
     for (let key in editorInfos) {
-     editorInfos[key] = String(editorInfos[key]);
+      editorInfos[key] = String(editorInfos[key]);
+    }
+    if (editorInfos.pay_state == "是") {
+      editorInfos.pay_state = '1';
+    } else {
+      editorInfos.pay_state = '0';
     }
     this.editorInfo = editorInfos;
     console.log(this.editorInfo);
@@ -170,30 +178,37 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          _this.isBtn=true;
+          _this.isBtn = true;
           // alert('submit!');
-          let editorInfo = _this.editorInfo;
+          let editorInfoss = _this.editorInfo;
+          if (editorInfoss.pay_state==1) {
+            editorInfoss.pay_state = '1';
+          } else {
+            editorInfoss.pay_state == '0';
+          }
           let params = { array: 111 };
           console.log(params);
           axios({
             method: "post",
             url: "/api/admin/index/update",
-            data: editorInfo
+            data: editorInfoss
           }).then(function(res) {
-            let e=JSON.parse(JSON.stringify(res.data))
+            let e = JSON.parse(JSON.stringify(res.data));
             console.log(e);
             if (e.code == 0) {
-              console.log(121)
+              console.log(121);
               let messages = e.msg;
               _this.$message.success(messages);
               _this.$router.push({ path: "/order" });
-            }else if(e.code == 14){
+            } else if (e.code == 14) {
               _this.$message.error("数据未更改");
+              return;
             } else {
               let messages = e.msg;
               _this.$message.error(messages);
+              return;
             }
-            _this.isBtn=false;
+            _this.isBtn = false;
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);

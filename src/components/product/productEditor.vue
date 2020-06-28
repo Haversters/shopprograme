@@ -20,7 +20,7 @@
     >
       <el-input v-model="editorInfo.Transaction_number"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       prop="Transaction_date"
       label="Transaction_date"
       :rules="[
@@ -28,7 +28,7 @@
       {message: '请输入Transaction_date', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.Transaction_date"></el-input>
+      <el-input placeholder="请输入yyyy-mm-dd格式" v-model="editorInfo.Transaction_date"></el-input>
     </el-form-item>
     <el-form-item
       prop="Transaction_type"
@@ -50,7 +50,7 @@
     >
       <el-input v-model="editorInfo.Invoice_amount"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       prop="Deducted_amount"
       label="Deducted_amount"
       :rules="[
@@ -136,7 +136,7 @@
     >
       <el-input v-model="editorInfo.return_goods_amount"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       v-if="level==1||level==2"
       prop="return_money"
       label="return_money"
@@ -160,7 +160,7 @@
       <el-input v-model="editorInfo.remarks"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
+      <el-button type="success" :disabled="isBtn" plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -174,23 +174,24 @@ export default {
       // 编辑列表的信息
       editorInfo: {},
       editorIndex: "",
-      level:3,
+      level: 3,
+       isBtn:false,
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "2"; //设置左侧导航2-2 active
-    this.level=this.$store.state.user_data.level
+    this.level = this.$store.state.user_data.level;
   },
   mounted() {
-    this.level=this.$store.state.user_data.level
-        console.log(this.$store.state.user_data.level)
+    this.level = this.$store.state.user_data.level;
+    console.log(this.$store.state.user_data.level);
     // console.log(this.$router.currentRoute.query);
-    let editorInfos=JSON.parse(this.$router.currentRoute.query.index)
+    let editorInfos = JSON.parse(this.$router.currentRoute.query.index);
     for (let key in editorInfos) {
-     editorInfos[key] = String(editorInfos[key]);
+      editorInfos[key] = String(editorInfos[key]);
     }
     this.editorInfo = editorInfos;
-    console.log(this.editorInfo,"----",this.level);
+    console.log(this.editorInfo, "----", this.level);
   },
   methods: {
     //点击提交按钮
@@ -198,17 +199,31 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.isBtn=true
           // alert('submit!');
-          let editorInfo=_this.editorInfo
-          editorInfo.level=this.$store.state.user_data.level
+          let editorInfo = _this.editorInfo;
+          editorInfo.level = this.$store.state.user_data.level;
           let params = { array: 111 };
           console.log(params);
           axios({
-            method: 'post',
-            url: '/api//admin/productreturns/update',
-            data:editorInfo
-          }).then(function(e){
-            console.log(e)
+            method: "post",
+            url: "/api//admin/productreturns/update",
+            data: editorInfo
+          }).then(function(res) {
+            let e = JSON.parse(JSON.stringify(res.data));
+            console.log(e);
+            if (e.code == 0) {
+              console.log(121);
+              let messages = e.msg;
+              _this.$message.success(messages);
+              _this.$router.push({ path: "/product" });
+            } else if (e.code == 7) {
+              _this.$message.error("数据未更改");
+            } else {
+              let messages = e.msg;
+              _this.$message.error(messages);
+            }
+            _this.isBtn = false;
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
@@ -234,7 +249,7 @@ export default {
         value: "",
         key: "invoice" + _this.editorInfo.domains.length
       });
-    },
+    }
     // 获取编辑列表的信息
     // 获取编辑列表的信息
     // getTeamData(indexs) {

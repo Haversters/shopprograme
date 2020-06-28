@@ -8,7 +8,7 @@
           <!-- <el-button type="success" plain>
             上传
             <i class="el-icon-upload el-icon--right"></i>
-          </el-button> -->
+          </el-button>-->
         </div>
       </div>
       <el-table :data="logisticsData" style="width: 100%" :border="true">
@@ -79,10 +79,10 @@ export default {
       this.select = e;
     },
     // 去往添加页面
-    goAddPage(urls){
+    goAddPage(urls) {
       // let urls=''
-            // console.log(urls)
-  this.$router.push({ path: urls });
+      // console.log(urls)
+      this.$router.push({ path: urls });
     },
     // 搜索类型
     getSearch() {
@@ -96,7 +96,15 @@ export default {
         console.log(urls);
         console.log(e);
         if (e.code == 0) {
-          _this.tableData = e.data;
+    
+          // e.data.forEach(function(item) {
+          //   if (item.isDelivered == 1) {
+          //     item.isDelivered = "是";
+          //   } else {
+          //     item.isDelivered = "否";
+          //   }
+          // });
+          _this.tableData = e.data.reverse();
           _this.listTotal = e.data.length;
           _this.logisticsData = _this.tableData.slice(0, 7);
         } else {
@@ -155,7 +163,14 @@ export default {
         console.log(111);
         console.log(e);
         if (e.code == 0) {
-          _this.tableData = e.data;
+          // e.data.forEach(function(item) {
+          //   if (item.isDelivered == 1) {
+          //     item.isDelivered = "是";
+          //   } else {
+          //     item.isDelivered = "否";
+          //   }
+          // });
+          _this.tableData = e.data.reverse();
           _this.listTotal = e.data.length;
           _this.logisticsData = _this.tableData.slice(0, 7);
         } else {

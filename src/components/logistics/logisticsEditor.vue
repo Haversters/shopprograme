@@ -20,7 +20,7 @@
     >
       <el-input v-model="editorInfo.delivery"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       prop="trackingNumber"
       label="发货重量"
       :rules="[
@@ -30,7 +30,7 @@
     >
       <el-input v-model="editorInfo.trackingNumber"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       prop="transferNo"
       label="转单号"
       :rules="[
@@ -72,14 +72,10 @@
       <el-input v-model="editorInfo.freight"></el-input>
     </el-form-item>
     <el-form-item
-      prop="isDelivered"
       label="是否妥投了 "
-      :rules="[
-      {required: true, message: '请输入是否妥投了 ', trigger: 'blur' },
-      {message: '请输入是否妥投了 ', trigger: ['blur'] }
-    ]"
     >
-      <el-input v-model="editorInfo.isDelivered"></el-input>
+            <el-radio v-model="editorInfo.isDelivered" label="0">是</el-radio>
+        <el-radio v-model="editorInfo.isDelivered" label="1">否</el-radio>
     </el-form-item>
     <!-- <el-form-item
       prop="logisticsRemarks"
@@ -103,7 +99,7 @@
       <el-input v-model="editorInfo.remarks"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
+      <el-button type="success" :disabled="isBtn" plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -116,7 +112,8 @@ export default {
     return {
       // 编辑列表的信息
       editorInfo: {},
-      editorIndex: ""
+      editorIndex: "",
+      isBtn: false
     };
   },
   created() {
@@ -125,9 +122,14 @@ export default {
   },
   mounted() {
     console.log(this.$router.currentRoute.query);
-    let editorInfos=JSON.parse(this.$router.currentRoute.query.index)
+    let editorInfos = JSON.parse(this.$router.currentRoute.query.index);
     for (let key in editorInfos) {
-     editorInfos[key] = String(editorInfos[key]);
+      editorInfos[key] = String(editorInfos[key]);
+    }
+    if (editorInfos.isDelivered == "是") {
+      editorInfos.isDelivered = "0";
+    } else {
+      editorInfos.isDelivered = "1";
     }
     this.editorInfo = editorInfos;
     console.log(this.editorInfo);
@@ -138,16 +140,35 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
+          _this.isBtn = true;
           // alert('submit!');
-          let editorInfo = _this.editorInfo;
+          let editorInfoss = _this.editorInfo;
+          // if (editorInfoss.isDelivered == '1') {
+          //   editorInfoss.isDelivered = "1";
+          // } else {
+          //   editorInfoss.isDelivered == "0";
+          // }
           let params = { array: 111 };
           console.log(params);
           axios({
             method: "post",
             url: "/api/admin/logistics/update",
-            data: editorInfo
-          }).then(function(e) {
+            data: editorInfoss
+          }).then(function(res) {
+            let e = JSON.parse(JSON.stringify(res.data));
             console.log(e);
+            if (e.code == 0) {
+              console.log(121);
+              let messages = e.msg;
+              _this.$message.success(messages);
+              _this.$router.push({ path: "/logistics" });
+            } else if (e.code == 7) {
+              _this.$message.error("数据未更改");
+            } else {
+              let messages = e.msg;
+              _this.$message.error(messages);
+            }
+            _this.isBtn = false;
           });
           // _this.$post("/api/admin/logistics/update", editorInfo).then(function(e) {
           //   console.log(e);

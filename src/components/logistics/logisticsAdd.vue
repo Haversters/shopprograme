@@ -71,14 +71,10 @@
       <el-input v-model="editorInfo.freight"></el-input>
     </el-form-item>
     <el-form-item
-      prop="isDelivered"
       label="是否妥投了"
-      :rules="[
-      {required: true, message: '请输入是否妥投了', trigger: 'blur' },
-      {message: '请输入是否妥投了', trigger: ['blur'] }
-    ]"
     >
-      <el-input v-model="editorInfo.isDelivered"></el-input>
+          <el-radio v-model="editorInfo.isDelivered" label="0">是</el-radio>
+      <el-radio v-model="editorInfo.isDelivered" label="1">否</el-radio>
     </el-form-item>
     <el-form-item
       prop="remarks"
@@ -92,7 +88,7 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
+      <el-button type="success" :disabled="isBtn" plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -104,32 +100,45 @@ export default {
   data() {
     return {
       // 编辑列表的信息
-      editorInfo: {},
-      editorIndex: ""
+      editorInfo: {
+        isDelivered:'1'
+      },
+      editorIndex: "",
+      isBtn: false
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "3"; //设置左侧导航2-2 active
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     //点击提交按钮
     submitForm(formName) {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
+           _this.isBtn = true;
           // alert('submit!');
-          let editorInfo=_this.editorInfo
+          let editorInfo = _this.editorInfo;
           let params = { array: 111 };
           console.log(params);
           axios({
-            method: 'post',
-            url: '/api/admin/logistics/save',
-            data:editorInfo
-          }).then(function(e){
-            console.log(e)
+            method: "post",
+            url: "/api/admin/logistics/save",
+            data: editorInfo
+          }).then(function(res) {
+            let e = JSON.parse(JSON.stringify(res.data));
+            console.log(e);
+            if (e.code == 0) {
+              console.log(121);
+              let messages = e.msg;
+              _this.$message.success(messages);
+              _this.$router.push({ path: "/logistics" });
+            } else {
+              let messages = e.msg;
+              _this.$message.error(messages);
+            }
+            _this.isBtn = false;
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
