@@ -20,6 +20,9 @@ import adminAdd from '@/components/admin/adminAdd'; //admin管理新增
 import product from '@/components/product/product'; //product return模块
 import productAdd from '@/components/product/productAdd'; //product return模块
 import productEditor from '@/components/product/productEditor'; //product return模块
+import productUpload from '@/components/upload/productUpload'; //product return模块 
+import chargebackUpload from '@/components/upload/chargebackUpload'; ////chargeback上传文件
+import { Upload } from 'element-ui';
 Vue.use(Router);
 
 const router = new Router({
@@ -135,6 +138,18 @@ const router = new Router({
 					path: '/admin/adminAdd',
 					name: 'adminAdd',
 					component: adminAdd
+				},
+				//文件上传测试
+				{
+					path:'/product/productUpload',
+					name:'productUpload',
+					component:productUpload
+				},
+				//文件上传测试
+				{
+					path:'/chargeback/chargebackUpload',
+					name:'chargebackUpload',
+					component:chargebackUpload
 				},
 			]
 		},

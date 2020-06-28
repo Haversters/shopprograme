@@ -2,23 +2,7 @@
   <el-container>
     <el-main>
       <div style class="topBtn">
-        <el-input placeholder="请输入PO/负责人" v-model="input3" class="input-with-select">
-          <el-select
-            v-model="select"
-            slot="prepend"
-            placeholder="PO"
-            @change="searchselect"
-            style="width:100px"
-          >
-            <el-option label="PO" value="PO"></el-option>
-            <el-option label="负责人" value="person_charge"></el-option>
-            <el-option label="ASIN" value="ASIN"></el-option>
-            <el-option label="returnID" value="returnID"></el-option>
-            <el-option label="Invoice_Number" value="Invoice_Number"></el-option>
-            <el-option label="Transaction_date" value="Transaction_date"></el-option>
-          </el-select>
-          <el-button slot="append" icon="el-icon-search" @click="getSearch()">搜索</el-button>
-        </el-input>
+        <div></div>
         <div style="min-width:110px">
           <el-button type="primary" plain @click="goAddPage('/logistics/logisticsAdd')">添加数据</el-button>
           <!-- <el-button type="success" plain>
@@ -39,7 +23,7 @@
         <el-table-column align="center" prop="isDelivered" label="是否妥投了"></el-table-column>
         <!-- <el-table-column align="center" prop="logisticsRemarks" label="logistics_Remarks "></el-table-column> -->
         <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
-        <el-table-column align="center" prop label="操作">
+        <el-table-column width="160" align="center" prop label="操作">
           <template slot-scope="scope">
             <el-button size="mini" type="success" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row.id)">删除</el-button>

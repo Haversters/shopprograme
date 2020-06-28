@@ -2,27 +2,9 @@
   <el-container v-loading="loading">
     <el-main>
       <div style class="topBtn">
-        <el-input placeholder="请输入PO/负责人" v-model="input3" class="input-with-select">
-          <el-select
-            v-model="select"
-            slot="prepend"
-            placeholder="PO"
-            @change="searchselect"
-            style="width:100px"
-          >
-            <el-option label="PO" value="po"></el-option>
-            <el-option label="负责人" value="name"></el-option>
-            <!-- <el-option label="订单号" value="2"></el-option>
-            <el-option label="用户电话" value="3"></el-option>-->
-          </el-select>
-          <el-button slot="append" icon="el-icon-search" @click="getSearch()">搜索</el-button>
-        </el-input>
-        <div style="min-width:220px">
+        <div></div>
+        <div style="min-width:110px">
           <el-button type="primary" plain @click="goAddPage('/finance/financeAdd')">添加数据</el-button>
-          <el-button type="success" plain>
-            上传
-            <i class="el-icon-upload el-icon--right"></i>
-          </el-button>
         </div>
       </div>
       <el-table
@@ -212,6 +194,7 @@ export default {
 }
 /* 顶部区域 */
 .topBtn {
+  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   /* align-items: center; */

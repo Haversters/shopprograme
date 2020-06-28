@@ -80,7 +80,7 @@
     >
       <el-input v-model="editorInfo.invoice"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       prop="AISN"
       label="AISN"
       :rules="[
@@ -110,7 +110,7 @@
     >
       <el-input v-model="editorInfo.pay_state"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       prop="received_quantity"
       label="Amazon接收的到货数量"
       :rules="[
@@ -144,7 +144,7 @@
       <el-button @click.prevent="removeDomain(domain)">删除</el-button>
     </el-form-item>
     <el-form-item>
-      <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
+      <el-button type="success" :disabled="isBtn"  plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -158,15 +158,14 @@ export default {
       // 编辑列表的信息
       editorInfo: {},
       editorIndex: "",
-      deleatIndex:'',
+      deleatIndex: "",
+       isBtn:false,
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "0"; //设置左侧导航2-2 active
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     //点击提交按钮
     submitForm(formName) {
@@ -174,15 +173,29 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert('submit!');
-          let editorInfo=_this.editorInfo
+           _this.isBtn=true;
+          let editorInfo = _this.editorInfo;
           let params = { array: 111 };
           console.log(editorInfo);
           axios({
-            method: 'post',
-            url: '/api/admin/index/save',
-            data:editorInfo
-          }).then(function(e){
-            console.log(e)
+            method: "post",
+            url: "/api/admin/index/save",
+            data: editorInfo
+          }).then(function(res) {
+           let e=JSON.parse(JSON.stringify(res.data))
+            console.log(e);
+            if (e.code == 0) {
+              console.log(121)
+              let messages = e.msg;
+              _this.$message.success(messages);
+              _this.$router.push({ path: "/order" });
+            }else if(e.code == 14){
+              _this.$message.error("数据未更改");
+            } else {
+              let messages = e.msg;
+              _this.$message.error(messages);
+            }
+            _this.isBtn=false;
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
@@ -208,8 +221,7 @@ export default {
         value: "",
         key: "invoice" + _this.editorInfo.domains.length
       });
-    },
-
+    }
   }
 };
 </script>

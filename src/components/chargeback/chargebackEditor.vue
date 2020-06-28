@@ -154,7 +154,7 @@
       <el-button @click.prevent="removeDomain(domain)">删除</el-button>
     </el-form-item>
     <el-form-item>
-      <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
+      <el-button type="success" :disabled="isBtn" plain @click="submitForm('editorInfo')">提交</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -167,7 +167,8 @@ export default {
     return {
       // 编辑列表的信息
       editorInfo: {},
-      editorIndex: ""
+      editorIndex: "",
+      isBtn:false,
     };
   },
   created() {
@@ -187,6 +188,7 @@ export default {
     submitForm(formName) {
       var _this = this;
       this.$refs[formName].validate(valid => {
+        _this.isBtn=true;
         if (valid) {
           // alert('submit!');
           let editorInfo=_this.editorInfo
@@ -196,8 +198,21 @@ export default {
             method: 'post',
             url: '/api/admin/chargeback/update',
             data:editorInfo
-          }).then(function(e){
-            console.log(e)
+          }).then(function(res){
+            let e=JSON.parse(JSON.stringify(res.data))
+            console.log(e);
+            if (e.code == 0) {
+              console.log(121)
+              let messages = e.msg;
+              _this.$message.success(messages);
+              _this.$router.push({ path: "/chargeback" });
+            }else if(e.code == 14){
+              _this.$message.error("数据未更改");
+            } else {
+              let messages = e.msg;
+              _this.$message.error(messages);
+            }
+            _this.isBtn=false;
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);

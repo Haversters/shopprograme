@@ -20,7 +20,7 @@
         </el-input>
           <div style="min-width:220px">
           <el-button type="primary" plain @click="goAddPage('/chargeback/chargebackAdd')">添加数据</el-button>
-          <el-button type="success" plain>上传<i class="el-icon-upload el-icon--right"></i></el-button>
+          <el-button type="success" plain @click="goAddPage('/chargeback/chargebackUpload')">上传<i class="el-icon-upload el-icon--right"></i></el-button>
         </div>
       </div>
       <el-table :data="chargeData" style="width: 100%" :border="true">

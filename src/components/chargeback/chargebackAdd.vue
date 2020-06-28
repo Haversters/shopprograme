@@ -80,7 +80,7 @@
     >
       <el-input v-model="editorInfo.purchase_order"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       prop="quantity"
       label="quantity"
       :rules="[
@@ -110,7 +110,7 @@
     >
       <el-input v-model="editorInfo.vendor_code"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       prop="person_charge"
       label="person_charge"
       :rules="[
@@ -120,7 +120,7 @@
     >
       <el-input v-model="editorInfo.person_charge"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       prop="Status"
       label="Status"
       :rules="[
@@ -161,25 +161,37 @@ export default {
   created() {
     this.$store.state.adminleftnavnum = "1"; //设置左侧导航2-2 active
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     //点击提交按钮
     submitForm(formName) {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
+          _this.isBtn=true;
           // alert('submit!');
-          let editorInfo=_this.editorInfo
+          let editorInfo = _this.editorInfo;
           let params = { array: 111 };
           console.log(params);
           axios({
-            method: 'post',
-            url: '/api/admin/chargeback/save',
-            data:editorInfo
-          }).then(function(e){
-            console.log(e)
+            method: "post",
+            url: "/api/admin/chargeback/save",
+            data: editorInfo
+          }).then(function(res) {
+            let e=JSON.parse(JSON.stringify(res.data))
+            console.log(e);
+            if (e.code == 0) {
+              console.log(121)
+              let messages = e.msg;
+              _this.$message.success(messages);
+              _this.$router.push({ path: "/chargeback" });
+            }else if(e.code == 14){
+              _this.$message.error("数据未更改");
+            } else {
+              let messages = e.msg;
+              _this.$message.error(messages);
+            }
+            _this.isBtn=false;
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);

@@ -8,7 +8,7 @@
       {message: '请输入PO', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.po"></el-input>
+      <el-input v-model="editorInfo.po" :disabled="true"></el-input>
     </el-form-item>
     <el-form-item
       prop="person_charge"
@@ -135,7 +135,7 @@
     </el-form-item>
     <el-form-item>
       <el-button type="success" plain @click="submitForm('editorInfo')">提交</el-button>
-      <el-button @click="addDomain" type="danger" plain>新增 Invoice</el-button>
+      <el-button @click="addDomain" :disabled="isBtn" type="danger" plain>新增 Invoice</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -148,25 +148,8 @@ export default {
     return {
       // 编辑列表的信息
       editorInfo: {},
-      editorIndex: ""
-      //  editorInfo: {
-      //   POnumber: "", //PO
-      //   charge: "", //负责人
-      //   purchasePrice: "", //采购价
-      //   weight: "", //重量
-      //   oceanShipping: "", //海运预估利润
-      //   airTransport: "", //空运预估利润
-      //   shipmentId: "", //shipmentId
-      //   invoice: "", //invoice
-      //   InvoiceAmount: "", //发票付款金额
-      //   isPay: "", //是否已经付全款
-      //   amazonNumber: "", //Amazon接收的到货数量
-      //   remarks: "", //备注
-      //   domains: [], //新增invioce
-      //   // 编辑列表的信息
-      //   editorInfo: {},
-      //   editorIndex: ""
-      // }
+      editorIndex: "",
+      isBtn:false,
     };
   },
   created() {
@@ -187,6 +170,7 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
+          _this.isBtn=true;
           // alert('submit!');
           let editorInfo = _this.editorInfo;
           let params = { array: 111 };
@@ -195,17 +179,21 @@ export default {
             method: "post",
             url: "/api/admin/index/update",
             data: editorInfo
-          }).then(function(e) {
-            console.log(e.data);
-            if (e.data.code == 0) {
-              _this.$message.success("修改成功");
+          }).then(function(res) {
+            let e=JSON.parse(JSON.stringify(res.data))
+            console.log(e);
+            if (e.code == 0) {
+              console.log(121)
+              let messages = e.msg;
+              _this.$message.success(messages);
               _this.$router.push({ path: "/order" });
-            } else if (e.data.code == 7) {
-              _this.$message.error("未编辑数据");
+            }else if(e.code == 14){
+              _this.$message.error("数据未更改");
             } else {
-              let messages = e.data.msg;
+              let messages = e.msg;
               _this.$message.error(messages);
             }
+            _this.isBtn=false;
           });
           // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
