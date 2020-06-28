@@ -102,21 +102,21 @@ export default {
       //本地token
       let localStorageToken=localStorage.getItem('user_data')
       //设置请求token是否过期
-      const _this = this;
-      if (_this.$store.state.user_data.token==null || localStorageToken==null) {
-        this.$message.error("登录已过期，请重新登录");
-        this.$router.push({ path: "/login" });
-      }
-      console.log(_this.$store.state.user_data);
-      this.$fetch("/api/admin/login/checktoken", {
-        token: _this.$store.state.user_data.token
-      }).then(e => {
-        console.log(e);
-        if (e.code != 4) {
-          this.$message.error("登录已过期，请重新登录");
-          this.$router.push({ path: "/login" });
-        }
-      });
+      // const _this = this;
+      // if (_this.$store.state.user_data.token==null || localStorageToken==null) {
+      //   this.$message.error("登录已过期，请重新登录");
+      //   this.$router.push({ path: "/login" });
+      // }
+      // console.log(_this.$store.state.user_data);
+      // this.$fetch("/api/admin/login/checktoken", {
+      //   token: _this.$store.state.user_data.token
+      // }).then(e => {
+      //   console.log(e);
+      //   if (e.code != 4) {
+      //     this.$message.error("登录已过期，请重新登录");
+      //     this.$router.push({ path: "/login" });
+      //   }
+      // });
     }
   },
   watch: {

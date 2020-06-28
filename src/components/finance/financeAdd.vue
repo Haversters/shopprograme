@@ -108,6 +108,7 @@ export default {
         if (valid) {
           // alert('submit!');
           let editorInfo = _this.editorInfo;
+          editorInfo.levels=this.$store.state.user_data.level
           //   editorInfo.level=this.level;
           let params = { array: 111 };
           console.log(editorInfo);

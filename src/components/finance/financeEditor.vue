@@ -71,6 +71,9 @@
   </el-form>
 </template>
 <script>
+import axios from "axios";
+
+import { post } from "../../../config/http";
 export default {
   data() {
     return {
@@ -105,8 +108,18 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(_this.editorInfo);
           // alert('submit!');
+          let editorInfo=_this.editorInfo
+           editorInfo.levels=this.$store.state.user_data.level
+          let params = { array: 111 };
+          console.log(editorInfo);
+          axios({
+            method: 'post',
+            url: '/api/admin/finance/update',
+            data:editorInfo
+          }).then(function(e){
+            console.log(e)
+          });
         } else {
           console.log("error submit!!");
           return false;

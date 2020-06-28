@@ -66,7 +66,6 @@ export default {
       } else {
         _this.loginInfo('请输入账号');
       }
-
       // console.log(this.userName, this.userPassword);
       // // this.$router.push({path:'/'})
       // const _this=this

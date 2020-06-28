@@ -1,134 +1,84 @@
 <template>
   <el-form :model="editorInfo" ref="editorInfo" label-width="140px" class="demo-dynamic">
     <el-form-item
-      prop="ASIN"
-      label="ASIN"
+      prop="logisticsCharge"
+      label="负责人"
       :rules="[
-      {required: true, message: '请输入ASIN', trigger: 'blur' },
-      {message: '请输入ASIN', trigger: ['blur'] }
+      {required: true, message: '请输入负责人', trigger: 'blur' },
+      {message: '请输入负责人', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.ASIN"></el-input>
+      <el-input v-model="editorInfo.logisticsCharge"></el-input>
     </el-form-item>
     <el-form-item
-      prop="chargebackID"
-      label="chargebackID"
+      prop="delivery"
+      label="发货方式"
       :rules="[
-      {required: true, message: '请输入chargebackID', trigger: 'blur' },
-      {message: '请输入chargebackID', trigger: ['blur'] }
+      {required: true, message: '请输入发货方式', trigger: 'blur' },
+      {message: '请输入发货方式', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.chargebackID"></el-input>
+      <el-input v-model="editorInfo.delivery"></el-input>
     </el-form-item>
     <el-form-item
-      prop="chargeback_type"
-      label="chargeback_type"
+      prop="trackingNumber"
+      label="追踪号"
       :rules="[
-      {required: true, message: '请输入chargeback_type', trigger: 'blur' },
-      {message: '请输入chargeback_type', trigger: ['blur'] }
+      {required: true, message: '请输入追踪号', trigger: 'blur' },
+      {message: '请输入追踪号', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.chargeback_type"></el-input>
+      <el-input v-model="editorInfo.trackingNumber"></el-input>
     </el-form-item>
     <el-form-item
-      prop="creation_date"
-      label="creation_date"
+      prop="transferNo"
+      label="转单号"
       :rules="[
-      {required: true, message: '请输入creation_date', trigger: 'blur' },
-      {message: '请输入creation_date', trigger: ['blur'] }
+      {required: true, message: '请输入转单号', trigger: 'blur' },
+      {message: '请输入转单号', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.creation_date"></el-input>
+      <el-input v-model="editorInfo.transferNo"></el-input>
     </el-form-item>
     <el-form-item
-      prop="financial_charge"
-      label="financial_charge "
+      prop="deliveryWeight"
+      label="发货重量 "
       :rules="[
-      {required: true, message: '请输入financial_charge ', trigger: 'blur' },
-      {message: '请输入financial_charge ', trigger: ['blur'] }
+      {required: true, message: '请输入发货重量 ', trigger: 'blur' },
+      {message: '请输入发货重量 ', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.financial_charge"></el-input>
+      <el-input v-model="editorInfo.deliveryWeight"></el-input>
     </el-form-item>
     <el-form-item
-      prop="Financialcharge"
-      label="Financialcharge"
+      prop="deliveryContent"
+      label="发货内容"
       :rules="[
-      {required: true, message: '请输入Financialcharge', trigger: 'blur' },
-      {message: '请输入Financialcharge', trigger: ['blur'] }
+      {required: true, message: '请输入发货内容', trigger: 'blur' },
+      {message: '请输入发货内容', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.Financialcharge"></el-input>
+      <el-input v-model="editorInfo.deliveryContent"></el-input>
     </el-form-item>
     <el-form-item
-      prop="issueID"
-      label="issueID"
+      prop="freight"
+      label="运费"
       :rules="[
-      {required: true, message: '请输入issueID', trigger: 'blur' },
-      {message: '请输入issueID', trigger: ['blur'] }
+      {required: true, message: '请输入运费', trigger: 'blur' },
+      {message: '请输入运费', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.issueID"></el-input>
+      <el-input v-model="editorInfo.freight"></el-input>
     </el-form-item>
     <el-form-item
-      prop="purchase_order"
-      label="purchase_order"
+      prop="isDelivered"
+      label="是否妥投了"
       :rules="[
-      {required: true, message: '请输入purchase_order', trigger: 'blur' },
-      {message: '请输入purchase_order', trigger: ['blur'] }
+      {required: true, message: '请输入是否妥投了', trigger: 'blur' },
+      {message: '请输入是否妥投了', trigger: ['blur'] }
     ]"
     >
-      <el-input v-model="editorInfo.purchase_order"></el-input>
-    </el-form-item>
-        <el-form-item
-      prop="quantity"
-      label="quantity"
-      :rules="[
-      {required: true, message: '请输入quantity', trigger: 'blur' },
-      {message: '请输入quantity', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.quantity"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="shipmentID"
-      label="shipmentID "
-      :rules="[
-      {required: true, message: '请输入shipmentID ', trigger: 'blur' },
-      {message: '请输入shipmentID ', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.shipmentID"></el-input>
-    </el-form-item>
-    <el-form-item
-      prop="vendor_code"
-      label="vendor_code"
-      :rules="[
-      {required: true, message: '请输入vendor_code', trigger: 'blur' },
-      {message: '请输入vendor_code', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.vendor_code"></el-input>
-    </el-form-item>
-        <el-form-item
-      prop="person_charge"
-      label="person_charge"
-      :rules="[
-      {required: true, message: '请输入person_charge', trigger: 'blur' },
-      {message: '请输入person_charge', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.person_charge"></el-input>
-    </el-form-item>
-        <el-form-item
-      prop="Status"
-      label="Status"
-      :rules="[
-      {required: true, message: '请输入Status', trigger: 'blur' },
-      {message: '请输入Status', trigger: ['blur'] }
-    ]"
-    >
-      <el-input v-model="editorInfo.Status"></el-input>
+      <el-input v-model="editorInfo.isDelivered"></el-input>
     </el-form-item>
     <el-form-item
       prop="remarks"
@@ -176,7 +126,7 @@ export default {
           console.log(params);
           axios({
             method: 'post',
-            url: '/api/admin/chargeback/save',
+            url: '/api/admin/logistics/save',
             data:editorInfo
           }).then(function(e){
             console.log(e)
@@ -203,7 +153,7 @@ export default {
       console.log(this.editorInfo.domains);
       this.editorInfo.domains.push({
         value: "",
-        key: "purchase_order" + _this.editorInfo.domains.length
+        key: "是否妥投了" + _this.editorInfo.domains.length
       });
     },
     // 获取编辑列表的信息

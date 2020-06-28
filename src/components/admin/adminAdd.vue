@@ -71,7 +71,7 @@ export default {
     };
   },
   created() {
-    this.$store.state.adminleftnavnum = "0"; //设置左侧导航2-2 active
+    this.$store.state.adminleftnavnum = "5"; //设置左侧导航2-2 active
   },
   mounted() {
 
@@ -84,11 +84,12 @@ export default {
         if (valid) {
           // alert('submit!');
           let editorInfo=_this.editorInfo
+           editorInfo.levels=this.$store.state.user_data.level
           let params = { array: 111 };
           console.log(editorInfo);
           axios({
             method: 'post',
-            url: '/api/admin/index/save',
+            url: '/api/admin/adminstor/save',
             data:editorInfo
           }).then(function(e){
             console.log(e)

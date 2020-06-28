@@ -150,7 +150,7 @@ export default {
         console.log(111);
         console.log(e);
         if (e.code == 0) {
-          _this.tableData = e.data;
+          _this.tableData = e.data.reverse();
           _this.listTotal = e.data.length;
           _this.orderData = _this.tableData.slice(0, 7);
         } else {

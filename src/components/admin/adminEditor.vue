@@ -90,6 +90,7 @@ export default {
         if (valid) {
           // alert('submit!');
           let editorInfo = _this.editorInfo;
+           editorInfo.levels=this.$store.state.user_data.level
           let params = { array: 111 };
           console.log(params);
           axios({
@@ -100,7 +101,7 @@ export default {
             console.log(e.data);
             if (e.data.code == 0) {
               _this.$message.success("修改成功");
-              _this.$router.push({ path: "/order" });
+              _this.$router.push({ path: "/admin" });
             } else if (e.data.code == 7) {
               _this.$message.error("未编辑数据");
             } else {

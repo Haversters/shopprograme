@@ -39,7 +39,7 @@
         <el-table-column width="160" align="center" prop label="操作">
           <template slot-scope="scope">
             <el-button size="mini" type="success" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row.po)">删除</el-button>
+            <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -110,7 +110,7 @@ export default {
     // 删除提示
     open() {
       const _this = this;
-      let urls = "/api/admin/index/delete?po=" + this.deleteId;
+      let urls = "/api/admin/finance/delete?id=" + this.deleteId+'&level='+this.$store.state.user_data.level;
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",

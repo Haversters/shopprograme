@@ -200,11 +200,12 @@ export default {
         if (valid) {
           // alert('submit!');
           let editorInfo=_this.editorInfo
+          editorInfo.level=this.$store.state.user_data.level
           let params = { array: 111 };
           console.log(params);
           axios({
             method: 'post',
-            url: '/api/admin/chargeback/update',
+            url: '/api//admin/productreturns/update',
             data:editorInfo
           }).then(function(e){
             console.log(e)

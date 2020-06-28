@@ -6,15 +6,15 @@
           <el-select
             v-model="select"
             slot="prepend"
-            placeholder="PO"
+            placeholder="returnID"
             @change="searchselect"
             style="width:100px"
           >
             <el-option label="PO" value="PO"></el-option>
-            <el-option label="负责人" value="person_charge"></el-option>
-            <el-option label="ASIN" value="ASIN"></el-option>
             <el-option label="returnID" value="returnID"></el-option>
             <el-option label="Invoice_Number" value="Invoice_Number"></el-option>
+            <el-option label="ASIN" value="ASIN"></el-option>
+            <el-option label="person_charge" value="person_charge"></el-option>
             <el-option label="Transaction_date" value="Transaction_date"></el-option>
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click="getSearch()">搜索</el-button>
@@ -83,7 +83,7 @@ export default {
       input3: "",
       deleteId: "", ///删除数据deleteId
       deleteIndex: "", ///删除数据index
-      select: "po", //默认筛选类型
+      select: "PO", //默认筛选类型
       listTotal: 0,
       pageSize: 7, //显示数据量
       fileList:[], //上传数据列表
@@ -144,7 +144,7 @@ export default {
     getSearch() {
       let _this = this;
       let urls =
-        "/admin/chargeback/index?type=" +
+        "/api/admin/productreturns/select?type=" +
         this.select +
         "&content=" +
         this.input3;
@@ -152,7 +152,7 @@ export default {
         console.log(urls);
         console.log(e);
         if (e.code == 0) {
-          _this.tableData = e.data;
+          _this.tableData = e.data.reverse();
           _this.listTotal = e.data.length;
           _this.productData = _this.tableData.slice(0, 7);
         } else {
@@ -172,7 +172,7 @@ export default {
     // 删除提示
     open() {
       const _this = this;
-      let urls = "/admin/chargeback/delete?id=" + this.deleteId;
+      let urls = "/api/admin/productreturns/delete?id=" + this.deleteId+"&level="+this.$store.state.user_data.level;
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -211,7 +211,7 @@ export default {
         console.log(111);
         console.log(e);
         if (e.code == 0) {
-          _this.tableData = e.data;
+          _this.tableData = e.data.reverse();
           _this.listTotal = e.data.length;
           _this.productData = _this.tableData.slice(0, 7);
         } else {

@@ -6,14 +6,15 @@
           <el-select
             v-model="select"
             slot="prepend"
-            placeholder="PO"
+            placeholder="purchase_order"
             @change="searchselect"
-            style="width:100px"
+            style="width:150px"
           >
-            <el-option label="issueID" value="PO"></el-option>
-            <el-option label="负责人" value="name"></el-option>
+            <el-option label="purchase_order" value="purchase_order"></el-option>
+            <el-option label="issueID" value="issueID"></el-option>
+            <el-option label="creation_date" value="creation_date"></el-option>
             <el-option label="ASIN" value="ASIN"></el-option>
-            <el-option label="PO" value="3"></el-option>
+            <el-option label="person_charge" value="person_charge"></el-option>
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click="getSearch()">搜索</el-button>
         </el-input>
@@ -23,7 +24,7 @@
         </div>
       </div>
       <el-table :data="chargeData" style="width: 100%" :border="true">
-        <el-table-column align="center" sortable prop="ASIN" label="ASIN" width></el-table-column>
+        <el-table-column align="center" prop="ASIN" label="ASIN" width></el-table-column>
         <el-table-column align="center" prop="chargebackID" label="Chargeback_ID" width></el-table-column>
         <el-table-column align="center" prop="chargeback_type" label="Chargeback_type" width></el-table-column>
         <el-table-column align="center" prop="creation_date" label="Creationdate"></el-table-column>
@@ -70,7 +71,7 @@ export default {
       input3: "",
       deleteId: "", ///删除数据deleteId
       deleteIndex: "", ///删除数据index
-      select: "po", //默认筛选类型
+      select: "purchase_order", //默认筛选类型
       listTotal: 0,
       pageSize: 7 //显示数据量
     };
@@ -103,7 +104,7 @@ export default {
     getSearch() {
       let _this = this;
       let urls =
-        "/api/admin/chargeback/index?type=" +
+        "/api/admin/chargeback/select?type=" +
         this.select +
         "&content=" +
         this.input3;
@@ -131,7 +132,7 @@ export default {
     // 删除提示
     open() {
       const _this = this;
-      let urls = "/admin/chargeback/delete?issueID=" + this.deleteId;
+      let urls = "/api/admin/chargeback/delete?issueID=" + this.deleteId;
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -170,7 +171,7 @@ export default {
         console.log(111);
         console.log(e);
         if (e.code == 0) {
-          _this.tableData = e.data;
+          _this.tableData = e.data.reverse();
           _this.listTotal = e.data.length;
           _this.chargeData = _this.tableData.slice(0, 7);
         } else {
