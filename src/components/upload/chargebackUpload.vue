@@ -1,34 +1,38 @@
 <template>
   <div>
-    <div class="header"> 上传charge_Back文件</div>
+    <div class="header">上传charge_Back文件</div>
     <div class="content">
-        <div>
-      <el-upload
-        drag
-        :limit="limitNum"
-        :auto-upload="false"
-        accept=".xls"
-        :action="UploadUrl()"
-        :before-upload="beforeUploadFile"
-        :on-change="fileChange"
-        :on-exceed="exceedFile"
-        :on-success="handleSuccess"
-        :on-error="handleError"
-        :file-list="fileList"
-      >
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">
-          将charge_Back文件拖到此处，或
-          <em>点击上传</em>
+      <div>
+        <el-upload
+          drag
+          :limit="limitNum"
+          :auto-upload="false"
+          accept=".xls"
+          :action="UploadUrl()"
+          :before-upload="beforeUploadFile"
+          :on-change="fileChange"
+          :on-exceed="exceedFile"
+          :on-success="handleSuccess"
+          :on-error="handleError"
+          :file-list="fileList"
+        >
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">
+            将charge_Back文件拖到此处，或
+            <em>点击上传</em>
+          </div>
+          <div
+            class="el-upload__tip"
+            slot="tip"
+            style="display: flex;justify-content: center;align-items: center;"
+          >只能上传xls文件，且不超过10M</div>
+        </el-upload>
+        <br />
+        <div style="display: flex;justify-content: center;align-items: center;">
+          <el-button size="small" type="primary" @click="uploadFile">立即上传</el-button>
+          <el-button size="small">取消</el-button>
         </div>
-        <div class="el-upload__tip" slot="tip" style="display: flex;justify-content: center;align-items: center;">只能上传xls文件，且不超过10M</div>
-      </el-upload>
-      <br />
-      <div style="display: flex;justify-content: center;align-items: center;">
-      <el-button size="small" type="primary" @click="uploadFile">立即上传</el-button>
-      <el-button size="small">取消</el-button>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -43,11 +47,11 @@ export default {
       fileList: [] // excel文件列表
     };
   },
-  created(){
- this.$store.state.adminleftnavnum = "1"; //设置左侧导航2-2 active
+  created() {
+    this.$store.state.adminleftnavnum = "1"; //设置左侧导航2-2 active
   },
-  mounted(){
- this.$store.state.adminleftnavnum = "1"; //设置左侧导航2-2 active
+  mounted() {
+    this.$store.state.adminleftnavnum = "1"; //设置左侧导航2-2 active
   },
   methods: {
     // 文件超出个数限制时的钩子
@@ -95,6 +99,7 @@ export default {
       } else {
         let form = new FormData();
         form.append("file", this.fileList);
+        console.log(form);
         axios({
           method: "post",
           url: "/api/admin/productreturns/import",
@@ -123,21 +128,21 @@ export default {
 </script>
 
 <style scoped>
-.header{
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 26px;
-    color: #652c11;
-    letter-spacing: 2px;
-    border: 1px solid red;
+.header {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  color: #652c11;
+  letter-spacing: 2px;
+  border: 1px solid red;
 }
-.content{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

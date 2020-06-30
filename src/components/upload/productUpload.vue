@@ -1,34 +1,38 @@
 <template>
   <div>
-    <div class="header"> 上传product_Return文件</div>
+    <div class="header">上传product_Return文件</div>
     <div class="content">
-        <div>
-      <el-upload
-        drag
-        :limit="limitNum"
-        :auto-upload="false"
-        accept=".xls"
-        :action="UploadUrl()"
-        :before-upload="beforeUploadFile"
-        :on-change="fileChange"
-        :on-exceed="exceedFile"
-        :on-success="handleSuccess"
-        :on-error="handleError"
-        :file-list="fileList"
-      >
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">
-          将product_Return文件拖到此处，或
-          <em>点击上传</em>
+      <div>
+        <el-upload
+          drag
+          :limit="limitNum"
+          :auto-upload="false"
+          accept=".xls"
+          :action="UploadUrl()"
+          :before-upload="beforeUploadFile"
+          :on-change="fileChange"
+          :on-exceed="exceedFile"
+          :on-success="handleSuccess"
+          :on-error="handleError"
+          :file-list="fileList"
+        >
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">
+            将product_Return文件拖到此处，或
+            <em>点击上传</em>
+          </div>
+          <div
+            class="el-upload__tip"
+            slot="tip"
+            style="display: flex;justify-content: center;align-items: center;"
+          >只能上传xls文件，且不超过10M</div>
+        </el-upload>
+        <br />
+        <div style="display: flex;justify-content: center;align-items: center;">
+          <el-button size="small" type="primary" @click="uploadFile">立即上传</el-button>
+          <el-button size="small">取消</el-button>
         </div>
-        <div class="el-upload__tip" slot="tip" style="display: flex;justify-content: center;align-items: center;">只能上传xls文件，且不超过10M</div>
-      </el-upload>
-      <br />
-      <div style="display: flex;justify-content: center;align-items: center;">
-      <el-button size="small" type="primary" @click="uploadFile">立即上传</el-button>
-      <el-button size="small">取消</el-button>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -43,11 +47,11 @@ export default {
       fileList: [] // excel文件列表
     };
   },
-  created(){
- this.$store.state.adminleftnavnum = "2"; //设置左侧导航2-2 active
+  created() {
+    this.$store.state.adminleftnavnum = "2"; //设置左侧导航2-2 active
   },
-  mounted(){
- this.$store.state.adminleftnavnum = "2"; //设置左侧导航2-2 active
+  mounted() {
+    this.$store.state.adminleftnavnum = "2"; //设置左侧导航2-2 active
   },
   methods: {
     // 文件超出个数限制时的钩子
@@ -94,28 +98,22 @@ export default {
         this.$message.warning("请上传文件");
       } else {
         let form = new FormData();
-        form.append("file", this.fileList);
-        axios({
-          method: "post",
-          url: "/api/admin/productreturns/import",
-          headers: {
-            "Content-type": "multipart/form-data"
-          },
-          data: form
-        }).then(
-          e => {
-            console.log(e);
-            if (e.code == 0) {
-            } else {
-              let messages = e.msg;
-              this.$message.error(messages);
-            }
-          },
-          err => {
-            let messages = err;
-            this.$message.error(messages);
-          }
-        );
+        console.log(this.fileList);
+        // let fileLists=this.fileList
+        form.append("file",_this.fileList);
+        // form[0]=this.fileList
+        console.log(form);
+        axios.post('/api/admin/productreturns/import',form).then(function(e){
+          console.log(e)
+        })
+        // axios({
+        //   method: "post",
+        //   url: "/api/admin/productreturns/import",
+        //   header: {
+        //     "Content-Type": "multipart/form-data"
+        //   },
+        //   data: form
+        // })
       }
     }
   }
@@ -123,21 +121,21 @@ export default {
 </script>
 
 <style scoped>
-.header{
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 26px;
-    color: #652c11;
-    letter-spacing: 2px;
-    border: 1px solid red;
+.header {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  color: #652c11;
+  letter-spacing: 2px;
+  border: 1px solid red;
 }
-.content{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 export default {
   data() {
     return {
@@ -50,14 +51,16 @@ export default {
           }).then(e => {
             console.log(e);
            localStorage.setItem("user_data",JSON.stringify(e.data));       
-           _this.$store.state.user_data=e.data   
+           _this.$store.state.user_data=e.data
+          // _this.$store.commit('changeLogin',e.data)
+           _this.$router.push({path:'/order'})   
             console.log(localStorage.getItem('user_data'))
-            if(e.code==0){
-              _this.$router.push({path:'/order'})
-            }else{
-              localStorage.clear("user_data")
-              _this.loginFalse();
-            }
+            // if(e.code==0){
+            //   _this.$router.push({path:'/order'})
+            // }else{
+            //   localStorage.clear("user_data")
+            //   _this.loginFalse();
+            // }
             // console.log(_this.$store.state.user_data);
           });
         } else {
