@@ -36,7 +36,7 @@
             <span slot="title">物流管理</span>
           </el-menu-item>
           <el-menu-item index="4" route="/finance">
-            <i class="el-icon-setting"></i>
+            <i class="el-icon-goods"></i>
             <span slot="title">财务管理</span>
           </el-menu-item>
           <el-menu-item index="5" route="/admin">
@@ -48,15 +48,8 @@
       <el-container>
         <el-main>
           <el-header style="height:20px; text-align: right; font-size: 12px">
-            <el-dropdown>
-              <i class="el-icon-setting" style="margin-right: 5px"></i>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>退出</el-dropdown-item>
-                <!-- <el-dropdown-item>新增</el-dropdown-item>
-                <el-dropdown-item>删除</el-dropdown-item>-->
-              </el-dropdown-menu>
-            </el-dropdown>
-            <span>{{userName}}</span>
+              <i class="el-icon-setting" style="margin-right: 5px" @click="loginOut"></i>
+            <span @click="loginOut">{{userName}}</span>
           </el-header>
           <router-view />
         </el-main>
@@ -95,6 +88,43 @@ export default {
       console.log(this.navselected);
       //store.state.adminleftnavnum里值变化的时候，设置navselected
     },
+    // 退出登录
+    loginOut(){
+      const _this = this;
+      let urls = "/api/admin/login/checktoken?token=" + this.$store.state.user_data.token;
+      this.$confirm("退出登录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          _this.$fetch(urls).then(e => {
+            console.log(111);
+            console.log(e);
+            if (e.code == 0) {
+              localStorage.removeItem('user_data');
+              this.$store.commit('changeLogin','null')
+              this.$message({
+                type: "success",
+                message: "退出成功"
+              });
+            } else {
+              let messages = e.msg;
+              this.$message.error(messages);
+            }
+
+            console.log(_this.$store.state.user_data);
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    // 选中验证token
     selectItems(index) {
       console.log(index);
       //按钮选中之后设置当前的index为store里的值。
