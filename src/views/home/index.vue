@@ -48,7 +48,7 @@
       <el-container>
         <el-main>
           <el-header style="height:20px; text-align: right; font-size: 12px">
-              <i class="el-icon-setting" style="margin-right: 5px" @click="loginOut"></i>
+            <i class="el-icon-setting" style="margin-right: 5px" @click="loginOut"></i>
             <span @click="loginOut">{{userName}}</span>
           </el-header>
           <router-view />
@@ -89,9 +89,11 @@ export default {
       //store.state.adminleftnavnum里值变化的时候，设置navselected
     },
     // 退出登录
-    loginOut(){
+    loginOut() {
       const _this = this;
-      let urls = "/api/admin/login/checktoken?token=" + this.$store.state.user_data.token;
+      let urls =
+        "/api/admin/login/checktoken?token=" +
+        this.$store.state.user_data.token;
       this.$confirm("退出登录, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -103,24 +105,36 @@ export default {
             console.log(111);
             console.log(e);
             if (e.code == 0) {
-              localStorage.removeItem('user_data');
-              this.$store.commit('changeLogin','null')
+              localStorage.removeItem("user_data");
+              this.$store.commit("changeLogin", "null");
+              let localStorageToken = localStorage.getItem("user_data");
+              console.log(localStorageToken, this.$store.state.user_data);
               this.$message({
                 type: "success",
-                message: "退出成功"
+                message: "退出登录成功"
               });
+              _this.$router.push({ path: "/login" });
+            } else if (e.code == 5) {
+              localStorage.removeItem("user_data");
+              this.$store.commit("changeLogin", "null");
+              let localStorageToken = localStorage.getItem("user_data");
+              console.log(localStorageToken, this.$store.state.user_data);
+              this.$message({
+                type: "success",
+                message: "退出登录成功"
+              });
+              _this.$router.push({ path: "/login" });
             } else {
               let messages = e.msg;
               this.$message.error(messages);
             }
-
             console.log(_this.$store.state.user_data);
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消退出登录"
           });
         });
     },
@@ -130,7 +144,7 @@ export default {
       //按钮选中之后设置当前的index为store里的值。
       this.$store.state.adminleftnavnum = index;
       //本地token
-      let localStorageToken=localStorage.getItem('user_data')
+      let localStorageToken = localStorage.getItem("user_data");
       //设置请求token是否过期
       // const _this = this;
       // if (_this.$store.state.user_data.token==null || localStorageToken==null) {
