@@ -2,7 +2,10 @@
   <el-container v-loading="loading">
     <el-main>
       <div style class="topBtn">
-        <div></div>
+        <div>
+          <el-button type="info" plain @click="exportLog()">导出日志</el-button>
+          <!-- <el-button type="warning" plain>警告按钮</el-button> -->
+        </div>
         <div>
           <el-button
             type="primary"
@@ -102,6 +105,42 @@ export default {
       let urls = "/admin/editor?index=" + index;
       this.$router.push({ path: urls });
     },
+    // 导出日志
+    exportLog() {
+      const _this = this;
+      let urls =
+        "/api/admin/index/delete?" 
+      this.$confirm("是否导出日志?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          _this.$fetch(urls).then(e => {
+            console.log(111);
+            console.log(e);
+            if (e.code == 0) {
+              _this.orderData.splice(_this.deleteIndex, 1);
+              this.$message({
+                type: "success",
+                message: "导出成功!"
+              });
+            } else {
+              let messages = e.msg;
+              this.$message.error(messages);
+            }
+
+            console.log(_this.$store.state.user_data);
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消"
+          });
+        });
+    },
     // 搜索选择
     searchselect(e) {
       console.log(e);
@@ -124,7 +163,7 @@ export default {
     open() {
       const _this = this;
       let urls =
-        "/api/admin/index/delete?po=" +
+        "/api/admin/adminstor/delete?id=" +
         this.deleteId +
         "&level=" +
         this.$store.state.user_data.level;
