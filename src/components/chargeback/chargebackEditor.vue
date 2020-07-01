@@ -20,7 +20,7 @@
     >
       <el-input v-model="editorInfo.chargebackID"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       prop="chargeback_type"
       label="chargeback_type"
       :rules="[
@@ -32,10 +32,10 @@
     </el-form-item>
     <el-form-item
       prop="creation_date"
-      label="Creationdate"
+      label="日期"
       :rules="[
-      {required: true, message: '请输入Creationdate', trigger: 'blur' },
-      {message: '请输入Creationdate', trigger: ['blur'] }
+      {required: true, message: '请输入日期', trigger: 'blur' },
+      {message: '请输入日期', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.creation_date"></el-input>
@@ -50,7 +50,7 @@
     >
       <el-input v-model="editorInfo.financial_charge"></el-input>
     </el-form-item>
-        <el-form-item
+    <el-form-item
       prop="Financialcharge"
       label="Financialcharge"
       :rules="[
@@ -102,20 +102,20 @@
     </el-form-item>
     <el-form-item
       prop="vendor_code"
-      label="Vendorcode "
+      label="PO "
       :rules="[
-      {required: true, message: '请输入Vendorcode ', trigger: 'blur' },
-      {message: '请输入Vendorcode ', trigger: ['blur'] }
+      {required: true, message: '请输入PO ', trigger: 'blur' },
+      {message: '请输入PO', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.vendor_code"></el-input>
     </el-form-item>
     <el-form-item
       prop="person_charge"
-      label="person_charge"
+      label="负责人"
       :rules="[
-      {required: true, message: '请输入person_charge', trigger: 'blur' },
-      {message: '请输入person_charge', trigger: ['blur'] }
+      {required: true, message: '请输入负责人', trigger: 'blur' },
+      {message: '请输入负责人', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.person_charge"></el-input>
@@ -132,6 +132,7 @@
     </el-form-item>
 
     <el-form-item
+      v-if="levels==1"
       prop="remarks"
       label="备注"
       :rules="[
@@ -168,20 +169,22 @@ export default {
       // 编辑列表的信息
       editorInfo: {},
       editorIndex: "",
-      isBtn:false,
+      isBtn: false,
+      levels: 3
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "1"; //设置左侧导航2-2 active
+    this.levels = this.$store.state.user_data.level; //获取用户等级
   },
   mounted() {
-    console.log(this.$router.currentRoute.query);
-    let editorInfos=JSON.parse(this.$router.currentRoute.query.index)
+    // console.log(this.$router.currentRoute.query);
+    this.levels = this.$store.state.user_data.level; //获取用户等级
+    let editorInfos = JSON.parse(this.$router.currentRoute.query.index);
     for (let key in editorInfos) {
-     editorInfos[key] = String(editorInfos[key]);
+      editorInfos[key] = String(editorInfos[key]);
     }
     this.editorInfo = editorInfos;
-    console.log(this.editorInfo);
   },
   methods: {
     //点击提交按钮
@@ -189,32 +192,29 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          _this.isBtn=true;
+          _this.isBtn = true;
           // alert('submit!');
-          let editorInfo=_this.editorInfo
-          let params = { array: 111 };
-          console.log(params);
+          let editorInfo = _this.editorInfo;
           axios({
-            method: 'post',
-            url: '/api/admin/chargeback/update',
-            data:editorInfo
-          }).then(function(res){
-            let e=JSON.parse(JSON.stringify(res.data))
-            console.log(e);
+            method: "post",
+            url: "/admin/chargeback/update",
+            data: editorInfo
+          }).then(function(res) {
+            let e = JSON.parse(JSON.stringify(res.data));
+            // console.log(e);
             if (e.code == 0) {
-              console.log(121)
               let messages = e.msg;
               _this.$message.success(messages);
               _this.$router.push({ path: "/chargeback" });
-            }else if(e.code == 14){
+            } else if (e.code == 14) {
               _this.$message.error("数据未更改");
             } else {
               let messages = e.msg;
               _this.$message.error(messages);
             }
-            _this.isBtn=false;
+            _this.isBtn = false;
           });
-          // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
+          // _this.$post("/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
           // });
         } else {
@@ -233,17 +233,17 @@ export default {
     //新增invioce
     addDomain() {
       var _this = this;
-      console.log(this.editorInfo.domains);
+      // console.log(this.editorInfo.domains);
       this.editorInfo.domains.push({
         value: "",
         key: "invoice" + _this.editorInfo.domains.length
       });
-    },
+    }
     // 获取编辑列表的信息
     // 获取编辑列表的信息
     // getTeamData(indexs) {
     //   const _this = this;
-    //   this.$fetch("/api/admin/chargeback/index").then(e => {
+    //   this.$fetch("/admin/chargeback/index").then(e => {
     //       console.log(e)
     //     if (e.code == 0) {
     //       for (let key in e.data[indexs]) {

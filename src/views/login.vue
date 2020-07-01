@@ -1,12 +1,12 @@
 <template>
   <div class="cms_login">
     <div class="cms_login_container">
-      <div class="cms_login_text">欢迎登录沐瑾汐个人门户网站后台</div>
+      <div class="cms_login_text">欢迎登录阳亿ERP系统后台</div>
       <div class="cms_login_table">
         <form action>
           <div class="divBox">
             <span class="margin_right10">账号</span>
-            <input type="number" placeholder="请输入账号" v-model="userName" class="cms_login_ipt" />
+            <input type="text" placeholder="请输入账号" v-model="userName" maxlength="16" class="cms_login_ipt" />
           </div>
           <div class="divBox">
             <span class="margin_right10">密码</span>
@@ -19,7 +19,7 @@
             />
           </div>
           <div class="divBox margin_top60">
-            <button class="login_btn" @click="clickLogin()">登录</button>
+            <button class="login_btn" :disabled="isBtn" @click="clickLogin()">登录</button>
           </div>
         </form>
       </div>
@@ -28,46 +28,48 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
       userName: "",
       userPassword: "",
+      isBtn:false,
     };
   },
-  mounted(){
- console.log(localStorage.getItem('user_data'))
+  mounted() {
+    // console.log(localStorage.getItem("user_data"));
   },
   methods: {
     clickLogin() {
-      console.log(this.userName,this.userPassword)
+      // console.log(this.userName, this.userPassword);
       let _this = this;
       if (this.userName) {
         if (this.userPassword) {
-          this.$fetch("/api/admin/login/userlogin", {
+          _this.isBtn=true
+          this.$fetch("/admin/login/userlogin", {
             number: _this.userName,
             passwd: _this.userPassword
           }).then(e => {
-            console.log(e);
-           localStorage.setItem("user_data",JSON.stringify(e.data));       
-           _this.$store.state.user_data=e.data
-          // _this.$store.commit('changeLogin',e.data)
-           _this.$router.push({path:'/order'})   
-            console.log(localStorage.getItem('user_data'))
-            // if(e.code==0){
-            //   _this.$router.push({path:'/order'})
-            // }else{
-            //   localStorage.clear("user_data")
-            //   _this.loginFalse();
-            // }
+            // console.log(e);
+            if (e.code == 0) {
+              localStorage.setItem("user_data", JSON.stringify(e.data));
+              _this.$store.commit("changeLogin", e.data);
+              // console.log(localStorage.getItem("user_data"));
+              _this.$message.success("登录成功");
+              _this.$router.push({ path: "/order" });
+            } else {
+              localStorage.clear("user_data");
+              _this.$message.error(e.msg);
+            }
             // console.log(_this.$store.state.user_data);
+             _this.isBtn=false
           });
         } else {
-          _this.loginInfo('请输入密码');
+          _this.loginInfo("请输入密码");
         }
       } else {
-        _this.loginInfo('请输入账号');
+        _this.loginInfo("请输入账号");
       }
       // console.log(this.userName, this.userPassword);
       // // this.$router.push({path:'/'})

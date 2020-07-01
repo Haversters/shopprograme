@@ -22,10 +22,10 @@
     </el-form-item>
     <el-form-item
       prop="Transaction_date"
-      label="Transaction_date"
+      label="日期"
       :rules="[
-      {required: true, message: '请输入Transaction_date', trigger: 'blur' },
-      {message: '请输入Transaction_date', trigger: ['blur'] }
+      {required: true, message: '请输入日期', trigger: 'blur' },
+      {message: '请输入日期', trigger: ['blur'] }
     ]"
     >
       <el-input placeholder="请输入yyyy-mm-dd格式" v-model="editorInfo.Transaction_date"></el-input>
@@ -117,10 +117,10 @@
     <el-form-item
       v-if="level==1 || level==2"
       prop="person_charge"
-      label="person_charge"
+      label="负责人"
       :rules="[
-      {required: true, message: '请输入person_charge', trigger: 'blur' },
-      {message: '请输入person_charge', trigger: ['blur'] }
+      {required: true, message: '请输入负责人', trigger: 'blur' },
+      {message: '请输入负责人', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.person_charge"></el-input>
@@ -149,7 +149,7 @@
     </el-form-item>
 
     <el-form-item
-      v-if="level==1 || level==2"
+      v-if="level==1"
       prop="remarks"
       label="remarks"
       :rules="[
@@ -197,17 +197,14 @@ export default {
           // alert('submit!');
           let editorInfo = _this.editorInfo;
           editorInfo.level = this.$store.state.user_data.level;
-          let params = { array: 111 };
-          console.log(params);
           axios({
             method: "post",
-            url: "/api/admin/productreturns/save",
+            url: "/admin/productreturns/save",
             data: editorInfo
           }).then(function(res) {
             let e = JSON.parse(JSON.stringify(res.data));
-            console.log(e);
+            // console.log(e);
             if (e.code == 0) {
-              console.log(121);
               let messages = e.msg;
               _this.$message.success(messages);
               _this.$router.push({ path: "/product" });
@@ -217,7 +214,7 @@ export default {
             }
             _this.isBtn = false;
           });
-          // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
+          // _this.$post("/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
           // });
         } else {
@@ -236,7 +233,6 @@ export default {
     //新增invioce
     addDomain() {
       var _this = this;
-      console.log(this.editorInfo.domains);
       this.editorInfo.domains.push({
         value: "",
         key: "PO" + _this.editorInfo.domains.length
@@ -246,16 +242,15 @@ export default {
     // 获取编辑列表的信息
     getTeamData(indexs) {
       const _this = this;
-      this.$fetch("/api/admin/index/index").then(e => {
+      this.$fetch("/admin/index/index").then(e => {
         if (e.code == 0) {
           // _this.editorInfo =JSON.parse(JSON.stringify(e.data[index]));
           for (let key in e.data[indexs]) {
-            console.log(key, e.data[indexs][key]);
+            // console.log(key, e.data[indexs][key]);
             e.data[indexs][key] = String(e.data[indexs][key]);
           }
         }
         _this.editorInfo = e.data[indexs];
-        console.log(_this.editorInfo);
       });
     }
   }

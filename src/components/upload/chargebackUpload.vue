@@ -9,11 +9,12 @@
           class="upload-demo"
           ref="upload"
           :limit="limitNum"
-          action="/api/admin/chargeback/import"
+          action="/admin/chargeback/import"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           accept=".xls,.xlsx"
           :file-list="fileList"
+          :on-change="fileChange"
           :auto-upload="false"
           :on-exceed="exceedFile"
           :on-success="handleSuccess"
@@ -21,14 +22,14 @@
         >
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">
-            将product_Return文件拖到此处，或
+            将ChargeBack文件拖到此处，或
             <em>点击上传</em>
           </div>
           <div
             class="el-upload__tip"
             slot="tip"
             style="display: flex;justify-content: center;align-items: center;"
-          >只能上传xls文件，且不超过10M</div>
+          >只能上传xls与xlsx文件，且不超过10M</div>
         </el-upload>
         <br />
         <div style="display: flex;justify-content: center;align-items: center;">
@@ -67,19 +68,19 @@ export default {
       }
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      // console.log(file, fileList);
       this.length=0;
-      console.log(this.length)
+      // console.log(this.length)
     },
     handlePreview(file) {
-      console.log(file,111);
+      // console.log(file,111);
     },
     // 文件状态改变时的钩子
     fileChange(file, fileList) {
       this.length=1;
-      console.log(file.raw);
-      // this.fileList.push(file.raw);
-      console.log(this.fileList,this.length);
+      // console.log(file.raw);
+      // // this.fileList.push(file.raw);
+      // console.log(this.fileList,this.length);
     },
     // 文件超出个数限制时的钩子
     exceedFile(files, fileList) {
@@ -91,7 +92,7 @@ export default {
     // 文件上传成功时的钩子
     handleSuccess(res, file, fileList) {
       this.$message.success("文件上传成功");
-      this.$router.push({ path: "/product" });
+      this.$router.push({ path: "/chargeback" });
     },
     // 文件上传失败时的钩子
     handleError(err, file, fileList) {

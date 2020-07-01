@@ -3,7 +3,7 @@
     <el-main>
       <div style class="topBtn">
         <div>
-          <el-button type="info" plain @click="exportLog()">导出日志</el-button>
+          <!-- <el-button type="info" plain @click="exportLog()">导出日志</el-button> -->
           <!-- <el-button type="warning" plain>警告按钮</el-button> -->
         </div>
         <div>
@@ -26,7 +26,7 @@
       >
         <el-table-column align="center" prop="name" label="姓名" width></el-table-column>
         <el-table-column align="center" prop="number" label="账号" width></el-table-column>
-        <el-table-column align="center" prop="passwd" label="密码"></el-table-column>
+        <el-table-column align="center" prop="passwd" label="密码" v-if="levels==1"></el-table-column>
         <el-table-column align="center" prop="level" label="级别 "></el-table-column>
         <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
         <el-table-column width="160" align="center" prop label="操作">
@@ -100,7 +100,6 @@ export default {
   methods: {
     // 控制编辑
     handleEdit(index) {
-      console.log(index);
       index = JSON.stringify(index);
       let urls = "/admin/editor?index=" + index;
       this.$router.push({ path: urls });
@@ -108,8 +107,7 @@ export default {
     // 导出日志
     exportLog() {
       const _this = this;
-      let urls =
-        "/api/admin/index/delete?" 
+      let urls = "/admin/index/delete?";
       this.$confirm("是否导出日志?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -118,8 +116,7 @@ export default {
       })
         .then(() => {
           _this.$fetch(urls).then(e => {
-            console.log(111);
-            console.log(e);
+            // console.log(e);
             if (e.code == 0) {
               _this.orderData.splice(_this.deleteIndex, 1);
               this.$message({
@@ -130,8 +127,6 @@ export default {
               let messages = e.msg;
               this.$message.error(messages);
             }
-
-            console.log(_this.$store.state.user_data);
           });
         })
         .catch(() => {
@@ -143,7 +138,6 @@ export default {
     },
     // 搜索选择
     searchselect(e) {
-      console.log(e);
       this.select = e;
     },
     // 去往添加页面
@@ -157,13 +151,13 @@ export default {
       this.deleteIndex = index;
       this.deleteId = po;
       this.open();
-      console.log(index, po);
+      // console.log(index, po);
     },
     // 删除提示
     open() {
       const _this = this;
       let urls =
-        "/api/admin/adminstor/delete?id=" +
+        "/admin/adminstor/delete?id=" +
         this.deleteId +
         "&level=" +
         this.$store.state.user_data.level;
@@ -175,8 +169,7 @@ export default {
       })
         .then(() => {
           _this.$fetch(urls).then(e => {
-            console.log(111);
-            console.log(e);
+            // console.log(e);
             if (e.code == 0) {
               _this.orderData.splice(_this.deleteIndex, 1);
               this.$message({
@@ -187,8 +180,6 @@ export default {
               let messages = e.msg;
               this.$message.error(messages);
             }
-
-            console.log(_this.$store.state.user_data);
           });
         })
         .catch(() => {
@@ -201,43 +192,35 @@ export default {
     // 获取编辑列表的信息
     getTeamData() {
       const _this = this;
-      this.$fetch("/api/admin/adminstor/index").then(e => {
-        console.log(111);
-        console.log(e);
+      this.$fetch("/admin/adminstor/index").then(e => {
+        // console.log(e);
         if (e.code == 0) {
-          _this.tableData = e.data.reverse();
-          _this.tableData.forEach(function(item, index) {
+          e.data.forEach(function(item, index) {
             if (item.level == 2) {
               item.level = "财务";
             } else if (item.level == 1) {
               item.level = "超级管理员";
               _this.tableData.splice(index, 1);
-              console.log(index);
             } else {
               item.level = "普通管理员";
             }
           });
+          _this.tableData = e.data.reverse();
           _this.listTotal = e.data.length;
           _this.orderData = _this.tableData.slice(0, 7);
         } else {
           let messages = e.msg;
           this.$message.error(messages);
         }
-
-        console.log(_this.$store.state.user_data);
       });
     },
     // 搜索类型
     getSearch() {
       let _this = this;
       let urls =
-        "/api/admin/index/select?type=" +
-        this.select +
-        "&content=" +
-        this.input3;
+        "/admin/index/select?type=" + this.select + "&content=" + this.input3;
       this.$fetch(urls).then(e => {
-        console.log(urls);
-        console.log(e);
+        // console.log(e);
         if (e.code == 0) {
           _this.tableData = e.data;
           _this.listTotal = e.data.length;
@@ -246,17 +229,14 @@ export default {
           let messages = e.msg;
           this.$message.error(messages);
         }
-
-        console.log(_this.$store.state.user_data);
       });
     },
     // 页数发生改变
     pageChange(e) {
-      console.log(e);
+      // console.log(e);
       let num1 = (e - 1) * this.pageSize;
       let num2 = e * this.pageSize;
       this.orderData = this.tableData.slice(num1, num2);
-      console.log(this.orderData);
     }
   }
 };
@@ -275,13 +255,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
 }
 /* 顶部区域 */
 .topBtn {
   display: flex;
   justify-content: space-between;
   /* align-items: center; */
-  border: 1px solid red;
 }
 </style>

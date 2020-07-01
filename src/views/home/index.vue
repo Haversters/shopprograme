@@ -20,11 +20,11 @@
           :collapse="isCollapse"
         >
           <el-menu-item index="0" route="/order">
-            <i class="el-icon-sold-out"></i>
+            <i class="el-icon-menu"></i>
             <span slot="title">PO</span>
           </el-menu-item>
           <el-menu-item index="1" route="/chargeback">
-            <i class="el-icon-document"></i>
+            <i class="el-icon-s-data"></i>
             <span slot="title">chargeback</span>
           </el-menu-item>
           <el-menu-item index="2" route="/product">
@@ -32,14 +32,14 @@
             <span slot="title">Product Return</span>
           </el-menu-item>
           <el-menu-item index="3" route="/logistics">
-            <i class="el-icon-setting"></i>
+            <i class="el-icon-shopping-cart-2"></i>
             <span slot="title">物流管理</span>
           </el-menu-item>
           <el-menu-item index="4" route="/finance">
-            <i class="el-icon-goods"></i>
+            <i class="el-icon-sell"></i>
             <span slot="title">财务管理</span>
           </el-menu-item>
-          <el-menu-item index="5" route="/admin">
+          <el-menu-item v-if="level==1" index="5" route="/admin">
             <i class="el-icon-setting"></i>
             <span slot="title">admin管理</span>
           </el-menu-item>
@@ -67,14 +67,18 @@ export default {
       search: "",
       fullHeight: document.documentElement.clientHeight,
       navselected: "0",
-      userName: ""
+      userName: "",
+      level: 3
     };
   },
   mounted() {
     if (this.$store.state.user_data.name) {
       this.userName = this.$store.state.user_data.name;
+      this.level = this.$store.state.user_data.level;
+    } else {
+      this.$router.push({ path: "/login" });
     }
-    console.log(this.userName, this.$store.state.user_data.name);
+    // console.log(this.userName, this.$store.state.user_data.name);
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -85,15 +89,14 @@ export default {
     },
     getNavType() {
       this.navselected = this.$store.state.adminleftnavnum;
-      console.log(this.navselected);
+      // console.log(this.navselected);
       //store.state.adminleftnavnum里值变化的时候，设置navselected
     },
     // 退出登录
     loginOut() {
       const _this = this;
       let urls =
-        "/api/admin/login/checktoken?token=" +
-        this.$store.state.user_data.token;
+        "/admin/login/checktoken?token=" + this.$store.state.user_data.token;
       this.$confirm("退出登录, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -102,60 +105,47 @@ export default {
       })
         .then(() => {
           _this.$fetch(urls).then(e => {
-            console.log(111);
-            console.log(e);
+            // console.log(e);
             if (e.code == 0) {
               localStorage.removeItem("user_data");
               this.$store.commit("changeLogin", "null");
               let localStorageToken = localStorage.getItem("user_data");
-              console.log(localStorageToken, this.$store.state.user_data);
-              this.$message({
-                type: "success",
-                message: "退出登录成功"
-              });
+              _this.$message.success("退出登录成功!");
               _this.$router.push({ path: "/login" });
-            } else if (e.code == 5) {
+            } else if (e.code == 3) {
               localStorage.removeItem("user_data");
               this.$store.commit("changeLogin", "null");
               let localStorageToken = localStorage.getItem("user_data");
-              console.log(localStorageToken, this.$store.state.user_data);
-              this.$message({
-                type: "success",
-                message: "退出登录成功"
-              });
+              _this.$message.success("退出登录成功!");
               _this.$router.push({ path: "/login" });
             } else {
               let messages = e.msg;
               this.$message.error(messages);
             }
-            console.log(_this.$store.state.user_data);
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消退出登录"
-          });
+          _this.$message.info("退出登录成功!");
         });
     },
     // 选中验证token
     selectItems(index) {
-      console.log(index);
+      // console.log(index);
       //按钮选中之后设置当前的index为store里的值。
       this.$store.state.adminleftnavnum = index;
       //本地token
       let localStorageToken = localStorage.getItem("user_data");
       //设置请求token是否过期
-      // const _this = this;
-      // if (_this.$store.state.user_data.token==null || localStorageToken==null) {
-      //   this.$message.error("登录已过期，请重新登录");
-      //   this.$router.push({ path: "/login" });
-      // }
+      const _this = this;
+      if (_this.$store.state.user_data.token==null || localStorageToken==null) {
+        this.$message.error("登录已过期，请重新登录");
+        this.$router.push({ path: "/login" });
+      }
       // console.log(_this.$store.state.user_data);
-      // this.$fetch("/api/admin/login/checktoken", {
+      // this.$fetch("/admin/login/checktoken", {
       //   token: _this.$store.state.user_data.token
       // }).then(e => {
-      //   console.log(e);
+      //   // console.log(e);
       //   if (e.code != 4) {
       //     this.$message.error("登录已过期，请重新登录");
       //     this.$router.push({ path: "/login" });

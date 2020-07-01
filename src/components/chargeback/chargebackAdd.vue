@@ -32,10 +32,10 @@
     </el-form-item>
     <el-form-item
       prop="creation_date"
-      label="creation_date"
+      label="日期"
       :rules="[
-      {required: true, message: '请输入creation_date', trigger: 'blur' },
-      {message: '请输入creation_date', trigger: ['blur'] }
+      {required: true, message: '请输入日期', trigger: 'blur' },
+      {message: '请输入日期', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.creation_date"></el-input>
@@ -72,10 +72,10 @@
     </el-form-item>
     <el-form-item
       prop="purchase_order"
-      label="purchase_order"
+      label="PO"
       :rules="[
-      {required: true, message: '请输入purchase_order', trigger: 'blur' },
-      {message: '请输入purchase_order', trigger: ['blur'] }
+      {required: true, message: '请输入PO', trigger: 'blur' },
+      {message: '请输入PO', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.purchase_order"></el-input>
@@ -112,10 +112,10 @@
     </el-form-item>
     <el-form-item
       prop="person_charge"
-      label="person_charge"
+      label="负责人"
       :rules="[
-      {required: true, message: '请输入person_charge', trigger: 'blur' },
-      {message: '请输入person_charge', trigger: ['blur'] }
+      {required: true, message: '请输入负责人', trigger: 'blur' },
+      {message: '请输入负责人', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.person_charge"></el-input>
@@ -131,11 +131,12 @@
       <el-input v-model="editorInfo.Status"></el-input>
     </el-form-item>
     <el-form-item
+    v-if="levels==1"
       prop="remarks"
-      label="remarks"
+      label="备注"
       :rules="[
-      {message: '请输入remarks', trigger: 'blur' },
-      {message: '请输入remarks', trigger: ['blur'] }
+      {message: '请输入备注', trigger: 'blur' },
+      {message: '请输入备注', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.remarks"></el-input>
@@ -157,12 +158,16 @@ export default {
       editorInfo: {},
       editorIndex: "",
       isBtn:false,
+       levels: 3
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "1"; //设置左侧导航2-2 active
+        this.levels = this.$store.state.user_data.level; //获取用户等级
   },
-  mounted() {},
+  mounted() {
+        this.levels = this.$store.state.user_data.level; //获取用户等级
+  },
   methods: {
     //点击提交按钮
     submitForm(formName) {
@@ -172,17 +177,14 @@ export default {
           _this.isBtn=true;
           // alert('submit!');
           let editorInfo = _this.editorInfo;
-          let params = { array: 111 };
-          console.log(params);
           axios({
             method: "post",
-            url: "/api/admin/chargeback/save",
+            url: "/admin/chargeback/save",
             data: editorInfo
           }).then(function(res) {
             let e=JSON.parse(JSON.stringify(res.data))
-            console.log(e);
+            // console.log(e);
             if (e.code == 0) {
-              console.log(121)
               let messages = e.msg;
               _this.$message.success(messages);
               _this.$router.push({ path: "/chargeback" });
@@ -192,7 +194,7 @@ export default {
             }
             _this.isBtn=false;
           });
-          // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
+          // _this.$post("/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
           // });
         } else {
@@ -221,16 +223,15 @@ export default {
     // 获取编辑列表的信息
     getTeamData(indexs) {
       const _this = this;
-      this.$fetch("/api/admin/index/index").then(e => {
+      this.$fetch("/admin/index/index").then(e => {
         if (e.code == 0) {
           // _this.editorInfo =JSON.parse(JSON.stringify(e.data[index]));
           for (let key in e.data[indexs]) {
-            console.log(key, e.data[indexs][key]);
+            // console.log(key, e.data[indexs][key]);
             e.data[indexs][key] = String(e.data[indexs][key]);
           }
         }
         _this.editorInfo = e.data[indexs];
-        console.log(_this.editorInfo);
       });
     }
   }

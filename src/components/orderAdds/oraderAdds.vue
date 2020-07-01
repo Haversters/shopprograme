@@ -41,6 +41,16 @@
       <el-input v-model="editorInfo.weight"></el-input>
     </el-form-item>
     <el-form-item
+      prop="size"
+      label="尺寸"
+      :rules="[
+      {required: true, message: '请输入尺寸', trigger: 'blur' },
+      {message: '请输入尺寸', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.size"></el-input>
+    </el-form-item>
+    <el-form-item
       prop="ocean_profit"
       label="海运预估利润 "
       :rules="[
@@ -115,6 +125,7 @@
       <el-input v-model="editorInfo.received_quantity"></el-input>
     </el-form-item>
     <el-form-item
+      v-if="levels==1"
       prop="remarks"
       label="备注"
       :rules="[
@@ -151,17 +162,21 @@ export default {
     return {
       // 编辑列表的信息
       editorInfo: {
-        pay_state:'0'
+        pay_state: "0"
       },
       editorIndex: "",
       deleatIndex: "",
-      isBtn: false
+      isBtn: false,
+      levels: 3
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "0"; //设置左侧导航2-2 active
+    this.levels = this.$store.state.user_data.level; //获取用户等级
   },
-  mounted() {},
+  mounted() {
+    this.levels = this.$store.state.user_data.level; //获取用户等级
+  },
   methods: {
     //点击提交按钮
     submitForm(formName) {
@@ -172,30 +187,28 @@ export default {
           _this.isBtn = true;
           let editorInfo = _this.editorInfo;
           let params = { array: 111 };
-          console.log(editorInfo);
+          // console.log(editorInfo);
           axios({
             method: "post",
-            url: "/api/admin/index/save",
+            url: "/admin/index/save",
             data: editorInfo
           }).then(function(res) {
             let e = JSON.parse(JSON.stringify(res.data));
-            console.log(e);
+            // console.log(e);
             if (e.code == 0) {
-              console.log(121);
               let messages = e.msg;
               _this.$message.success(messages);
               _this.$router.push({ path: "/order" });
-            }else {
+            } else {
               let messages = e.msg;
               _this.$message.error(messages);
             }
             _this.isBtn = false;
           });
-          // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
+          // _this.$post("/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
           // });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -210,7 +223,7 @@ export default {
     //新增invioce
     addDomain() {
       var _this = this;
-      console.log(this.editorInfo.domains);
+      // console.log(this.editorInfo.domains);
       this.editorInfo.domains.push({
         value: "",
         key: "invoice" + _this.editorInfo.domains.length

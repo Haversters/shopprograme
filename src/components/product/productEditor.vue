@@ -22,10 +22,10 @@
     </el-form-item>
     <el-form-item
       prop="Transaction_date"
-      label="Transaction_date"
+      label="日期"
       :rules="[
-      {required: true, message: '请输入Transaction_date', trigger: 'blur' },
-      {message: '请输入Transaction_date', trigger: ['blur'] }
+      {required: true, message: '请输入日期', trigger: 'blur' },
+      {message: '请输入日期', trigger: ['blur'] }
     ]"
     >
       <el-input placeholder="请输入yyyy-mm-dd格式" v-model="editorInfo.Transaction_date"></el-input>
@@ -117,10 +117,10 @@
     <el-form-item
       v-if="level==1||level==2"
       prop="person_charge"
-      label="person_charge"
+      label="负责人"
       :rules="[
-      {required: true, message: '请输入person_charge', trigger: 'blur' },
-      {message: '请输入person_charge', trigger: ['blur'] }
+      {required: true, message: '请输入负责人', trigger: 'blur' },
+      {message: '请输入负责人', trigger: ['blur'] }
     ]"
     >
       <el-input v-model="editorInfo.person_charge"></el-input>
@@ -149,7 +149,7 @@
     </el-form-item>
 
     <el-form-item
-      v-if="level==1||level==2"
+      v-if="level==1"
       prop="remarks"
       label="备注"
       :rules="[
@@ -184,14 +184,13 @@ export default {
   },
   mounted() {
     this.level = this.$store.state.user_data.level;
-    console.log(this.$store.state.user_data.level);
+    // console.log(this.$store.state.user_data.level);
     // console.log(this.$router.currentRoute.query);
     let editorInfos = JSON.parse(this.$router.currentRoute.query.index);
     for (let key in editorInfos) {
       editorInfos[key] = String(editorInfos[key]);
     }
     this.editorInfo = editorInfos;
-    console.log(this.editorInfo, "----", this.level);
   },
   methods: {
     //点击提交按钮
@@ -203,17 +202,14 @@ export default {
           // alert('submit!');
           let editorInfo = _this.editorInfo;
           editorInfo.level = this.$store.state.user_data.level;
-          let params = { array: 111 };
-          console.log(params);
           axios({
             method: "post",
-            url: "/api//admin/productreturns/update",
+            url: "//admin/productreturns/update",
             data: editorInfo
           }).then(function(res) {
             let e = JSON.parse(JSON.stringify(res.data));
-            console.log(e);
+            // console.log(e);
             if (e.code == 0) {
-              console.log(121);
               let messages = e.msg;
               _this.$message.success(messages);
               _this.$router.push({ path: "/product" });
@@ -225,7 +221,7 @@ export default {
             }
             _this.isBtn = false;
           });
-          // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
+          // _this.$post("/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
           // });
         } else {
@@ -244,7 +240,7 @@ export default {
     //新增invioce
     addDomain() {
       var _this = this;
-      console.log(this.editorInfo.domains);
+      // console.log(this.editorInfo.domains);
       this.editorInfo.domains.push({
         value: "",
         key: "invoice" + _this.editorInfo.domains.length
@@ -254,7 +250,7 @@ export default {
     // 获取编辑列表的信息
     // getTeamData(indexs) {
     //   const _this = this;
-    //   this.$fetch("/api/admin/chargeback/index").then(e => {
+    //   this.$fetch("/admin/chargeback/index").then(e => {
     //       console.log(e)
     //     if (e.code == 0) {
     //       for (let key in e.data[indexs]) {

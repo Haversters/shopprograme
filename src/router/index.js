@@ -139,13 +139,13 @@ const router = new Router({
 					name: 'adminAdd',
 					component: adminAdd
 				},
-				//文件上传测试
+				//product文件上传测试
 				{
 					path:'/product/productUpload',
 					name:'productUpload',
 					component:productUpload
 				},
-				//文件上传测试
+				//chargeback文件上传测试
 				{
 					path:'/chargeback/chargebackUpload',
 					name:'chargebackUpload',
@@ -162,20 +162,20 @@ const router = new Router({
 });
 // 导航守卫
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
-// router.beforeEach((to, from, next) => {
-// 	console.log(to)
-// 	if (to.path == '/login') {
-// 	  next();
-// 	} else {
-// 	  let token = localStorage.getItem('user_data');
-// 	  console.log(token)
-// 	  if (token == null || token == '') {
-// 		  console.log(token)
-// 		next('/login');
-// 	  } else {
-// 		next();
-// 	  }
-// 	}
-//   });
+router.beforeEach((to, from, next) => {
+	// console.log(to)
+	if (to.path == '/login') {
+	  next();
+	} else {
+	  let token = localStorage.getItem('user_data');
+	//   console.log(token)
+	  if (token == null || token == '') {
+		//   console.log(token)
+		next('/login');
+	  } else {
+		next();
+	  }
+	}
+  });
 
 export default router;

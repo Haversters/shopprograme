@@ -32,7 +32,7 @@ axios.interceptors.request.use(
 //http response 拦截器
 axios.interceptors.response.use(
   response => {
-    console.log(response,store.state.user_data)
+    // console.log(response,store.state.user_data)
     if(store.state.user_data==null){
       router.push({
         path: "/login",

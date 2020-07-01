@@ -11,7 +11,7 @@
           </el-button>-->
         </div>
       </div>
-      <el-table :data="logisticsData" style="width: 100%" :border="true">
+      <el-table  :stripe="true"  v-loading="loading" :data="logisticsData" style="width: 100%" :border="true">
         <el-table-column align="center" prop="logisticsCharge" label="负责人"></el-table-column>
         <el-table-column align="center" prop="delivery" label="发货方式" width></el-table-column>
         <el-table-column align="center" prop="trackingNumber" label="追踪号 "></el-table-column>
@@ -50,7 +50,7 @@ export default {
       logisticsData: [],
       tableData: [],
       isCollapse: true, //控制侧边栏的显示
-      loading: false, //刷新状态
+      loading: true, //刷新状态
       search: "",
       input3: "",
       deleteId: "", ///删除数据deleteId
@@ -75,7 +75,7 @@ export default {
     },
     // 搜索选择
     searchselect(e) {
-      console.log(e);
+      // console.log(e);
       this.select = e;
     },
     // 去往添加页面
@@ -93,8 +93,7 @@ export default {
         "&content=" +
         this.input3;
       this.$fetch(urls).then(e => {
-        console.log(urls);
-        console.log(e);
+        // console.log(e);
         if (e.code == 0) {
     
           // e.data.forEach(function(item) {
@@ -112,7 +111,6 @@ export default {
           this.$message.error(messages);
         }
 
-        console.log(_this.$store.state.user_data);
       });
     },
     // 删除当前数据
@@ -124,7 +122,7 @@ export default {
     // 删除提示
     open() {
       const _this = this;
-      let urls = "/api/admin/logistics/delete?id=" + this.deleteId;
+      let urls = "/admin/logistics/delete?id=" + this.deleteId;
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -133,8 +131,7 @@ export default {
       })
         .then(() => {
           _this.$fetch(urls).then(e => {
-            console.log(111);
-            console.log(e);
+            // console.log(e);
             if (e.code == 0) {
               _this.logisticsData.splice(_this.deleteIndex, 1);
               this.$message({
@@ -146,7 +143,6 @@ export default {
               this.$message.error(messages);
             }
 
-            console.log(_this.$store.state.user_data);
           });
         })
         .catch(() => {
@@ -159,9 +155,8 @@ export default {
     // 获取chrgeback列表的信息
     getlogisticsData() {
       const _this = this;
-      this.$fetch("/api/admin/logistics/index").then(e => {
-        console.log(111);
-        console.log(e);
+      this.$fetch("/admin/logistics/index").then(e => {
+        // console.log(e);
         if (e.code == 0) {
           // e.data.forEach(function(item) {
           //   if (item.isDelivered == 1) {
@@ -175,9 +170,9 @@ export default {
           _this.logisticsData = _this.tableData.slice(0, 7);
         } else {
           let messages = e.msg;
-          this.$message.error(messages);
+          _this.$message.error(messages);
         }
-        console.log(_this.logisticsData, _this.tableData);
+        _this.loading=false;
       });
     },
     // 页数发生改变
@@ -186,7 +181,7 @@ export default {
       let num1 = (e - 1) * this.pageSize;
       let num2 = e * this.pageSize;
       this.logisticsData = this.tableData.slice(num1, num2);
-      console.log(this.logisticsData);
+      // console.log(this.logisticsData);
     }
   }
 };
@@ -205,13 +200,13 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
+
 }
 /* 顶部区域 */
 .topBtn {
   display: flex;
   justify-content: space-between;
   /* align-items: center; */
-  border: 1px solid red;
+
 }
 </style>

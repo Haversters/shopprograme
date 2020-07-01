@@ -2,7 +2,7 @@
   <el-container>
     <el-main>
       <div style class="topBtn">
-        <el-input placeholder="请输入搜索数据" v-model="input3" class="input-with-select">
+        <el-input placeholder="请输入搜索数据" v-model="input3" class="input-with-select" style="max-width:600px;">
           <el-select
             v-model="select"
             slot="prepend"
@@ -10,11 +10,11 @@
             @change="searchselect"
             style="width:150px"
           >
-            <el-option label="purchase_order" value="purchase_order"></el-option>
-            <el-option label="issueID" value="issueID"></el-option>
-            <el-option label="creation_date" value="creation_date"></el-option>
+            <el-option label="PO" value="purchase_order"></el-option>
+            <!-- <el-option label="issueID" value="issueID"></el-option> -->
+            <el-option label="日期" value="creation_date"></el-option>
             <el-option label="ASIN" value="ASIN"></el-option>
-            <el-option label="person_charge" value="person_charge"></el-option>
+            <el-option label="负责人" value="person_charge"></el-option>
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click="getSearch()">搜索</el-button>
         </el-input>
@@ -23,19 +23,19 @@
           <el-button type="success" plain @click="goAddPage('/chargeback/chargebackUpload')">上传<i class="el-icon-upload el-icon--right"></i></el-button>
         </div>
       </div>
-      <el-table :data="chargeData" style="width: 100%" :border="true">
+      <el-table :stripe="true" :data="chargeData"  v-loading="loading" style="width: 100%" :border="true">
         <el-table-column align="center" prop="ASIN" label="ASIN" width></el-table-column>
         <el-table-column align="center" prop="chargebackID" label="Chargeback_ID" width></el-table-column>
         <el-table-column align="center" prop="chargeback_type" label="Chargeback_type" width></el-table-column>
-        <el-table-column align="center" prop="creation_date" label="Creationdate"></el-table-column>
+        <el-table-column align="center" prop="creation_date" label="日期"></el-table-column>
         <el-table-column align="center" prop="financial_charge" label="Financial_charge "></el-table-column>
         <el-table-column align="center" prop="Financialcharge" label="Financialcharge "></el-table-column>
         <el-table-column align="center" prop="issueID" label="Issue_ID"></el-table-column>
-        <el-table-column align="center" prop="purchase_order" label="Purchase_Order"></el-table-column>
+        <el-table-column align="center" prop="purchase_order" label="PO"></el-table-column>
         <el-table-column align="center" prop="quantity" label="Quantity "></el-table-column>
         <el-table-column align="center" prop="shipmentID" label="ShipmentID"></el-table-column>
-        <el-table-column align="center" prop="vendor_code" label="Vendorcode"></el-table-column>
-        <el-table-column align="center" prop="person_charge" label="person_charge"></el-table-column>
+        <el-table-column align="center" prop="vendor_code" label="vendor_code"></el-table-column>
+        <el-table-column align="center" prop="person_charge" label="负责人"></el-table-column>
         <el-table-column align="center" prop="Status" label="status"></el-table-column>
         <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
         <el-table-column width="160" align="center" prop label="操作">
@@ -66,12 +66,12 @@ export default {
       chargeData: [],
       tableData: [],
       isCollapse: true, //控制侧边栏的显示
-      loading: false, //刷新状态
+      loading: true, //刷新状态
       search: "",
       input3: "",
       deleteId: "", ///删除数据deleteId
       deleteIndex: "", ///删除数据index
-      select: "purchase_order", //默认筛选类型
+      select: "PO", //默认筛选类型
       listTotal: 0,
       pageSize: 7 //显示数据量
     };
@@ -91,7 +91,7 @@ export default {
     },
         // 搜索选择
     searchselect(e) {
-      console.log(e);
+      // console.log(e);
       this.select = e;
     },
         // 去往添加页面
@@ -104,23 +104,21 @@ export default {
     getSearch() {
       let _this = this;
       let urls =
-        "/api/admin/chargeback/select?type=" +
+        "/admin/chargeback/select?type=" +
         this.select +
         "&content=" +
         this.input3;
       this.$fetch(urls).then(e => {
-        console.log(urls);
-        console.log(e);
+        // console.log(e);
         if (e.code == 0) {
           _this.tableData = e.data;
           _this.listTotal=e.data.length;
           _this.chargeData =  _this.tableData.slice(0,7);
         } else {
           let messages = e.msg;
-          this.$message.error(messages);
+          _this.$message.error(messages);
         }
-
-        console.log(_this.$store.state.user_data);
+        _this.loading=false;
       });
     },
     // 删除当前数据
@@ -132,7 +130,7 @@ export default {
     // 删除提示
     open() {
       const _this = this;
-      let urls = "/api/admin/chargeback/delete?issueID=" + this.deleteId;
+      let urls = "/admin/chargeback/delete?issueID=" + this.deleteId;
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -141,8 +139,7 @@ export default {
       })
         .then(() => {
           _this.$fetch(urls).then(e => {
-            console.log(111);
-            console.log(e);
+            // console.log(e);
             if (e.code == 0) {
               _this.chargeData.splice(_this.deleteIndex, 1);
               this.$message({
@@ -154,7 +151,6 @@ export default {
               this.$message.error(messages);
             }
 
-            console.log(_this.$store.state.user_data);
           });
         })
         .catch(() => {
@@ -167,27 +163,25 @@ export default {
     // 获取chrgeback列表的信息
     getChargeData() {
       const _this = this;
-      this.$fetch("/api/admin/chargeback/index").then(e => {
-        console.log(111);
-        console.log(e);
+      this.$fetch("/admin/chargeback/index").then(e => {
+        // console.log(e);
         if (e.code == 0) {
           _this.tableData = e.data.reverse();
           _this.listTotal = e.data.length;
           _this.chargeData = _this.tableData.slice(0, 7);
         } else {
           let messages = e.msg;
-          this.$message.error(messages);
+          _this.$message.error(messages);
         }
-        console.log(_this.chargeData, _this.tableData);
+        _this.loading=false;
       });
     },
     // 页数发生改变
     pageChange(e) {
-      console.log(e);
+      // console.log(e);
       let num1 = (e - 1) * this.pageSize;
       let num2 = e * this.pageSize;
       this.chargeData = this.tableData.slice(num1, num2);
-      console.log(this.chargeData);
     }
   }
 };
@@ -206,13 +200,13 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
+
 }
 /* 顶部区域 */
 .topBtn{
   display: flex;
   justify-content: space-between;
   /* align-items: center; */
-  border: 1px solid red;
+
 }
 </style>

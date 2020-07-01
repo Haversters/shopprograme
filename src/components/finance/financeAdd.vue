@@ -46,6 +46,7 @@
     </el-form-item>
 
     <el-form-item
+    v-if="level==1"
       prop="remarks"
       label="备注"
       :rules="[
@@ -112,7 +113,7 @@ export default {
           console.log(editorInfo);
           axios({
             method: "post",
-            url: "/api/admin/finance/save",
+            url: "/admin/finance/save",
             data: editorInfo
           }).then(function(res) {
             let e = JSON.parse(JSON.stringify(res.data));
@@ -128,7 +129,7 @@ export default {
             }
             _this.isBtn = false;
           });
-          // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
+          // _this.$post("/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
           // });
         } else {

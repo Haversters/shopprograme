@@ -30,13 +30,12 @@
     >
       <el-input v-model="editorInfo.passwd"></el-input>
     </el-form-item>
-    <el-form-item
-      label="级别"
-    >
-     <el-radio v-model="editorInfo.level" label="3">普通管理员</el-radio>
-        <el-radio v-model="editorInfo.level" label="2">财务</el-radio>
+    <el-form-item label="级别">
+      <el-radio v-model="editorInfo.level" label="3">普通管理员</el-radio>
+      <el-radio v-model="editorInfo.level" label="2">财务</el-radio>
     </el-form-item>
     <el-form-item
+      v-if="level==3"
       prop="remarks"
       label="备注"
       :rules="[
@@ -70,18 +69,17 @@ export default {
   },
   mounted() {
     this.level = this.$store.state.user_data.level;
-    console.log(this.$router.currentRoute.query);
+    // console.log(this.$router.currentRoute.query);
     let editorInfos = JSON.parse(this.$router.currentRoute.query.index);
     for (let key in editorInfos) {
       editorInfos[key] = String(editorInfos[key]);
     }
-       if (editorInfos.level == "财务") {
-      editorInfos.level = '2';
+    if (editorInfos.level == "财务") {
+      editorInfos.level = "2";
     } else {
-      editorInfos.level = '3';
+      editorInfos.level = "3";
     }
     this.editorInfo = editorInfos;
-    console.log(this.editorInfo);
   },
   methods: {
     //点击提交按钮
@@ -91,15 +89,13 @@ export default {
         if (valid) {
           // alert('submit!');
           let editorInfo = _this.editorInfo;
-           editorInfo.levels=this.$store.state.user_data.level
-          let params = { array: 111 };
-          console.log(params);
+          editorInfo.levels = this.$store.state.user_data.level;
           axios({
             method: "post",
-            url: "/api/admin/adminstor/update",
+            url: "/admin/adminstor/update",
             data: editorInfo
           }).then(function(e) {
-            console.log(e.data);
+            // console.log(e.data);
             if (e.data.code == 0) {
               _this.$message.success("修改成功");
               _this.$router.push({ path: "/admin" });
@@ -110,7 +106,7 @@ export default {
               _this.$message.error(messages);
             }
           });
-          // _this.$post("/api/admin/index/update", editorInfo).then(function(e) {
+          // _this.$post("/admin/index/update", editorInfo).then(function(e) {
           //   console.log(e);
           // });
         } else {

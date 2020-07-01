@@ -13,6 +13,8 @@
         </div>
       </div>
       <el-table
+       :stripe="true"
+        v-loading="loading"
         :data="orderData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         style="width: 100%"
         :border="true"
@@ -64,7 +66,7 @@ export default {
       isCollapse: true, //控制侧边栏的显示
       search: "",
       input3: "",
-      loading: false, //控制加载状态
+      loading: true, //控制加载状态
       deleteId: "", ///删除数据deleteId
       deleteIndex: "", ///删除数据index
       select: "po", //默认筛选类型
@@ -94,14 +96,14 @@ export default {
   methods: {
     // 控制编辑
     handleEdit(index) {
-      console.log(index);
+      // console.log(index);
       index = JSON.stringify(index);
       let urls = "/finance/editor?index=" + index;
       this.$router.push({ path: urls });
     },
     // 搜索选择
     searchselect(e) {
-      console.log(e);
+      // console.log(e);
       this.select = e;
     },
     // 去往添加页面
@@ -115,13 +117,13 @@ export default {
       this.deleteIndex = index;
       this.deleteId = po;
       this.open();
-      console.log(index, po);
+      // console.log(index, po);
     },
     // 删除提示
     open() {
       const _this = this;
       let urls =
-        "/api/admin/finance/delete?id=" +
+        "/admin/finance/delete?id=" +
         this.deleteId +
         "&level=" +
         this.$store.state.user_data.level;
@@ -133,8 +135,7 @@ export default {
       })
         .then(() => {
           _this.$fetch(urls).then(e => {
-            console.log(111);
-            console.log(e);
+            // console.log(e);
             if (e.code == 0) {
               _this.orderData.splice(_this.deleteIndex, 1);
               this.$message({
@@ -146,7 +147,6 @@ export default {
               this.$message.error(messages);
             }
 
-            console.log(_this.$store.state.user_data);
           });
         })
         .catch(() => {
@@ -159,32 +159,29 @@ export default {
     // 获取编辑列表的信息
     getTeamData() {
       const _this = this;
-      this.$fetch("/api/admin/finance/index").then(e => {
-        console.log(111);
-        console.log(e);
+      this.$fetch("/admin/finance/index").then(e => {
+        // console.log(e);
         if (e.code == 0) {
           _this.tableData = e.data.reverse();
           _this.listTotal = e.data.length;
           _this.orderData = _this.tableData.slice(0, 7);
         } else {
           let messages = e.msg;
-          this.$message.error(messages);
+          _this.$message.error(messages);
         }
-
-        console.log(_this.$store.state.user_data);
+        _this.loading=false;
       });
     },
     // 搜索类型
     getSearch() {
       let _this = this;
       let urls =
-        "/api/admin/index/select?type=" +
+        "/admin/index/select?type=" +
         this.select +
         "&content=" +
         this.input3;
       this.$fetch(urls).then(e => {
-        console.log(urls);
-        console.log(e);
+        // console.log(e);
         if (e.code == 0) {
           _this.tableData = e.data;
           _this.listTotal = e.data.length;
@@ -194,16 +191,14 @@ export default {
           this.$message.error(messages);
         }
 
-        console.log(_this.$store.state.user_data);
       });
     },
     // 页数发生改变
     pageChange(e) {
-      console.log(e);
+      // console.log(e);
       let num1 = (e - 1) * this.pageSize;
       let num2 = e * this.pageSize;
       this.orderData = this.tableData.slice(num1, num2);
-      console.log(this.orderData);
     }
   }
 };
@@ -222,7 +217,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
+
 }
 /* 顶部区域 */
 .topBtn {
@@ -230,6 +225,6 @@ export default {
   display: flex;
   justify-content: space-between;
   /* align-items: center; */
-  border: 1px solid red;
+
 }
 </style>

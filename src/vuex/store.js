@@ -14,7 +14,6 @@ const mutations = {
     },
     changeLogin(state,user_datas){
         state.user_data=user_datas;
-        localStorage.setItem('user_data',user_datas)
     }
 }
 // const actions = {...}

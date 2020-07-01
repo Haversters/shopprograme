@@ -89,6 +89,7 @@
     </el-form-item>-->
 
     <el-form-item
+      v-if="levels==1"
       prop="remarks"
       label="备注"
       :rules="[
@@ -113,15 +114,16 @@ export default {
       // 编辑列表的信息
       editorInfo: {},
       editorIndex: "",
-      isBtn: false
+      isBtn: false,
+       levels: 3
     };
   },
   created() {
     this.$store.state.adminleftnavnum = "3"; //设置左侧导航2-2 active
-    console.log(this.$store);
+    this.levels = this.$store.state.user_data.level; //获取用户等级
   },
   mounted() {
-    console.log(this.$router.currentRoute.query);
+    this.levels = this.$store.state.user_data.level; //获取用户等级
     let editorInfos = JSON.parse(this.$router.currentRoute.query.index);
     for (let key in editorInfos) {
       editorInfos[key] = String(editorInfos[key]);
@@ -132,7 +134,7 @@ export default {
       editorInfos.isDelivered = "1";
     }
     this.editorInfo = editorInfos;
-    console.log(this.editorInfo);
+    // console.log(this.editorInfo);
   },
   methods: {
     //点击提交按钮
@@ -148,17 +150,14 @@ export default {
           // } else {
           //   editorInfoss.isDelivered == "0";
           // }
-          let params = { array: 111 };
-          console.log(params);
           axios({
             method: "post",
-            url: "/api/admin/logistics/update",
+            url: "/admin/logistics/update",
             data: editorInfoss
           }).then(function(res) {
             let e = JSON.parse(JSON.stringify(res.data));
             console.log(e);
             if (e.code == 0) {
-              console.log(121);
               let messages = e.msg;
               _this.$message.success(messages);
               _this.$router.push({ path: "/logistics" });
@@ -170,7 +169,7 @@ export default {
             }
             _this.isBtn = false;
           });
-          // _this.$post("/api/admin/logistics/update", editorInfo).then(function(e) {
+          // _this.$post("/admin/logistics/update", editorInfo).then(function(e) {
           //   console.log(e);
           // });
         } else {
@@ -190,16 +189,15 @@ export default {
     // 获取编辑列表的信息
     getTeamData(indexs) {
       const _this = this;
-      this.$fetch("/api/admin/logistics/index").then(e => {
-        console.log(e);
+      this.$fetch("/admin/logistics/index").then(e => {
+        // console.log(e);
         if (e.code == 6) {
           for (let key in e.data[indexs]) {
-            console.log(key, e.data[indexs][key]);
+            // console.log(key, e.data[indexs][key]);
             e.data[indexs][key] = String(e.data[indexs][key]);
           }
         }
         _this.editorInfo = e.data[indexs];
-        console.log(_this.editorInfo);
       });
     }
   }
