@@ -96,7 +96,7 @@ export default {
     loginOut() {
       const _this = this;
       let urls =
-        "/admin/login/checktoken?token=" + this.$store.state.user_data.token;
+        "/api/admin/login/checktoken?token=" + this.$store.state.user_data.token;
       this.$confirm("退出登录, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -142,15 +142,15 @@ export default {
         this.$router.push({ path: "/login" });
       }
       // console.log(_this.$store.state.user_data);
-      // this.$fetch("/admin/login/checktoken", {
-      //   token: _this.$store.state.user_data.token
-      // }).then(e => {
-      //   // console.log(e);
-      //   if (e.code != 4) {
-      //     this.$message.error("登录已过期，请重新登录");
-      //     this.$router.push({ path: "/login" });
-      //   }
-      // });
+      this.$fetch("/api/admin/login/checktoken", {
+        token: _this.$store.state.user_data.token
+      }).then(e => {
+        console.log(e);
+        if (e.code != 0) {
+          this.$message.error("登录已过期，请重新登录");
+          this.$router.push({ path: "/login" });
+        }
+      });
     }
   },
   watch: {
