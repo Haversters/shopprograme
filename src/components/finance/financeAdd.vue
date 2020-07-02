@@ -41,8 +41,8 @@
       <el-input v-model="editorInfo.transferAmount"></el-input>
     </el-form-item>
     <el-form-item label="是否入账">
-      <el-radio v-model="editorInfo.isEntry" label="1">是</el-radio>
-      <el-radio v-model="editorInfo.isEntry" label="0">否</el-radio>
+      <el-radio v-model="editorInfo.isEntry" label="0">是</el-radio>
+      <el-radio v-model="editorInfo.isEntry" label="1">否</el-radio>
     </el-form-item>
 
     <el-form-item
@@ -109,15 +109,15 @@ export default {
           let editorInfo = _this.editorInfo;
           editorInfo.levels = this.$store.state.user_data.level;
           //   editorInfo.level=this.level;
-          let params = { array: 111 };
-          console.log(editorInfo);
+          // let params = { array: 111 };
+          // console.log(editorInfo);
           axios({
             method: "post",
             url: "/admin/finance/save",
             data: editorInfo
           }).then(function(res) {
             let e = JSON.parse(JSON.stringify(res.data));
-            console.log(e);
+            // console.log(e);
             if (e.code == 0) {
               console.log(121);
               let messages = e.msg;

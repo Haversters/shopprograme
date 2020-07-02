@@ -195,7 +195,7 @@ export default {
     // 获取编辑列表的信息
     getTeamData() {
       const _this = this;
-      this.$fetch("/api/admin/adminstor/index").then(e => {
+      this.$fetch("/admin/adminstor/index").then(e => {
         // console.log(e);
         let adminIndex = "";
         if (e.code == 0) {

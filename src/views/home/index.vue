@@ -96,7 +96,7 @@ export default {
     loginOut() {
       const _this = this;
       let urls =
-        "/api/admin/login/checktoken?token=" + this.$store.state.user_data.token;
+        "/admin/login/checktoken?token=" + this.$store.state.user_data.token;
       this.$confirm("退出登录, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -142,7 +142,7 @@ export default {
         this.$router.push({ path: "/login" });
       }
       // console.log(_this.$store.state.user_data);
-      this.$fetch("/api/admin/login/checktoken", {
+      this.$fetch("/admin/login/checktoken", {
         token: _this.$store.state.user_data.token
       }).then(e => {
         console.log(e);
