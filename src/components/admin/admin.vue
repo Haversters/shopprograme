@@ -20,6 +20,8 @@
         </div>
       </div>
       <el-table
+        v-loading="loading"
+        :stripe="true"
         :data="orderData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         style="width: 100%"
         :border="true"
@@ -77,7 +79,8 @@ export default {
       listTotal: 0,
       pageSize: 7, //显示数据量
       levels: 3,
-      isBtn: true
+      isBtn: true,
+      loading: true
     };
   },
   watch: {
@@ -194,24 +197,28 @@ export default {
       const _this = this;
       this.$fetch("/admin/adminstor/index").then(e => {
         // console.log(e);
+        let adminIndex = "";
         if (e.code == 0) {
           e.data.forEach(function(item, index) {
             if (item.level == 2) {
               item.level = "财务";
             } else if (item.level == 1) {
               item.level = "超级管理员";
-              _this.tableData.splice(index, 1);
+              adminIndex = index;
             } else {
               item.level = "普通管理员";
             }
           });
+          e.data.splice(adminIndex, 1);
           _this.tableData = e.data.reverse();
           _this.listTotal = e.data.length;
           _this.orderData = _this.tableData.slice(0, 7);
+          // console.log(_this.tableData);
         } else {
           let messages = e.msg;
           this.$message.error(messages);
         }
+        _this.loading = false;
       });
     },
     // 搜索类型
