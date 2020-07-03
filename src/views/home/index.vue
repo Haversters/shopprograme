@@ -78,6 +78,7 @@ export default {
     } else {
       this.$router.push({ path: "/login" });
     }
+    // this.selectItemss();
     // console.log(this.userName, this.$store.state.user_data.name);
   },
   methods: {
@@ -119,8 +120,11 @@ export default {
               _this.$message.success("退出登录成功!");
               _this.$router.push({ path: "/login" });
             } else {
-              let messages = e.msg;
-              this.$message.error(messages);
+              localStorage.removeItem("user_data");
+              this.$store.commit("changeLogin", "null");
+              let localStorageToken = localStorage.getItem("user_data");
+              _this.$message.success("退出登录成功!");
+              _this.$router.push({ path: "/login" });
             }
           });
         })
@@ -141,17 +145,35 @@ export default {
         this.$message.error("登录已过期，请重新登录");
         this.$router.push({ path: "/login" });
       }
-      // console.log(_this.$store.state.user_data);
+      let tokens=JSON.parse(localStorageToken).token
+      // this.$fetch("/admin/login/checktoken", {
+      //   'token':tokens
+      // }).then(e => {
+      //   if (e.code != 0) {
+      //     this.$message.error("登录已过期，请重新登录");
+      //     this.$router.push({ path: "/login" });
+      //   }
+      // });
+    },
+    // 刚开始验证
+        // 选中验证token
+    selectItemss() {
+      //本地token
+      let localStorageToken = localStorage.getItem("user_data");
+      //设置请求token是否过期
+      const _this = this;
+      let tokens=JSON.parse(localStorageToken).token
       this.$fetch("/admin/login/checktoken", {
-        token: _this.$store.state.user_data.token
+        'token':tokens
       }).then(e => {
-        console.log(e);
         if (e.code != 0) {
           this.$message.error("登录已过期，请重新登录");
+          localStorage.clear("user_data");
+          console.log(localStorage.getItem("user_data"))
           this.$router.push({ path: "/login" });
         }
       });
-    }
+    },
   },
   watch: {
     // 监测store.state
