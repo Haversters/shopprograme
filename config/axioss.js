@@ -2,9 +2,9 @@
 import axios from 'axios';
 
 // 开发环境
-// axios.defaults.baseURL = env === 'development' ? '/api' : window.location.protocol + '//' + window.location.host; // 配置axios请求的地址
+axios.defaults.baseURL = env === 'development' ? '/api' : window.location.protocol + '//' + window.location.host; // 配置axios请求的地址
 // 上线
-axios.defaults.baseURL =www.yangyisy.com // 配置axios请求的地址
+// axios.defaults.baseURL =www.yangyisy.com // 配置axios请求的地址
 axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 axios.defaults.crossDomain = true;
 axios.defaults.withCredentials = true; //设置cross跨域 并设置访问权限 允许跨域携带cookie信息

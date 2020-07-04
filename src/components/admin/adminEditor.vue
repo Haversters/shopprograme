@@ -64,7 +64,7 @@ export default {
     };
   },
   created() {
-    this.$store.state.adminleftnavnum = "5"; //设置左侧导航2-2 active
+    this.$store.state.adminleftnavnum = "6"; //设置左侧导航2-2 active
     this.level = this.$store.state.user_data.level;
   },
   mounted() {

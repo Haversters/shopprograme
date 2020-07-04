@@ -39,9 +39,17 @@
             <i class="el-icon-sell"></i>
             <span slot="title">财务管理</span>
           </el-menu-item>
-          <el-menu-item v-if="level==1" index="5" route="/admin">
+          <el-menu-item v-if="false" index="5" route="/pay">
+            <i class="el-icon-setting"></i>
+            <span slot="title">财务支出管理</span>
+          </el-menu-item>
+          <el-menu-item v-if="level==1" index="6" route="/admin">
             <i class="el-icon-setting"></i>
             <span slot="title">admin管理</span>
+          </el-menu-item>
+          <el-menu-item v-if="level==1" index="7" route="/log">
+            <i class="el-icon-setting"></i>
+            <span slot="title">日志</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -141,11 +149,14 @@ export default {
       let localStorageToken = localStorage.getItem("user_data");
       //设置请求token是否过期
       const _this = this;
-      if (_this.$store.state.user_data.token==null || localStorageToken==null) {
+      if (
+        _this.$store.state.user_data.token == null ||
+        localStorageToken == null
+      ) {
         this.$message.error("登录已过期，请重新登录");
         this.$router.push({ path: "/login" });
       }
-      let tokens=JSON.parse(localStorageToken).token
+      let tokens = JSON.parse(localStorageToken).token;
       // this.$fetch("/admin/login/checktoken", {
       //   'token':tokens
       // }).then(e => {
@@ -156,24 +167,24 @@ export default {
       // });
     },
     // 刚开始验证
-        // 选中验证token
+    // 选中验证token
     selectItemss() {
       //本地token
       let localStorageToken = localStorage.getItem("user_data");
       //设置请求token是否过期
       const _this = this;
-      let tokens=JSON.parse(localStorageToken).token
+      let tokens = JSON.parse(localStorageToken).token;
       this.$fetch("/admin/login/checktoken", {
-        'token':tokens
+        token: tokens
       }).then(e => {
         if (e.code != 0) {
           this.$message.error("登录已过期，请重新登录");
           localStorage.clear("user_data");
-          console.log(localStorage.getItem("user_data"))
+          console.log(localStorage.getItem("user_data"));
           this.$router.push({ path: "/login" });
         }
       });
-    },
+    }
   },
   watch: {
     // 监测store.state

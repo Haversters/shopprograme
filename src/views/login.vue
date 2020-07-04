@@ -47,7 +47,7 @@ export default {
       if (this.userName) {
         if (this.userPassword) {
           _this.isBtn=true
-          this.$fetch("/admin/login/userlogin", {
+          this.$fetch("/api/admin/login/userlogin", {
             number: _this.userName,
             passwd: _this.userPassword
           }).then(e => {

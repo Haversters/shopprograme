@@ -124,6 +124,136 @@
     >
       <el-input v-model="editorInfo.received_quantity"></el-input>
     </el-form-item>
+     <el-form-item
+      prop="Vendor"
+      label="Vendor "
+      :rules="[
+      {required: true, message: '请输入Vendor ', trigger: 'blur' },
+      {message: '请输入Vendor ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.Vendor"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="Ship_to_location"
+      label="Ship_to_location "
+      :rules="[
+      {required: true, message: '请输入Ship_to_location ', trigger: 'blur' },
+      {message: '请输入Ship_to_location ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.Ship_to_location"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="External_ID"
+      label="External_ID "
+      :rules="[
+      {required: true, message: '请输入External_ID ', trigger: 'blur' },
+      {message: '请输入External_ID ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.External_ID"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="Model_Number"
+      label="Model_Number "
+      :rules="[
+      {required: true, message: '请输入Model_Number ', trigger: 'blur' },
+      {message: '请输入Model_Number ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.Model_Number"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="Title"
+      label="Title "
+      :rules="[
+      {required: true, message: '请输入Title ', trigger: 'blur' },
+      {message: '请输入Title ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.Title"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="Availability"
+      label="Availability "
+      :rules="[
+      {required: true, message: '请输入Availability ', trigger: 'blur' },
+      {message: '请输入Availability ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.Availability"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="Window_Type"
+      label="Window_Type "
+      :rules="[
+      {required: true, message: '请输入Window_Type ', trigger: 'blur' },
+      {message: '请输入Window_Type ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.Window_Type"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="WindowStart"
+      label="WindowStart "
+      :rules="[
+      {required: true, message: '请输入WindowStart ', trigger: 'blur' },
+      {message: '请输入WindowStart ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.WindowStart"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="WindowEnd"
+      label="WindowEnd "
+      :rules="[
+      {required: true, message: '请输入WindowEnd ', trigger: 'blur' },
+      {message: '请输入WindowEnd ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.WindowEnd"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="ExpectedDate"
+      label="ExpectedDate "
+      :rules="[
+      {required: true, message: '请输入ExpectedDate ', trigger: 'blur' },
+      {message: '请输入ExpectedDate ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.ExpectedDate"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="QuantityRequested"
+      label="QuantityRequested "
+      :rules="[
+      {required: true, message: '请输入QuantityRequested ', trigger: 'blur' },
+      {message: '请输入QuantityRequested ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.QuantityRequested"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="ExpectedQuantity"
+      label="ExpectedQuantity "
+      :rules="[
+      {required: true, message: '请输入ExpectedQuantity ', trigger: 'blur' },
+      {message: '请输入ExpectedQuantity ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.ExpectedQuantity"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="UnitCost"
+      label="UnitCost "
+      :rules="[
+      {required: true, message: '请输入UnitCost ', trigger: 'blur' },
+      {message: '请输入UnitCost ', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.UnitCost"></el-input>
+    </el-form-item>
     <el-form-item
       v-if="levels==1"
       prop="remarks"
