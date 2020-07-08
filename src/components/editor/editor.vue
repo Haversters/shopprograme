@@ -299,6 +299,17 @@
       <el-input v-model="editorInfo.invoice2"></el-input>
     </el-form-item>
     <el-form-item
+      v-if="editorInfo.invoice1!=''&&editorInfo.invoice1!='null'"
+      prop="invoice3"
+      label="invoice4"
+      :rules="[
+      { message: '请输入invoice4', trigger: 'blur' },
+      {message: '请输入invoice4', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.invoice3"></el-input>
+    </el-form-item>
+    <el-form-item
       v-for="(domain, index) in editorInfo.domains"
       :label="'Invoice' + index"
       :key="domain.key"

@@ -68,6 +68,7 @@
         <el-table-column align="center" prop="invoice0" label="invoice1"></el-table-column>
         <el-table-column align="center" prop="invoice1" label="invoice2"></el-table-column>
         <el-table-column align="center" prop="invoice2" label="invoice3"></el-table-column>
+        <el-table-column align="center" prop="invoice3" label="invoice4"></el-table-column>
         <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
         <el-table-column width="160" align="center" prop label="操作">
           <template slot-scope="scope">
@@ -174,7 +175,7 @@ export default {
     getTeamData() {
       const _this = this;
       this.$fetch("/admin/index/index").then(e => {
-        console.log(e);
+        // console.log(e);
         if (e.code == 0) {
           e.data.forEach(function(item) {
             if (item.pay_state == 1 ||item.pay_state == "是") {

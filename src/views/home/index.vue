@@ -39,7 +39,7 @@
             <i class="el-icon-sell"></i>
             <span slot="title">财务管理</span>
           </el-menu-item>
-          <el-menu-item v-if="false" index="5" route="/pay">
+          <el-menu-item v-if="level==1||level==2" index="5" route="/pay">
             <i class="el-icon-setting"></i>
             <span slot="title">财务支出管理</span>
           </el-menu-item>
@@ -56,8 +56,18 @@
       <el-container>
         <el-main>
           <el-header style="height:20px; text-align: right; font-size: 12px">
-            <i class="el-icon-setting" style="margin-right: 5px" @click="loginOut"></i>
-            <span @click="loginOut">{{userName}}</span>
+            <div style="display:flex;flex-direction:row-reverse;">
+              <div style="padding:0 8px;padding-right:10px;">
+                <i class="el-icon-user-solid"></i>
+                <span style="color:#b90707;">{{userName}}</span>
+              </div>
+              <div @click="loginOut" style="display:flex;justify-content:center;align-items:center;cursor:pointer">
+                <i style="color: #606266;font-size: 14px;" class="el-icon-warning"></i>
+                <span style="color: #606266;font-size: 14px;padding:0 5px;">退出登录</span>
+              </div>
+              <!-- <el-button   @click="loginOut" style="margin-left: 5px"> -->
+              <!-- </el-button> -->
+            </div>
           </el-header>
           <router-view />
         </el-main>
@@ -137,7 +147,7 @@ export default {
           });
         })
         .catch(() => {
-          _this.$message.info("退出登录成功!");
+          _this.$message.info("取消退出登录!");
         });
     },
     // 选中验证token
@@ -157,14 +167,14 @@ export default {
         this.$router.push({ path: "/login" });
       }
       let tokens = JSON.parse(localStorageToken).token;
-      // this.$fetch("/admin/login/checktoken", {
-      //   'token':tokens
-      // }).then(e => {
-      //   if (e.code != 0) {
-      //     this.$message.error("登录已过期，请重新登录");
-      //     this.$router.push({ path: "/login" });
-      //   }
-      // });
+      this.$fetch("/admin/login/checktoken", {
+        token: tokens
+      }).then(e => {
+        if (e.code != 0) {
+          this.$message.error("登录已过期，请重新登录");
+          this.$router.push({ path: "/login" });
+        }
+      });
     },
     // 刚开始验证
     // 选中验证token
@@ -180,7 +190,7 @@ export default {
         if (e.code != 0) {
           this.$message.error("登录已过期，请重新登录");
           localStorage.clear("user_data");
-          console.log(localStorage.getItem("user_data"));
+          // console.log(localStorage.getItem("user_data"));
           this.$router.push({ path: "/login" });
         }
       });

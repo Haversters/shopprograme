@@ -124,7 +124,7 @@
     >
       <el-input v-model="editorInfo.received_quantity"></el-input>
     </el-form-item>
-     <el-form-item
+    <el-form-item
       prop="Vendor"
       label="Vendor "
       :rules="[
@@ -265,7 +265,46 @@
     >
       <el-input v-model="editorInfo.remarks"></el-input>
     </el-form-item>
-
+        <el-form-item
+      prop="invoice0"
+      label="invoice1"
+      :rules="[
+      {message: '请输入invoice1', trigger: 'blur' },
+      {message: '请输入invoice1', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.invoice0"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="invoice1"
+      label="invoice2"
+      :rules="[
+      {message: '请输入invoice2', trigger: 'blur' },
+      {message: '请输入invoice2', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.invoice1"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="invoice2"
+      label="invoice3"
+      :rules="[
+      { message: '请输入invoice3', trigger: 'blur' },
+      {message: '请输入invoice3', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.invoice2"></el-input>
+    </el-form-item>
+    <el-form-item
+      prop="invoice3"
+      label="invoice4"
+      :rules="[
+      { message: '请输入invoice4', trigger: 'blur' },
+      {message: '请输入invoice4', trigger: ['blur'] }
+    ]"
+    >
+      <el-input v-model="editorInfo.invoice3"></el-input>
+    </el-form-item>
     <el-form-item
       v-for="(domain, index) in editorInfo.domains"
       :label="'Invoice' + index"

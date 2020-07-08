@@ -91,6 +91,24 @@ export function fetch(url, params = {}) {
 
 
 /**
+ * 封装get方法
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+
+const fentchs=async function(url, params){
+  var  r= await axios.get(url, {
+    params: params
+  })
+  return new Promise((res)=>{
+    res(r.data);
+  })
+
+}
+
+
+/**
  * 封装post请求
  * @param url
  * @param data
@@ -144,4 +162,8 @@ export function put(url, data = {}) {
         reject(err)
       })
   })
+}
+
+export default{
+  fentchs
 }

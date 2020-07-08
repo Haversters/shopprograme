@@ -29,6 +29,7 @@ import chargebackUpload from '@/components/upload/chargebackUpload'; ////chargeb
 import payUpload from '@/components/upload/payUpload'; ////pay上传文件
 import log from '@/components/log/log'; ////log日志
 import { Upload } from 'element-ui';
+import checkLogin from '../assets/js/checkLogin';
 Vue.use(Router);
 
 const router = new Router({
@@ -210,7 +211,8 @@ router.beforeEach((to, from, next) => {
 		next();
 	} else {
 		let token = localStorage.getItem('user_data');
-		//   console.log(token)
+		let tokens=checkLogin.checkLogins()
+		//   console.log(token,tokens)
 		if (token == null || token == '') {
 			//   console.log(token)
 			next('/login');
